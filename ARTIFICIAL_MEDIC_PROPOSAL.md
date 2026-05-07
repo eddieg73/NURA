@@ -2,14 +2,25 @@
 
 This document outlines the hardware selection and technical architecture for developing an autonomous medical humanoid capable of clinical decision-making and protocol execution using the Unitree G1 platform.
 
-## 1. Hardware Selection: Unitree G1 EDU Ultimate B (U4)
+## 1. Hardware Selection: Recommended & Alternatives
 
-To create a functional "Artificial Medic," the **Unitree G1 EDU Ultimate B (U4)** is the recommended model.
+To create a functional "Artificial Medic," we have evaluated several humanoid platforms. While the Unitree G1 EDU U4 remains our primary recommendation for versatility and cost-efficiency, other models offer specialized advantages.
 
-### Why the U4 Variant?
-*   **Tactile Dexterity:** The U4 features dual **Dex3-1 force-controlled dexterous hands** with integrated tactile sensors. This is non-negotiable for a medic who must handle delicate instruments (syringes, bandages) or interact with human patients (checking pulse, palpation).
-*   **High Degrees of Freedom (43 DOF):** The U4 provides the maximum range of motion available in the G1 series, allowing it to navigate cramped environments (like an ambulance or a clinical room) and perform complex procedures.
-*   **Onboard Computing:** It comes equipped with the **NVIDIA Jetson Orin (100 TOPS)**. This provides the local compute power necessary to run medical AI models without requiring a constant internet connection—critical for emergency scenarios.
+### Primary Choice: Unitree G1 EDU Ultimate B (U4)
+*   **Tactile Dexterity:** Features dual **Dex3-1 force-controlled dexterous hands** with tactile sensors. Essential for handling medical instruments or interacting with patients.
+*   **Agility (43 DOF):** Maximum degrees of freedom in the G1 series for navigating clinical spaces.
+*   **Compute:** **NVIDIA Jetson Orin (100 TOPS)** for local AI inference.
+*   **Best for:** Research-focused prototypes and highly agile, small-scale medical assistants.
+
+### Alternative A: Fourier GR-1 (Medical & Rehab Focus)
+*   **Strengths:** Specifically marketed for "Medical and Rehab" scenarios. It is taller (165cm) and more powerful (230N·m peak torque), making it better suited for physically assisting patients (e.g., helping someone stand up).
+*   **Compute:** Uses an **Intel i7-13700H** platform, which may be more familiar for standard software development but less optimized for edge-AI than the Jetson Orin.
+*   **Best for:** Rehabilitation, patient transfer assistance, and clinical environments requiring a full-height presence.
+
+### Alternative B: AgiBot A2 Ultra (Industrial Power)
+*   **Strengths:** Features a more powerful **NVIDIA Jetson AGX Orin (64GB)** and 40 DOF. It is designed for high reliability and commercial-scale deployment.
+*   **Dexterity:** Includes dual 6-DOF dexterous hands and a comprehensive multi-sensor array (LiDAR, dual RGBD, fisheye).
+*   **Best for:** Large-scale commercial hospital deployments where high-uptime and superior compute are required for complex multi-modal AI.
 
 ---
 
