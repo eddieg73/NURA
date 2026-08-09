@@ -1,0 +1,28 @@
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+*.apk
+*.ipa
+*.aab
+ios/Pods/
+android/.gradle/
+android/local.properties
+android/app/debug/
+android/app/profile/
+android/app/release/
+
+# The environment + the secrets!
+.env
+*.env
+secrets/
+*.p8
+*.p12
+*.mobileprovision
+
+# The IDE
+.idea/
+*.iml
+.vscode/
+.DS_Store
