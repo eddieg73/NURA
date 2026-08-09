@@ -1,0 +1,44 @@
+# Codemagic workflow — the NURA-medical iOS builds (the CI-cloud lane!)
+# Triggered: on the git-push to the main branch (or the manual build!)
+workflows:
+  ios-build:
+    name: NURA-iOS
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: NURA-AppStoreConnect
+    environment:
+      vars:
+        XCODE_WORKSPACE: "Runner.xcworkspace"
+        XCODE_SCHEME: "Runner"
+        BUNDLE_ID: "com.nuratech.nuraMedical"
+        APP_STORE_APPLE_ID: 0  # ← the founder's App-Store-Connect app-ID (after the first upload!)
+      flutter: stable
+    scripts:
+      - name: Flutter pub get
+        script: flutter pub get
+      - name: Flutter analyze
+        script: flutter analyze
+      - name: Build the iOS release
+        script: flutter build ios --release --no-codesign
+      - name: Archive for the App Store
+        script: |
+          xcode-project build-ipa \
+            --workspace "$CM_BUILD_DIR/ios/$XCODE_WORKSPACE" \
+            --scheme "$XCODE_SCHEME" \
+            --bundle-id "$BUNDLE_ID"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        beta_groups: NURA-Testers
+        submit_to_app_store: false
+      email:
+        recipients:
+          - eg@nuratech.ai
+        notify:
+          success: true
+          failure: true
