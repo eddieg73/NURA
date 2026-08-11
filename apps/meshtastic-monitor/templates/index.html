@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meshtastic Node Monitor</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <h1>📡 Meshtastic Node Monitor</h1>
+  <div id="stats">
+    <span id="stat-packets">packets: —</span>
+    <span id="stat-nodes">nodes: —</span>
+    <span id="stat-pos">positions: —</span>
+    <span id="stat-last">last: —</span>
+  </div>
+</header>
+<main>
+  <section id="map-panel">
+    <h2>Mesh Map</h2>
+    <div id="map"></div>
+  </section>
+  <section id="tables">
+    <div class="panel">
+      <div class="toolbar">
+        <h2>Messages</h2>
+        <div>
+          <button id="btn-refresh">↻ Refresh</button>
+          <a class="btn" href="/api/export.csv?type=packets">⬇ Packets CSV</a>
+          <a class="btn" href="/api/export.csv?type=positions">⬇ Positions CSV</a>
+          <a class="btn" href="/api/export.csv?type=nodes">⬇ Nodes CSV</a>
+        </div>
+      </div>
+      <table id="msg-table">
+        <thead><tr><th>Time</th><th>From</th><th>Text</th><th>SNR</th><th>RSSI</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="panel">
+      <h2>Known Nodes</h2>
+      <table id="nodes-table">
+        <thead><tr><th>Node</th><th>Name</th><th>HW</th><th>Last</th><th>Packets</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>
