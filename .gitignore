@@ -1,0 +1,18 @@
+# the NURA secrets + the heavy data (the never push)
+.env
+*.env
+profiles/
+*credentials*
+*secrets*
+.kaggle/
+imaging-corpus/
+finetune-data/
+radiology-datasets/
+docs/
+*.zip
+*.npz
+*.onnx
+*.onnx.json
+cache/
+node_modules/
+__pycache__/

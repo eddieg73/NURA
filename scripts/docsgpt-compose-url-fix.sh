@@ -1,0 +1,3 @@
+#!/bin/bash
+# Patch the compose env block URLs (host-network mode) + recreate + verify
+ssh -o BatchMode=yes -o ConnectTimeout=10 -i ~/.ssh/id_nura_clean root@72.61.71.211 'cd /docker/docsgpt/deployment && grep -n "DATABASE_URL\|REDIS_URL\|CELERY_BROKER\|@postgres\|@redis" docker-compose.yaml | head -8 && sed -i "s|@postgres:5432|@127.0.0.1:5432|g; s|@redis:6379|@127.0.0.1:6379|g; s|redis://redis:6379|redis://127.0.0.1:6379|g" docker-compose.yaml && echo "=== after ===" && grep -n "DATABASE_URL\|@127" docker-compose.yaml | head -5 && docker compose -f docker-compose.yaml up -d --force-recreate backend 2>&1 | tail -1 && sleep 15 && echo "=== health ===" && curl -s -m 8 -o /dev/null -w "health: %{http_code}\n" http://127.0.0.1:7091/api/health 2>/dev/null'

@@ -1,0 +1,3 @@
+#!/bin/bash
+# DocsGPT -> Lab Ollama wiring + answer test
+ssh -o BatchMode=yes -o ConnectTimeout=10 -i ~/.ssh/id_nura_clean root@72.61.71.211 'cd /docker/docsgpt/deployment && sed -i "s|^OPENAI_BASE_URL=.*|OPENAI_BASE_URL=http://72.60.163.140:11434/v1|" .env && grep "^OPENAI_BASE_URL" .env | sed "s|://[^:]*:|://***:|" && docker compose -f docker-compose.yaml up -d backend 2>&1 | tail -1 && sleep 15 && K=$(grep "^API_KEY=" .env | head -1 | cut -d= -f2) && echo "=== answer test ===" && curl -s -m 40 -X POST http://127.0.0.1:7091/api/answer -H "Content-Type: application/json" -d "{\"question\":\"What is anatomy?\",\"api_key\":\"$K\"}" 2>/dev/null | head -c 300'

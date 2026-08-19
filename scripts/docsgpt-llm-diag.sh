@@ -1,0 +1,3 @@
+#!/bin/bash
+# DocsGPT answer-lane final diagnosis: backend log + LLM reachability from the backend
+ssh -o BatchMode=yes -o ConnectTimeout=10 -i ~/.ssh/id_nura_clean root@72.61.71.211 'echo "=== backend log (answer attempt) ==="; docker logs docsgpt-oss-backend-1 2>&1 | tail -12 | grep -iE "error|exception|refused|connect|traceback" | head -6; echo "=== backend->ollama ==="; docker exec docsgpt-oss-backend-1 sh -c "curl -s -m 6 -o /dev/null -w \"llm: %{http_code}\" http://127.0.0.1:11434/ 2>/dev/null"; echo; echo "=== ollama models ==="; curl -s -m 6 http://127.0.0.1:11434/api/tags 2>/dev/null | python3 -c "import json,sys; d=json.load(sys.stdin); print([m[\"name\"] for m in d.get(\"models\",[])])" 2>/dev/null | head -2'

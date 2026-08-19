@@ -1,0 +1,3 @@
+#!/bin/bash
+# Register the DocsGPT agent (fixed quotes) + answer test
+ssh -o BatchMode=yes -o ConnectTimeout=10 -i ~/.ssh/id_nura_clean root@72.61.71.211 "KEY=\$(python3 -c 'import uuid; print(uuid.uuid4().hex)'); docker exec docsgpt-oss-postgres-1 psql -U docsgpt -d docsgpt -c \"INSERT INTO agents (user_id, name, description, agent_type, status, key, tools) VALUES ('nura', 'NURA-Hermes', 'NURA clinical docs agent', 'docs', 'active', '\$KEY', '[]') RETURNING id, key;\" 2>&1 | head -5; echo '=== answer test ==='; curl -s -m 60 -X POST http://127.0.0.1:7091/api/answer -H 'Content-Type: application/json' -d \"{\\\"question\\\":\\\"What is anatomy?\\\",\\\"api_key\\\":\\\"\$KEY\\\"}\" 2>/dev/null | head -c 500"

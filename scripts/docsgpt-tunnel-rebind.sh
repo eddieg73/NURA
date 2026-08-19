@@ -1,0 +1,3 @@
+#!/bin/bash
+# Re-tunnel with 0.0.0.0 bind + answer test
+ssh -o BatchMode=yes -o ConnectTimeout=10 -i ~/.ssh/id_nura_clean root@72.61.71.211 'kill 3177518 2>/dev/null; sleep 1; ssh -o BatchMode=yes -o ConnectTimeout=8 -o ExitOnForwardFailure=yes -f -N -L 0.0.0.0:11434:127.0.0.1:11434 root@72.60.163.140 -i /root/.ssh/id_nura_clean 2>&1 | head -1; sleep 3; ss -tlnp 2>/dev/null | grep 11434 | head -1; K=$(grep "^API_KEY=" /docker/docsgpt/deployment/.env | head -1 | cut -d= -f2); echo "=== answer test ==="; curl -s -m 40 -X POST http://127.0.0.1:7091/api/answer -H "Content-Type: application/json" -d "{\"question\":\"What is anatomy?\",\"api_key\":\"$K\"}" 2>/dev/null | head -c 350'

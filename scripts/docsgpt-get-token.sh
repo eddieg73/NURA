@@ -1,0 +1,3 @@
+#!/bin/bash
+# GET the DocsGPT token + answer test
+ssh -o BatchMode=yes -o ConnectTimeout=10 -i ~/.ssh/id_nura_clean root@72.61.71.211 'T=$(curl -s -m 15 http://127.0.0.1:7091/api/generate_token 2>/dev/null | head -c 300); echo "gen response: ${T:0:60}"; TK=$(echo "$T" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get(\"token\") or d.get(\"api_key\") or \"\")" 2>/dev/null); if [ -n "$TK" ]; then echo "token: ${TK:0:8}..."; curl -s -m 50 -X POST http://127.0.0.1:7091/api/answer -H "Content-Type: application/json" -d "{\"question\":\"What is anatomy?\",\"api_key\":\"$TK\"}" 2>/dev/null | head -c 500; else echo "no token parsed"; fi'
