@@ -1,30 +1,27 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
+// The NURA smoke test — the 5-tab shell renders + the tabs switch.
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:nura_medical/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('The 5-tab shell renders and the tabs switch', (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // The navigation bar renders with the 5 destinations.
+    expect(find.byType(NavigationBar), findsOneWidget);
+    expect(find.text('Scribe'), findsWidgets);
+    expect(find.text('Clinical'), findsWidgets);
+
+    // The switch to the Ops tab.
+    await tester.tap(find.text('Ops'));
+    await tester.pumpAndSettle();
+    expect(find.text('📋 NURA Ops — the back office'), findsOneWidget);
+
+    // The switch to the Account tab.
+    await tester.tap(find.text('Account'));
+    await tester.pumpAndSettle();
+    expect(find.text('The license gate'), findsOneWidget);
   });
 }
