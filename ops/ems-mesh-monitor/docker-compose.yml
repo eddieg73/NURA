@@ -1,0 +1,32 @@
+# The Meshtastic Monitor — the dual-service deployment (the listener-daemon + the Flask-web!)
+services:
+  listener:
+    build: .
+    container_name: meshtastic-listener
+    restart: unless-stopped
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"   # the USB radio (Linux/RPi5!)
+    volumes:
+      - meshtastic-data:/data
+    environment:
+      - MESHTASTIC_DEVICE=/dev/ttyUSB0
+      - MESHTASTIC_DB=/data/meshtastic.db
+    command: ["python", "listener.py"]
+
+  web:
+    build: .
+    container_name: meshtastic-web
+    restart: unless-stopped
+    depends_on:
+      - listener
+    volumes:
+      - meshtastic-data:/data
+    ports:
+      - "5000:5000"
+    environment:
+      - MESHTASTIC_DB=/data/meshtastic.db
+      - PORT=5000
+    command: ["python", "app.py"]
+
+volumes:
+  meshtastic-data:

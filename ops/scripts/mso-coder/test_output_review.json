@@ -1,0 +1,314 @@
+{
+  "review_id": "55af48343168",
+  "generated_at_utc": "2026-08-19T01:47:25+00:00",
+  "coder_id": "ATLAS-TEST",
+  "patient_ref": "SYN-72-DM2-CKD3-CHF",
+  "status": "DRAFT \u2014 PROVIDER APPROVAL REQUIRED",
+  "draft": true,
+  "diagnosis_recommendations": [
+    {
+      "icd10": "E119",
+      "hcc": "HCC 37",
+      "hcc_desc": "Diabetes without Complications",
+      "raf": "0.166",
+      "condition": "Type 2 DM without complications",
+      "confidence": 0.98,
+      "confidence_level": "high",
+      "confidence_rationale": "exact ICD-10 in chart + Med42 corroboration; MEAT met",
+      "evidence": "diabetes documented | med42: on metformin 1000 mg BID, A1c 7.2% \u2014 improving",
+      "source": "rule",
+      "meat": {
+        "status": "met",
+        "met": [
+          "Monitor",
+          "Evaluate",
+          "Assess",
+          "Treat"
+        ],
+        "missing": []
+      },
+      "draft": true,
+      "provider_approval_required": true,
+      "note": "Uncomplicated DM. V28: same RAF as complication HCCs \u2014 accuracy first."
+    },
+    {
+      "icd10": "N1832",
+      "hcc": "HCC 328",
+      "hcc_desc": "Chronic Kidney Disease Stage 3b",
+      "raf": "0.07",
+      "condition": "Chronic kidney disease, stage 3b",
+      "confidence": 0.98,
+      "confidence_level": "high",
+      "confidence_rationale": "exact ICD-10 in chart + Med42 corroboration; MEAT met",
+      "evidence": "CKD stage 3b documented | med42: eGFR 38, on lisinopril 10 mg daily",
+      "source": "rule",
+      "meat": {
+        "status": "met",
+        "met": [
+          "Monitor",
+          "Evaluate",
+          "Assess",
+          "Treat"
+        ],
+        "missing": []
+      },
+      "draft": true,
+      "provider_approval_required": true,
+      "note": "Stage 3b (N18.32) is the only stage-3 code that maps to HCC 328 in V28."
+    },
+    {
+      "icd10": "I5022",
+      "hcc": "HCC 85",
+      "hcc_desc": "Congestive Heart Failure",
+      "raf": "0.323",
+      "condition": "Chronic systolic (congestive) heart failure",
+      "confidence": 0.98,
+      "confidence_level": "high",
+      "confidence_rationale": "exact ICD-10 in chart + Med42 corroboration; MEAT met",
+      "evidence": "HF documented (systolic) | med42: EF 35% on last echo, NYHA class II, on furosemide 40 mg daily and metoprolol succinate 50 mg",
+      "source": "rule",
+      "meat": {
+        "status": "met",
+        "met": [
+          "Monitor",
+          "Evaluate",
+          "Assess",
+          "Treat"
+        ],
+        "missing": []
+      },
+      "draft": true,
+      "provider_approval_required": true
+    },
+    {
+      "icd10": "I10",
+      "hcc": null,
+      "hcc_desc": null,
+      "raf": null,
+      "condition": "Hypertension",
+      "confidence": 0.47,
+      "confidence_level": "low",
+      "confidence_rationale": "no V28 reference mapping \u2014 coder verify; MEAT met",
+      "evidence": "controlled on lisinopril",
+      "source": "med42 (med42)",
+      "meat": {
+        "status": "met",
+        "met": [
+          "Monitor",
+          "Evaluate",
+          "Assess",
+          "Treat"
+        ],
+        "missing": []
+      },
+      "draft": true,
+      "provider_approval_required": true,
+      "note": "No V28 payment-HCC mapping in the reference \u2014 coder verify."
+    }
+  ],
+  "raf_impact": {
+    "before": 0.166,
+    "after": 0.559,
+    "delta": 0.393,
+    "approximate": true,
+    "hierarchy_note": "Phase-1 simplification: one RAF per HCC group (max coefficient); full V28 hierarchy + count-bonus logic is V2. Demographic factors not included.",
+    "current_codes_resolved": [
+      {
+        "code": "E119",
+        "hcc": "HCC 37",
+        "hcc_desc": "Diabetes without Complications",
+        "raf": "0.166",
+        "desc": "Type 2 DM without complications"
+      }
+    ],
+    "interaction_bonuses": [
+      {
+        "term": "Diabetes + CHF",
+        "approx_bonus": "~0.121",
+        "note": "Document both conditions separately each visit."
+      }
+    ],
+    "unrecaptured": [
+      {
+        "code": "I252",
+        "hcc": null,
+        "hcc_desc": null,
+        "raf_estimate": null,
+        "flag": "unrecaptured",
+        "note": "Prior-year code absent this year. V28 trap: old MI alone no longer generates a payment HCC \u2014 document active CAD with angina (I25.11x) if present."
+      }
+    ],
+    "suspected": [],
+    "draft": true
+  },
+  "compliance_validation": {
+    "meat": {
+      "per_recommendation": [
+        {
+          "icd10": "E119",
+          "hcc": "HCC 37",
+          "condition": "Type 2 DM without complications",
+          "meat_status": "met",
+          "met_components": [
+            "Monitor",
+            "Evaluate",
+            "Assess",
+            "Treat"
+          ],
+          "missing_components": []
+        },
+        {
+          "icd10": "N1832",
+          "hcc": "HCC 328",
+          "condition": "Chronic kidney disease, stage 3b",
+          "meat_status": "met",
+          "met_components": [
+            "Monitor",
+            "Evaluate",
+            "Assess",
+            "Treat"
+          ],
+          "missing_components": []
+        },
+        {
+          "icd10": "I5022",
+          "hcc": "HCC 85",
+          "condition": "Chronic systolic (congestive) heart failure",
+          "meat_status": "met",
+          "met_components": [
+            "Monitor",
+            "Evaluate",
+            "Assess",
+            "Treat"
+          ],
+          "missing_components": []
+        },
+        {
+          "icd10": "I10",
+          "hcc": null,
+          "condition": "Hypertension",
+          "meat_status": "met",
+          "met_components": [
+            "Monitor",
+            "Evaluate",
+            "Assess",
+            "Treat"
+          ],
+          "missing_components": []
+        }
+      ],
+      "summary": "MEAT met for 4 of 4 recommended condition(s).",
+      "meets_meat": true
+    },
+    "documentation_sufficiency": {
+      "suspected_undocumented": [],
+      "history_vs_active": [],
+      "trap_notes": [
+        {
+          "kind": "trap",
+          "condition": "hypertension",
+          "note": "HTN alone has no HCC. It counts only with HF (I11.0) or CKD (I12.x/I13.x) \u2014 use those codes only if clinically established. (Qualifying condition may be present \u2014 use the combined code ONLY if the relationship is clinically established.)"
+        }
+      ]
+    },
+    "provider_review_required": true,
+    "draft": true
+  },
+  "provider_review": {
+    "gaps": [
+      "DM and CKD both documented. If the CKD is diabetic, document E11.22/E10.22 relationship explicitly (clinically established only)."
+    ],
+    "prompts": [],
+    "trap_notes": [
+      {
+        "kind": "trap",
+        "condition": "hypertension",
+        "note": "HTN alone has no HCC. It counts only with HF (I11.0) or CKD (I12.x/I13.x) \u2014 use those codes only if clinically established. (Qualifying condition may be present \u2014 use the combined code ONLY if the relationship is clinically established.)"
+      }
+    ],
+    "history_notes": [],
+    "notes": [],
+    "draft": true
+  },
+  "audit_record": {
+    "review_id": "55af48343168",
+    "timestamp_utc": "2026-08-19T01:47:25+00:00",
+    "coder_id": "ATLAS-TEST",
+    "patient_ref": "SYN-72-DM2-CKD3-CHF",
+    "input_sha256": "e72741c882d3047c",
+    "chart_chars": 622,
+    "original_codes": [
+      "E119"
+    ],
+    "recommended_codes": [
+      "E119",
+      "N1832",
+      "I5022",
+      "I10"
+    ],
+    "changes": [
+      {
+        "action": "keep",
+        "code": "E119",
+        "hcc": "HCC 37",
+        "raf": "0.166",
+        "confidence": 0.98
+      },
+      {
+        "action": "add",
+        "code": "I10",
+        "hcc": null,
+        "raf": null,
+        "confidence": 0.47,
+        "evidence": "controlled on lisinopril"
+      },
+      {
+        "action": "add",
+        "code": "I5022",
+        "hcc": "HCC 85",
+        "raf": "0.323",
+        "confidence": 0.98,
+        "evidence": "HF documented (systolic) | med42: EF 35% on last echo, NYHA class II, on furosemide 40 mg daily and metoprolol succinate 50 mg"
+      },
+      {
+        "action": "add",
+        "code": "N1832",
+        "hcc": "HCC 328",
+        "raf": "0.07",
+        "confidence": 0.98,
+        "evidence": "CKD stage 3b documented | med42: eGFR 38, on lisinopril 10 mg daily"
+      },
+      {
+        "action": "recapture-review",
+        "code": "I252",
+        "hcc": null,
+        "raf": null,
+        "note": "Prior-year code absent this year. V28 trap: old MI alone no longer generates a payment HCC \u2014 document active CAD with angina (I25.11x) if present."
+      }
+    ],
+    "raf_before": 0.166,
+    "raf_after": 0.559,
+    "raf_delta": 0.393,
+    "engine_lane": "med42 (med42:latest) + rule-based",
+    "llm_error": null,
+    "status": "DRAFT \u2014 PROVIDER APPROVAL REQUIRED",
+    "audit_compliant": true,
+    "notes": [
+      "In-memory audit only \u2014 no production data writes (Phase 1).",
+      "Chart text is NOT retained; only the SHA-256 prefix is stored."
+    ]
+  },
+  "engine": {
+    "lane": "med42 (med42:latest) + rule-based",
+    "llm_error": null,
+    "chart_chars": 622
+  },
+  "compliance_flags": {
+    "read_only": true,
+    "no_emr_writes": true,
+    "phi_stripped_test_data_only": true,
+    "provider_approval_required": true,
+    "raf_values_approximate": true
+  },
+  "chart_meta": {}
+}

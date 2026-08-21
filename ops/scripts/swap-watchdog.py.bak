@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+"""NURA swap/memory watchdog — silent when healthy, alerts when critical."""
+import subprocess, sys
+
+def get_mem():
+    out = subprocess.run(["free", "-b"], capture_output=True, text=True).stdout
+    lines = out.strip().split("\n")
+    mem = dict(zip(["total","used","free","shared","buff_cache","available"],
+                   map(int, lines[1].split()[1:])))
+    swap = dict(zip(["total","used","free"],
+                   map(int, lines[2].split()[1:])))
+    return mem, swap
+
+mem, swap = get_mem()
+swap_pct = (swap["used"] / swap["total"] * 100) if swap["total"] > 0 else 0
+mem_avail_pct = mem["available"] / mem["total"] * 100
+
+alerts = []
+if swap_pct > 90:
+    alerts.append(f"SWAP CRITICAL: {swap_pct:.0f}% used ({swap['used']//1024//1024}MB/{swap['total']//1024//1024}MB)")
+elif swap_pct > 75:
+    alerts.append(f"SWAP WARNING: {swap_pct:.0f}% used ({swap['used']//1024//1024}MB/{swap['total']//1024//1024}MB)")
+
+if mem_avail_pct < 10:
+    alerts.append(f"MEMORY CRITICAL: only {mem_avail_pct:.0f}% available ({mem['available']//1024//1024}MB)")
+
+if alerts:
+    for a in alerts:
+        print(a)
+
+# Check for duplicate Paperclip processes
+dup_check = subprocess.run(
+    ["bash", "-c", "ps aux | grep '[p]aperclipai onboard' | wc -l"],
+    capture_output=True, text=True
+)
+count = int(dup_check.stdout.strip())
+if count > 1:
+    print(f"MULTIPLE PAPERCLIP: {count} onboard processes running — duplicates wasting RAM")
+
+sys.exit(0 if not alerts else 1)

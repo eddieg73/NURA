@@ -1,0 +1,41 @@
+====================================================================================================
+NURA CODING AGENT — MA RAF/HCC V28 decision support
+DECISION SUPPORT ONLY — NOT A DIAGNOSIS — PROVIDER APPROVAL REQUIRED ON EVERY OUTPUT
+READ-ONLY: no writes to OpenEMR/Perfex/CarePilot. No PHI leaves the box.
+====================================================================================================
+ENGINE LANE: med42 (med42:latest) + rule-based
+CHART: 622 chars analyzed | Reference: CMS-HCC V28 workbook sidecar
+----------------------------------------------------------------------------------------------------
+CANDIDATES  (code + HCC + RAF + evidence — every row DRAFT):
+----------------------------------------------------------------------------------------------------
+  [DRAFT] E119      HCC 37      RAF 0.166  Diabetes without Complications
+          condition: Type 2 DM without complications  (source: rule)
+          evidence: "diabetes documented | med42: on metformin 1000 mg BID, A1c 7.2% — improving"
+  ⚠ Uncomplicated DM. V28: same RAF as complication HCCs — accuracy first.
+  [DRAFT] N1832     HCC 328     RAF 0.07   Chronic Kidney Disease Stage 3b
+          condition: Chronic kidney disease, stage 3b  (source: rule)
+          evidence: "CKD stage 3b documented | med42: eGFR 38, on lisinopril 10 mg daily"
+  ⚠ Stage 3b (N18.32) is the only stage-3 code that maps to HCC 328 in V28.
+  [DRAFT] I5022     HCC 85      RAF 0.323  Congestive Heart Failure
+          condition: Chronic systolic (congestive) heart failure  (source: rule)
+          evidence: "HF documented (systolic) | med42: EF 35% on last echo, NYHA class II, on furosemide 40 mg daily and metoprolol succinate 50 mg"
+  [DRAFT] I10       NO-V28-HCC  RAF —      
+          condition: Hypertension  (source: med42 (med42))
+          evidence: "controlled on lisinopril"
+  ⚠ no reference mapping — coder verify
+----------------------------------------------------------------------------------------------------
+GAPS  (missing specificity / documentation):
+  - DM and CKD both documented. If the CKD is diabetic, document E11.22/E10.22 relationship explicitly (clinically established only).
+----------------------------------------------------------------------------------------------------
+PROMPTS  (provider-review asks — never silent confirmations):
+  (none)
+----------------------------------------------------------------------------------------------------
+TRAP NOTES  (V28 — no payment HCC unless noted):
+  - hypertension: HTN alone has no HCC. It counts only with HF (I11.0) or CKD (I12.x/I13.x) — use those codes only if clinically established. (Qualifying condition may be present — use the combined code ONLY if the relationship is clinically established.)
+----------------------------------------------------------------------------------------------------
+INTERACTION BONUSES  (reference estimates — APPROXIMATE):
+  - Diabetes + CHF: ~0.121 — Document both conditions separately each visit.
+----------------------------------------------------------------------------------------------------
+STATUS: DRAFT — PROVIDER APPROVAL REQUIRED
+RAF values are reference estimates — verify against current CMS before any payment decision.
+====================================================================================================

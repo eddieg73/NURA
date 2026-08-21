@@ -1,0 +1,9 @@
+{
+  "fixture": "PHI-stripped synthetic sample chart (Phase-1 test data — no real patient data)",
+  "patient_ref": "SYN-72-DM2-CKD3-CHF",
+  "coder_id": "ATLAS-TEST",
+  "current_codes": ["E11.9"],
+  "prior_year_codes": ["E11.9", "I25.2"],
+  "use_llm": true,
+  "chart": "ENCOUNTER NOTE (synthetic test case)\n72-year-old male, established patient, follow-up.\nAssessment/Plan:\n1. Type 2 diabetes mellitus (E11.9), on metformin 1000 mg BID. A1c 7.2% — improving. Continue, recheck A1c in 3 months.\n2. Chronic kidney disease stage 3b (N18.32), eGFR 38, on lisinopril 10 mg daily. Monitor BMP q6 months.\n3. Chronic systolic congestive heart failure (I50.22), EF 35% on last echo, NYHA class II, on furosemide 40 mg daily and metoprolol succinate 50 mg.\n4. Hypertension — controlled on lisinopril.\nProblem list: DM2, CKD3b, CHF (systolic, chronic), HTN.\nFollow up in 3 months. Continue current meds."
+}

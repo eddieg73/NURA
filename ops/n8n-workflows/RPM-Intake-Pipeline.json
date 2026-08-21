@@ -1,0 +1,85 @@
+{
+  "name": "RPM Intake Pipeline",
+  "nodes": [
+    {
+      "parameters": {"httpMethod": "POST", "path": "rpm-enroll", "responseMode": "onReceived"},
+      "id": "rpm-webhook", "name": "Enrollment Webhook", "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2, "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "loose"},
+          "conditions": [
+            {"id": "c1", "leftValue": "={{ $json.body.consent }}", "rightValue": true, "operator": {"type": "boolean", "operation": "true"}}
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "rpm-consent", "name": "Consent Required?", "type": "n8n-nodes-base.if",
+      "typeVersion": 2, "position": [220, 0]
+    },
+    {
+      "parameters": {"operation": "upsert", "resource": "contact", "additionalFields": {"customFieldsUi": {"customFieldValues": [{"fieldId": "rpm_status", "fieldValue": "enrolled"}]}}},
+      "id": "rpm-ghl", "name": "GHL: Mark RPM Enrolled", "type": "n8n-nodes-base.highLevel",
+      "typeVersion": 1, "position": [440, -120]
+    },
+    {
+      "parameters": {"triggerTimes": {"item": [{"mode": "customInterval", "interval": 16}]}, "triggerInterval": "days"},
+      "id": "rpm-16day", "name": "Wait 16 Days", "type": "n8n-nodes-base.wait",
+      "typeVersion": 1, "position": [660, -120]
+    },
+    {
+      "parameters": {"conditions": {"options": {"caseSensitive": true}, "conditions": [
+        {"id": "d1", "leftValue": "={{ $json.days_transmitted }}", "rightValue": 16, "operator": {"type": "number", "operation": "gte"}}
+      ]}},
+      "id": "rpm-16check", "name": "16 Days of Data?", "type": "n8n-nodes-base.if",
+      "typeVersion": 2, "position": [880, -120]
+    },
+    {
+      "parameters": {"content": "## RPM Monthly Review Due\nPatient: {{ $json.patient_name }}\n99457 billing window open. Provider review required.\nDevice data: {{ $json.days_transmitted }}/16 days ✓", "chatId": "=nura-rpm"},
+      "id": "rpm-alert", "name": "Telegram: Provider Review", "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.1, "position": [1100, -120]
+    },
+    {
+      "parameters": {"operation": "create", "resource": "item", "additionalFields": {"customFieldsUi": {"customFieldValues": [{"fieldId": "rpm_billing", "fieldValue": "99457_ready"}]}}},
+      "id": "rpm-billing", "name": "Perfex: Billing Item", "type": "n8n-nodes-base.perfexCrm",
+      "typeVersion": 1, "position": [1320, -120]
+    },
+    {
+      "parameters": {"content": "RPM enrollment rejected: consent missing. Contact patient to complete CMS consent."},
+      "id": "rpm-reject", "name": "Telegram: Consent Missing", "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.1, "position": [440, 120]
+    },
+    {
+      "parameters": {"keepOnlySet": true, "values": {"set": [
+        {"name": "days_transmitted", "value": "={{ $json.days_transmitted ?? 0 }}"},
+        {"name": "patient_name", "value": "={{ $json.name }}"}
+      ]}},
+      "id": "rpm-set", "name": "Set Fields", "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4, "position": [0, 240]
+    }
+  ],
+  "connections": {
+    "Enrollment Webhook": {"main": [[{"node": "Set Fields", "type": "main", "index": 0}]]},
+    "Set Fields": {"main": [[{"node": "Consent Required?", "type": "main", "index": 0}]]},
+    "Consent Required?": {
+      "main": [
+        [{"node": "GHL: Mark RPM Enrolled", "type": "main", "index": 0}],
+        [{"node": "Telegram: Consent Missing", "type": "main", "index": 0}]
+      ]
+    },
+    "GHL: Mark RPM Enrolled": {"main": [[{"node": "Wait 16 Days", "type": "main", "index": 0}]]},
+    "Wait 16 Days": {"main": [[{"node": "16 Days of Data?", "type": "main", "index": 0}]]},
+    "16 Days of Data?": {
+      "main": [
+        [{"node": "Telegram: Provider Review", "type": "main", "index": 0}],
+        [{"node": "GHL: Mark RPM Enrolled", "type": "main", "index": 0}]
+      ]
+    },
+    "Telegram: Provider Review": {"main": [[{"node": "Perfex: Billing Item", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "active": false,
+  "versionId": "rpm-intake-v1"
+}
