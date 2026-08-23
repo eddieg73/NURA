@@ -1,0 +1,71 @@
+<channel version="4.4.0">
+  <id>2ca13e55-8c9b-4088-802b-2ecc43348370</id>
+  <nextMetaDataId>2</nextMetaDataId>
+  <name>OpenEMR_to_ThaiRIS_ORM</name>
+  <description>Automated TCP-to-TCP HL7 routing channel deployed by Hermes.</description>
+  <revision>1</revision>
+  <sourceConnector version="4.4.0">
+    <metaDataId>0</metaDataId>
+    <name>sourceConnector</name>
+    <properties class="com.mirth.connect.connectors.tcp.TcpReceiverProperties" version="4.4.0">
+      <pluginProperties/>
+      <listenerConnectorProperties>
+        <host>0.0.0.0</host>
+        <port>6002</port>
+      </listenerConnectorProperties>
+      <sourceConnectorProperties>
+        <responseVariable>Auto-generate (After source transformer)</responseVariable>
+        <respondAfterProcessing>true</respondAfterProcessing>
+        <processBatch>false</processBatch>
+      </sourceConnectorProperties>
+      <transmissionModeProperties class="com.mirth.connect.plugins.mllpmode.MLLPModeProperties">
+        <pluginPointName>MLLP</pluginPointName>
+      </transmissionModeProperties>
+      <serverMode>true</serverMode>
+      <remoteAddress></remoteAddress>
+      <remotePort></remotePort>
+      <overrideLocalBinding>false</overrideLocalBinding>
+      <receiveTimeout>0</receiveTimeout>
+      <bufferSize>65536</bufferSize>
+      <maxConnections>10</maxConnections>
+      <keepConnectionOpen>true</keepConnectionOpen>
+      <dataType>HL7V2</dataType>
+    </properties>
+  </sourceConnector>
+  <destinationConnectors>
+    <connector version="4.4.0">
+      <metaDataId>1</metaDataId>
+      <name>Destination 1</name>
+      <properties class="com.mirth.connect.connectors.tcp.TcpDispatcherProperties" version="4.4.0">
+        <pluginProperties/>
+        <destinationConnectorProperties>
+          <queueEnabled>true</queueEnabled>
+          <sendFirst>false</sendFirst>
+          <retryIntervalMillis>10000</retryIntervalMillis>
+          <regenerateTemplate>false</regenerateTemplate>
+          <retryCount>0</retryCount>
+          <rotate>false</rotate>
+          <includeFilterClasses>false</includeFilterClasses>
+          <threadCount>1</threadCount>
+          <validateResponse>false</validateResponse>
+        </destinationConnectorProperties>
+        <transmissionModeProperties class="com.mirth.connect.plugins.mllpmode.MLLPModeProperties">
+          <pluginPointName>MLLP</pluginPointName>
+        </transmissionModeProperties>
+        <remoteAddress>thairis</remoteAddress>
+        <remotePort>6002</remotePort>
+        <overrideLocalBinding>false</overrideLocalBinding>
+        <localAddress></localAddress>
+        <localPort></localPort>
+        <sendTimeout>5000</sendTimeout>
+        <bufferSize>65536</bufferSize>
+        <keepConnectionOpen>true</keepConnectionOpen>
+        <checkRemoteHost>false</checkRemoteHost>
+        <responseTimeout>5000</responseTimeout>
+        <ignoreResponse>false</ignoreResponse>
+        <queueOnResponseTimeout>true</queueOnResponseTimeout>
+        <dataType>HL7V2</dataType>
+      </properties>
+    </connector>
+  </destinationConnectors>
+</channel>

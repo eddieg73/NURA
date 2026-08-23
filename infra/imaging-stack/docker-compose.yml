@@ -1,0 +1,52 @@
+services:
+
+  thairis-db:
+    image: mariadb:11
+    container_name: thairis-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${THAIRIS_DB_ROOT_PASSWORD:?set in .env}
+      MYSQL_DATABASE: ${THAIRIS_DB_NAME:-thairis}
+      MYSQL_USER: ${THAIRIS_DB_USER:-thairis}
+      MYSQL_PASSWORD: ${THAIRIS_DB_PASSWORD:?set in .env}
+    volumes:
+      - thairis-db:/var/lib/mysql
+      - ./db-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    networks:
+      - nura
+
+  thairis:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nura-thairis:1.0
+    container_name: thairis
+    restart: unless-stopped
+    ports:
+      - "8085:80"
+    volumes:
+      - ./www:/var/www/html
+    depends_on:
+      thairis-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost/ >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - nura
+
+volumes:
+  thairis-db:
+
+networks:
+  nura:
+    external: true

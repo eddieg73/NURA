@@ -1,0 +1,69 @@
+<channel version="4.4.0">
+  <id>[CHANNEL_ID]</id>
+  <nextMetaDataId>2</nextMetaDataId>
+  <name>OpenEMR_DB_Poller_to_ThaiRIS_ADT</name>
+  <description>Poll OpenEMR patient_data (read-only) and forward ADT^A04 to ThaiRIS :6001</description>
+  <revision>1</revision>
+  <sourceConnector version="4.4.0">
+    <metaDataId>0</metaDataId>
+    <name>sourceConnector</name>
+    <properties class="com.mirth.connect.connectors.db.DbReceiverProperties" version="4.4.0">
+      <pluginProperties/>
+      <driver>com.mysql.cj.jdbc.Driver</driver>
+      <url>jdbc:mysql://openemr:3306/openemr?useSSL=true&amp;serverTimezone=UTC</url>
+      <username>[MIRTH_DB_USER]</username>
+      <password>[MIRTH_DB_PASS]</password>
+      <query>SELECT pid, fname, lname, DOB, sex FROM patient_data WHERE pid &gt; ${last_pid} ORDER BY pid</query>
+      <update>UPDATE patient_data SET last_polled = NOW() WHERE pid = ${pid}</update>
+      <useUpdate>false</useUpdate>
+      <sourceConnectorProperties>
+        <responseVariable>Auto-generate (After source transformer)</responseVariable>
+        <respondAfterProcessing>true</respondAfterProcessing>
+        <processBatch>true</processBatch>
+      </sourceConnectorProperties>
+      <pollingType>interval</pollingType>
+      <pollingFrequency>30000</pollingFrequency>
+      <keepConnectionOpen>false</keepConnectionOpen>
+      <dataType>RAW</dataType>
+    </properties>
+  </sourceConnector>
+  <destinationConnectors>
+    <connector version="4.4.0">
+      <metaDataId>1</metaDataId>
+      <name>ThaiRIS_ADT_6001</name>
+      <properties class="com.mirth.connect.connectors.tcp.TcpDispatcherProperties" version="4.4.0">
+        <pluginProperties/>
+        <destinationConnectorProperties>
+          <queueEnabled>true</queueEnabled>
+          <sendFirst>false</sendFirst>
+          <retryIntervalMillis>10000</retryIntervalMillis>
+          <regenerateTemplate>false</regenerateTemplate>
+          <retryCount>0</retryCount>
+          <rotate>false</rotate>
+          <threadCount>1</threadCount>
+          <validateResponse>false</validateResponse>
+        </destinationConnectorProperties>
+        <transmissionModeProperties class="com.mirth.connect.plugins.mllpmode.MLLPModeProperties">
+          <pluginPointName>MLLP</pluginPointName>
+        </transmissionModeProperties>
+        <remoteAddress>[DEST_IP]</remoteAddress>
+        <remotePort>6001</remotePort>
+        <overrideLocalBinding>false</overrideLocalBinding>
+        <localAddress></localAddress>
+        <localPort></localPort>
+        <sendTimeout>5000</sendTimeout>
+        <bufferSize>65536</bufferSize>
+        <keepConnectionOpen>true</keepConnectionOpen>
+        <checkRemoteHost>false</checkRemoteHost>
+        <responseTimeout>5000</responseTimeout>
+        <ignoreResponse>false</ignoreResponse>
+        <queueOnResponseTimeout>true</queueOnResponseTimeout>
+        <dataType>HL7V2</dataType>
+      </properties>
+    </connector>
+  </destinationConnectors>
+  <preprocessingScript>// Build ADT^A04 from DB row
+var msg = "MSH|^~\\&amp;|OpenEMR|NURATECH|ThaiRIS|NURATECH|" + DateUtil.getCurrentDate("yyyyMMddHHmm") + "||ADT^A04|ADT" + channelMap.get("pid") + "|P|2.3\r" +
+          "PID|1||" + channelMap.get("pid") + "||" + channelMap.get("lname") + "^" + channelMap.get("fname") + "||" + channelMap.get("DOB") + "|" + channelMap.get("sex") + "\r";
+return msg;</preprocessingScript>
+</channel>

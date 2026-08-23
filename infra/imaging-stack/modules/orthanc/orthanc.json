@@ -1,0 +1,53 @@
+{
+  "Name": "NURA Orthanc PACS",
+  "DicomAet": "NURAORTHANC",
+  "DicomPort": 4242,
+  "HttpPort": 8042,
+  "AuthenticationEnabled": true,
+  "RegisteredUsers": {
+    "orthanc": "CHANGE_ME_ORTHANC_PASS"
+  },
+  "StorageDirectory": "/var/lib/orthanc/db",
+  "StoreDicom": true,
+  "DicomServerEnabled": true,
+  "DicomCheckCalledAet": false,
+  "DicomModalities": {
+    "thairis": {
+      "AET": "THAIRIS",
+      "Host": "thairis",
+      "Port": 11112,
+      "AllowEcho": true,
+      "AllowStore": true,
+      "AllowFind": true,
+      "AllowMove": true
+    },
+    "ohif": {
+      "AET": "OHIF",
+      "Host": "ohif-viewer",
+      "Port": 11112,
+      "AllowEcho": true,
+      "AllowStore": false
+    }
+  },
+  "DicomWeb": {
+    "Enable": true,
+    "Root": "/dicomweb/",
+    "EnableWado": true,
+    "EnableQido": true,
+    "EnableStow": true,
+    "QidoCaseSensitive": false,
+    "Cors": ["*"]
+  },
+  "Cors": ["*"],
+  "HttpVerbose": false,
+  "DicomIngestWorkers": 1,
+  "StoreDicomMetadata": true,
+  "DeleteAllowed": false,
+  "TemporaryDirectory": "/var/lib/orthanc/tmp",
+  "LogExportedResources": true,
+  "HttpsVerifyPeers": false,
+  "MallocArenaMax": 8,
+  "HttpWebhooks": [
+    "http://n8n:5678/webhook/orthanc-new-instance"
+  ]
+}

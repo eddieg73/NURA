@@ -1,0 +1,54 @@
+# NURA Model Routing Table (task-driven). Prefer narrow, fallback-safe, PHI-aware.
+# provider_review/consensus flags drive the PolicyEngine, not the model.
+radiology_interpretation:
+  preferred: deepseek
+  fallback: local-medical-llm
+  require_structured_output: true
+  provider_review: true
+
+differential_diagnosis:
+  preferred: deepseek
+  fallback: openai
+  require_structured_output: true
+  provider_review: true
+  consensus_required_if_high_risk: true
+
+document_extraction:
+  preferred: local
+  fallback: deepseek
+  require_structured_output: true
+  provider_review: false
+
+patient_message_draft:
+  preferred: deepseek
+  fallback: local
+  require_structured_output: true
+  provider_review: true
+  provider_approval_required: true
+
+coding_suggestions:
+  preferred: deepseek
+  fallback: openai
+  require_structured_output: false
+  provider_review: false
+  provider_or_coder_review: true
+
+evidence_synthesis:
+  preferred: deepseek
+  fallback: local-medical-llm
+  require_structured_output: true
+  provider_review: false
+
+fast_extraction:
+  preferred: local
+  fallback: deepseek
+  require_structured_output: true
+  provider_review: false
+
+# Encoder/NER + embeddings lane (retrieval, concept extraction, dedup) — NOT a generator.
+# Resolves to a local encoder (Clinical ModernBERT / nomic-embed-text), not an LLM.
+clinical_embedding:
+  preferred: local-encoder
+  fallback: local
+  require_structured_output: false
+  provider_review: false

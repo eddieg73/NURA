@@ -1,0 +1,56 @@
+{
+  "channel": {
+    "id": "",
+    "name": "OpenEMR_to_ThaiRIS_ORM",
+    "description": "Radiology order routing: OpenEMR -> ThaiRIS (MLLP :6002)",
+    "enabled": true,
+    "sourceConnector": {
+      "name": "source",
+      "transportName": "TCP Listener",
+      "mode": "SOURCE",
+      "enabled": true,
+      "version": "4.5.2",
+      "transformer": { "elements": [] },
+      "filter": { "elements": [] },
+      "properties": {
+        "host": "0.0.0.0",
+        "port": "6002",
+        "timeout": "10000",
+        "bufferSize": "65536",
+        "dataTypeBinary": "false",
+        "charset": "UTF-8",
+        "respondOnConnect": "false"
+      }
+    },
+    "destinationConnectors": [
+      {
+        "name": "ThaiRIS_ORM_6002",
+        "transportName": "TCP Sender",
+        "mode": "DESTINATION",
+        "enabled": true,
+        "version": "4.5.2",
+        "transformer": { "elements": [] },
+        "filter": { "elements": [] },
+        "properties": {
+          "host": "thairis",
+          "port": "6002",
+          "keepConnectionOpen": "true",
+          "connectTimeout": "10000",
+          "responseTimeout": "10000",
+          "sendTimeout": "10000",
+          "charset": "UTF-8"
+        }
+      }
+    ],
+    "preprocessingScript": "",
+    "postprocessingScript": "",
+    "deployScript": "",
+    "undeployScript": "",
+    "properties": {
+      "clearGlobalChannelMap": "true",
+      "messageStorageMode": "DEVELOPMENT",
+      "encryptData": "false",
+      "removeContentOnCompletion": "false"
+    }
+  }
+}

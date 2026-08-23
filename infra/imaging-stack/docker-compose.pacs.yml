@@ -1,0 +1,46 @@
+services:
+
+  orthanc:
+    image: jodogne/orthanc-plugins:${ORTHANC_TAG:-latest}
+    container_name: orthanc
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8042:8042"          # REST/DICOMweb — pacs.nuratech.ai (NPM)
+      - "127.0.0.1:4242:4242"          # DICOM C-STORE — private, never proxied
+    volumes:
+      - orthanc-db:/var/lib/orthanc/db
+      - ./modules/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro
+    networks:
+      - nura
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs -u orthanc:CHANGE_ME_ORTHANC_PASS http://127.0.0.1:8042/system >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  ohif-viewer:
+    image: ohif/viewer:${OHIF_TAG:-latest}
+    container_name: ohif-viewer
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:80"            # viewer.nuratech.ai (NPM)
+    volumes:
+      - ./modules/ohif/app-config.js:/usr/share/nginx/html/app-config.js:ro
+    depends_on:
+      - orthanc
+    networks:
+      - nura
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost/ >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+volumes:
+  orthanc-db:
+
+networks:
+  nura:
+    external: true

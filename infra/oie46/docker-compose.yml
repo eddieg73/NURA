@@ -1,0 +1,41 @@
+# OIE 4.6.0 engine (side-by-side with 4.5.2 rollback engine)
+services:
+  postgres-db:
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_DB=enginedb
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASS}
+    volumes:
+      - oie46-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER} -d enginedb"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  mirth-engine:
+    image: nuratech/connect:4.6.0-nura.1
+    restart: always
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    ports:
+      - "8086:8080"  # HTTP Listener
+      - "8445:8443"  # Admin API
+      - "6663:6661"  # MLLP
+    environment:
+      - DATABASE=postgres
+      - DATABASE_URL=jdbc:postgresql://postgres-db:5432/enginedb
+      - DATABASE_USERNAME=${PG_USER}
+      - DATABASE_PASSWORD=${PG_PASS}
+      - JAVA_TOOL_OPTIONS=--add-opens=java.sql/java.sql=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.desktop/java.awt=ALL-UNNAMED
+    volumes:
+      - oie46-appdata:/opt/oie/appdata
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  oie46-pg:
+  oie46-appdata:
