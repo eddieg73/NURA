@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  dsh-harness:
+    image: deepseek/dsh-core:latest
+    container_name: dsh-harness
+    ports:
+      - "8000:8000"
+    environment:
+      - LLM_ENDPOINT=http://ollama-lab:11434
+      - LLM_MODEL=gemma4:31b
+      - PROFILE=nura
+      - B2_BUCKET=nura-orion-audit
+    volumes:
+      - /opt/data/nura_medical/orion/backend/plugins:/app/plugins
+      - /opt/data/profiles/nura/.env:/app/.env:ro
+    restart: always
+    networks:
+      - nura-net
+
+networks:
+  nura-net:
+    external: true

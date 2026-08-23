@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "layout": {
+    "type": "SECOND_SCREEN",
+    "left_pane": {
+      "id": "comms_hub",
+      "components": ["PATIENT_QUEUE", "OMNI_CHAT", "CLINIC_PULSE"]
+    },
+    "right_pane": {
+      "id": "intelligence_hub",
+      "components": ["LIVE_SCRIBE", "VISION_ANALYSIS", "RAF_IMPACT_COUNTER", "MUST_NOT_MISS_ALERT"]
+    }
+  },
+  "components": {
+    "SOAP_CARD": {
+      "fields": ["subjective", "objective", "assessment", "plan"],
+      "action": "APPROVE_NOTE",
+      "style": "clinical_blue"
+    },
+    "VISUAL_ANALYSIS_CARD": {
+      "fields": ["image_url", "observation", "suggested_action", "severity"],
+      "action": "ADD_TO_OBJECTIVE",
+      "style": "vision_purple"
+    },
+    "RAF_IMPACT_COUNTER": {
+      "fields": ["current_raf", "delta", "top_contributing_codes"],
+      "action": "VIEW_DETAIL",
+      "style": "financial_green"
+    },
+    "MUST_NOT_MISS_ALERT": {
+      "fields": ["warning", "guideline_link", "action"],
+      "action": "Triage_NOW",
+      "style": "critical_red"
+    },
+    "KNOWLEDGE_CARD": {
+      "fields": ["answer", "sources", "confidence"],
+      "action": "VIEW_SOURCE",
+      "style": "info_gold"
+    }
+  }
+}
