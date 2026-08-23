@@ -617,3 +617,94 @@ export type WorkflowStep = z.infer<typeof WorkflowStepSchema>;
 export type Workflow = z.infer<typeof WorkflowSchema>;
 export type SkillStatus = z.infer<typeof SkillStatusSchema>;
 export type Skill = z.infer<typeof SkillSchema>;
+
+// ── NURA Control Plane — missions, tasks, gates, and the command bus ────────
+// This is the seam between the command-center UI (eyes/controls) and the
+// Hermes runtime (brain/hands). FounderOS never becomes an autonomous agent:
+// it displays mission state, accepts executive commands, and exposes gates.
+// Decomposition + execution belong to Hermes/worker agents below.
+
+// Priority: P0 = must-ship, P3 = backlog.
+export const MissionPrioritySchema = z.enum(['P0', 'P1', 'P2', 'P3']);
+export type MissionPriority = z.infer<typeof MissionPrioritySchema>;
+
+// Lifecycle status. `awaiting_approval` means a gate is armed and a human (or
+// authorized approver) must confirm before the mission advances.
+export const MissionStatusSchema = z.enum([
+  'proposed',
+  'executing',
+  'blocked',
+  'awaiting_approval',
+  'complete',
+  'failed',
+]);
+export type MissionStatus = z.infer<typeof MissionStatusSchema>;
+
+// The change-policy gate pipeline, in release order. This is the visible
+// ladder on the dashboard: BUILD → UNIT → INTEGRATION → SECURITY → CLINICAL →
+// QA → MERGE. A mission may not pass a gate that's blocked above it.
+export const GATE_ORDER = [
+  'build',
+  'unit_test',
+  'integration',
+  'security',
+  'clinical',
+  'qa',
+  'merge',
+] as const;
+export const GateIdSchema = z.enum(GATE_ORDER);
+export type GateId = z.infer<typeof GateIdSchema>;
+
+export const GateStatusSchema = z.enum(['pending', 'pass', 'review', 'waiting', 'fail']);
+export type GateStatus = z.infer<typeof GateStatusSchema>;
+
+// One mission task — a decomposed unit owned by exactly one worker agent.
+export const MissionTaskStatusSchema = z.enum(['pending', 'in_progress', 'done', 'blocked']);
+export type MissionTaskStatus = z.infer<typeof MissionTaskStatusSchema>;
+
+export const MissionTaskSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  ownerAgentId: z.string().min(1),
+  status: MissionTaskStatusSchema,
+  order: z.number().int().nonnegative(),
+});
+export type MissionTask = z.infer<typeof MissionTaskSchema>;
+
+// A mission is ONE strategic objective owned by a lead agent (e.g. the CTO),
+// decomposed into tasks assigned to workers, and gated by the change policy.
+// The shape mirrors the control-plane object exactly: artifacts/tests/risks/
+// evidence are honest lists, never fabricated.
+export const MissionSchema = z.object({
+  id: z.string().min(1),
+  mission: z.string().min(1),
+  priority: MissionPrioritySchema,
+  ownerAgentId: z.string().min(1),
+  status: MissionStatusSchema,
+  dependencies: z.array(z.string()).default([]),
+  approvalsRequired: z.array(z.string()).default([]),
+  artifacts: z.array(z.string()).default([]),
+  tests: z.array(z.string()).default([]),
+  risks: z.array(z.string()).default([]),
+  evidence: z.array(z.string()).default([]),
+  gates: z.record(GateIdSchema, GateStatusSchema),
+  tasks: z.array(MissionTaskSchema).default([]),
+  createdAt: z.string().min(1),
+  updatedAt: z.string().min(1),
+});
+export type Mission = z.infer<typeof MissionSchema>;
+
+// An executive command queued on the command bus. FounderOS accepts the
+// command and reports it as queued/dispatched; Hermes (or a worker) fulfills it.
+export const CommandStatusSchema = z.enum(['queued', 'dispatched', 'failed']);
+export type CommandStatus = z.infer<typeof CommandStatusSchema>;
+
+export const CommandSchema = z.object({
+  id: z.string().min(1),
+  source: z.string().min(1), // 'ceo' | 'operator' | …
+  intent: z.string().min(1),
+  missionId: z.string().nullable().default(null),
+  status: CommandStatusSchema,
+  createdAt: z.string().min(1),
+});
+export type Command = z.infer<typeof CommandSchema>;

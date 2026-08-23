@@ -23,6 +23,7 @@ type PageEntry = {
 // Every app/**/page.tsx, with the props each needs to be invoked.
 const PAGES: PageEntry[] = [
   { file: 'page.tsx', load: () => import('@/app/page') },
+  { file: 'mission-control/page.tsx', load: () => import('@/app/mission-control/page') },
   { file: 'comms/page.tsx', load: () => import('@/app/comms/page') },
   { file: 'social/page.tsx', load: () => import('@/app/social/page') },
   { file: 'social/[platform]/page.tsx', load: () => import('@/app/social/[platform]/page'), props: { params: { platform: 'instagram' } } },

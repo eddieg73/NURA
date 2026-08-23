@@ -23,7 +23,9 @@ import type {
   SocialPost,
   SocialSnapshot,
   Tool,
+  Mission,
 } from '@/lib/schemas';
+import { defaultGates } from '@/lib/control-plane';
 
 // Monochrome palette — the UI is strict black & white; "color" fields carry
 // grayscale steps used only for subtle hierarchy.
@@ -1565,6 +1567,119 @@ const workflows: Workflow[] = [
 // Agent task board — seeded across open/doing/done so the Kanban is alive on
 // first load. Demo cards; user-added tasks coexist (we insert by id, never wipe).
 const SEED_TS = '2026-07-21T12:00:00.000Z';
+
+// ── NURA missions — the control-plane roster ─────────────────────────────────
+// Each mission is ONE strategic objective owned by a lead agent, decomposed
+// into tasks assigned to worker agents, and gated by the Hermes change policy.
+// This seeds the NeuroGrid MVP build (the decomposition you specced) plus a
+// couple of supporting missions so Mission Control is alive on first load.
+const MISSION_TS = '2026-08-23T12:00:00.000Z';
+
+const neurogridTasks = [
+  'Inspect repository & existing work',
+  'Create architecture & schemas',
+  'Define data models',
+  'Build device gateway',
+  'Add Omi adapter',
+  'Build BioBed simulator',
+  'Build event bus',
+  'Build patient-state engine',
+  'Add clinical orchestrator',
+  'Add safety layer',
+  'Write tests',
+  'Security review',
+  'Clinical safety review',
+  'Documentation',
+  'Deploy to staging',
+].map((title, i) => ({
+  id: `neurogrid-t${i + 1}`,
+  title,
+  ownerAgentId:
+    i === 2 ? 'software-architect'
+    : i === 3 || i === 4 || i === 5 ? 'backend-engineer'
+    : i === 6 || i === 7 || i === 8 ? 'clinical-intelligence'
+    : i === 9 ? 'cybersecurity'
+    : i === 10 ? 'qa'
+    : i === 11 ? 'cybersecurity'
+    : i === 12 ? 'clinical-intelligence'
+    : i === 13 ? 'research'
+    : 'devops',
+  status: 'pending' as const,
+  order: i,
+}));
+
+const missions: Mission[] = [
+  {
+    id: 'mission-neurogrid-mvp',
+    mission: 'Build the first NeuroGrid prototype',
+    priority: 'P0',
+    ownerAgentId: 'hermes-cto',
+    status: 'executing',
+    dependencies: [],
+    approvalsRequired: ['clinical-safety-review'],
+    artifacts: ['device-gateway', 'omi-adapter', 'biobed-simulator', 'event-bus', 'patient-state-engine'],
+    tests: ['unit', 'integration'],
+    risks: ['PHI-in-transit', 'device-firmware-ambiguity'],
+    evidence: ['neurogrid-device-gateway-PASS', 'neurogrid-event-bus-PASS'],
+    gates: {
+      ...defaultGates(),
+      build: 'pass',
+      unit_test: 'pass',
+      integration: 'review',
+      security: 'pass',
+      clinical: 'waiting',
+      qa: 'pending',
+      merge: 'pending',
+    },
+    tasks: neurogridTasks,
+    createdAt: MISSION_TS,
+    updatedAt: MISSION_TS,
+  },
+  {
+    id: 'mission-nura-medical-brain',
+    mission: 'Wire NURA Medical Brain RAG over the clinical knowledge base',
+    priority: 'P1',
+    ownerAgentId: 'hermes-cto',
+    status: 'executing',
+    dependencies: ['mission-neurogrid-mvp'],
+    approvalsRequired: [],
+    artifacts: ['medical-rag', 'specialist-agents'],
+    tests: ['unit'],
+    risks: [],
+    evidence: ['medical-rag-retrieval-PASS'],
+    gates: {
+      ...defaultGates(),
+      build: 'pass',
+      unit_test: 'pass',
+      integration: 'pending',
+      security: 'pending',
+      clinical: 'pending',
+      qa: 'pending',
+      merge: 'pending',
+    },
+    tasks: neurogridTasks.slice(0, 5).map((t, i) => ({ ...t, id: `brain-t${i + 1}`, order: i })),
+    createdAt: MISSION_TS,
+    updatedAt: MISSION_TS,
+  },
+  {
+    id: 'mission-orthanc-ris',
+    mission: 'Deploy Orthanc/OHIF RIS-PACS staging for radiology pipeline',
+    priority: 'P2',
+    ownerAgentId: 'hermes-cto',
+    status: 'proposed',
+    dependencies: [],
+    approvalsRequired: [],
+    artifacts: ['orthanc-stack', 'ohif-viewer'],
+    tests: [],
+    risks: [],
+    evidence: [],
+    gates: defaultGates(),
+    tasks: neurogridTasks.slice(0, 3).map((t, i) => ({ ...t, id: `ris-t${i + 1}`, order: i })),
+    createdAt: MISSION_TS,
+    updatedAt: MISSION_TS,
+  },
+];
+
 const agentTasks: AgentTask[] = [
   { id: 'task-seed-1', agentId: 'comms-agent', title: 'Triage overnight inbound across 4 inboxes', status: 'open', createdAt: SEED_TS, updatedAt: SEED_TS },
   { id: 'task-seed-2', agentId: 'social-agent', title: 'Draft 3 IG hooks for the Vantage launch', status: 'open', createdAt: SEED_TS, updatedAt: SEED_TS },
@@ -1661,4 +1776,8 @@ export function seedDatabase(db: FounderDb): void {
   for (const p of socialPosts) db.socialPosts.enqueue(p);
   for (const c of funnelContacts) db.funnel.insertContact(c);
   for (const t of funnelTouches) db.funnel.insertTouch(t);
+  for (const m of missions) db.missions.insert(m);
+  // Retired missions leave the DB on re-seed (Oracle, user-created missions survive — we
+  // prune only our seeded ids so a re-seed never wipes a mission you launched from the OS).
+  db.missions.deleteWhereIdNotIn(missions.map((m) => m.id));
 }

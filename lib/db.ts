@@ -32,6 +32,8 @@ import {
   WorkflowSchema,
   SkillSchema,
   ToolSchema,
+  MissionSchema,
+  CommandSchema,
   type Agent,
   type AgentCron,
   type AgentMessage,
@@ -63,6 +65,10 @@ import {
   type Workflow,
   type Skill,
   type Tool,
+  type Mission,
+  type Command,
+  type GateId,
+  type GateStatus,
 } from '@/lib/schemas';
 
 const DDL = `
@@ -316,6 +322,31 @@ CREATE TABLE IF NOT EXISTS skills (
   tools TEXT NOT NULL DEFAULT '[]',
   markdown TEXT NOT NULL DEFAULT '',
   ord INTEGER NOT NULL DEFAULT 0
+);
+CREATE TABLE IF NOT EXISTS missions (
+  id TEXT PRIMARY KEY,
+  mission TEXT NOT NULL,
+  priority TEXT NOT NULL,
+  owner_agent_id TEXT NOT NULL,
+  status TEXT NOT NULL,
+  dependencies TEXT NOT NULL DEFAULT '[]',
+  approvals_required TEXT NOT NULL DEFAULT '[]',
+  artifacts TEXT NOT NULL DEFAULT '[]',
+  tests TEXT NOT NULL DEFAULT '[]',
+  risks TEXT NOT NULL DEFAULT '[]',
+  evidence TEXT NOT NULL DEFAULT '[]',
+  gates TEXT NOT NULL DEFAULT '{}',
+  tasks TEXT NOT NULL DEFAULT '[]',
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS commands (
+  id TEXT PRIMARY KEY,
+  source TEXT NOT NULL,
+  intent TEXT NOT NULL,
+  mission_id TEXT,
+  status TEXT NOT NULL,
+  created_at TEXT NOT NULL
 );
 `;
 
@@ -1145,6 +1176,111 @@ export function openDb(path: string) {
     },
   };
 
+  const rowToMission = (r: any): Mission =>
+    MissionSchema.parse({
+      id: r.id,
+      mission: r.mission,
+      priority: r.priority,
+      ownerAgentId: r.owner_agent_id,
+      status: r.status,
+      dependencies: JSON.parse(r.dependencies || '[]'),
+      approvalsRequired: JSON.parse(r.approvals_required || '[]'),
+      artifacts: JSON.parse(r.artifacts || '[]'),
+      tests: JSON.parse(r.tests || '[]'),
+      risks: JSON.parse(r.risks || '[]'),
+      evidence: JSON.parse(r.evidence || '[]'),
+      gates: JSON.parse(r.gates || '{}'),
+      tasks: JSON.parse(r.tasks || '[]'),
+      createdAt: r.created_at,
+      updatedAt: r.updated_at,
+    });
+
+  const missions = {
+    all(): Mission[] {
+      return db
+        .prepare('SELECT * FROM missions ORDER BY CASE priority WHEN \'P0\' THEN 0 WHEN \'P1\' THEN 1 WHEN \'P2\' THEN 2 ELSE 3 END, created_at')
+        .all()
+        .map(rowToMission);
+    },
+    byId(id: string): Mission | null {
+      const r = db.prepare('SELECT * FROM missions WHERE id = ?').get(id) as any;
+      return r ? rowToMission(r) : null;
+    },
+    insert(m: Mission): void {
+      const parsed = MissionSchema.parse(m);
+      db.prepare(
+        `INSERT OR REPLACE INTO missions
+          (id, mission, priority, owner_agent_id, status, dependencies, approvals_required,
+           artifacts, tests, risks, evidence, gates, tasks, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ).run(
+        parsed.id, parsed.mission, parsed.priority, parsed.ownerAgentId, parsed.status,
+        JSON.stringify(parsed.dependencies), JSON.stringify(parsed.approvalsRequired),
+        JSON.stringify(parsed.artifacts), JSON.stringify(parsed.tests), JSON.stringify(parsed.risks),
+        JSON.stringify(parsed.evidence), JSON.stringify(parsed.gates), JSON.stringify(parsed.tasks),
+        parsed.createdAt, parsed.updatedAt,
+      );
+    },
+    setStatus(id: string, status: Mission['status'], updatedAt: string): void {
+      MissionSchema.shape.status.parse(status);
+      db.prepare('UPDATE missions SET status = ?, updated_at = ? WHERE id = ?').run(status, updatedAt, id);
+    },
+    /** Set one gate's status, then re-derive the mission status so a failed or
+     *  waiting gate surfaces on the dashboard without extra bookkeeping. */
+    setGate(id: string, gate: GateId, status: GateStatus, updatedAt: string): void {
+      const mission = missions.byId(id);
+      if (!mission) throw new Error(`unknown mission: ${id}`);
+      const gates = { ...mission.gates, [gate]: status };
+      db.prepare('UPDATE missions SET gates = ?, updated_at = ? WHERE id = ?').run(
+        JSON.stringify(gates), updatedAt, id,
+      );
+      // If a gate just went to `waiting`, the mission is awaiting approval.
+      // If any gate is `fail`, the mission is blocked. Otherwise keep its status.
+      if (status === 'fail') missions.setStatus(id, 'blocked', updatedAt);
+      else if (status === 'waiting') missions.setStatus(id, 'awaiting_approval', updatedAt);
+    },
+    addEvidence(id: string, evidence: string, updatedAt: string): void {
+      const mission = missions.byId(id);
+      if (!mission) throw new Error(`unknown mission: ${id}`);
+      if (!mission.evidence.includes(evidence)) {
+        const evidenceList = [...mission.evidence, evidence];
+        db.prepare('UPDATE missions SET evidence = ?, updated_at = ? WHERE id = ?').run(
+          JSON.stringify(evidenceList), updatedAt, id,
+        );
+      }
+    },
+    deleteWhereIdNotIn(ids: string[]): void {
+      const placeholders = ids.map(() => '?').join(', ');
+      db.prepare(`DELETE FROM missions WHERE id NOT IN (${placeholders})`).run(...ids);
+    },
+  };
+
+  const rowToCommand = (r: any): Command =>
+    CommandSchema.parse({
+      id: r.id,
+      source: r.source,
+      intent: r.intent,
+      missionId: r.mission_id,
+      status: r.status,
+      createdAt: r.created_at,
+    });
+
+  const commands = {
+    all(): Command[] {
+      return db.prepare('SELECT * FROM commands ORDER BY created_at DESC').all().map(rowToCommand);
+    },
+    insert(c: Command): void {
+      const parsed = CommandSchema.parse(c);
+      db.prepare(
+        'INSERT OR REPLACE INTO commands (id, source, intent, mission_id, status, created_at) VALUES (?, ?, ?, ?, ?, ?)',
+      ).run(parsed.id, parsed.source, parsed.intent, parsed.missionId, parsed.status, parsed.createdAt);
+    },
+    setStatus(id: string, status: Command['status']): void {
+      CommandSchema.shape.status.parse(status);
+      db.prepare('UPDATE commands SET status = ? WHERE id = ?').run(status, id);
+    },
+  };
+
   return {
     departments,
     agents,
@@ -1169,6 +1305,8 @@ export function openDb(path: string) {
     sopTasks,
     workflows,
     skills,
+    missions,
+    commands,
     close: () => db.close(),
   };
 }

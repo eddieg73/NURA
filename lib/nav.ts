@@ -22,11 +22,13 @@ import {
   BarChart3,
   LayoutGrid,
   Layers,
+  Target,
 } from 'lucide-react';
 
 export type NavItem = { href: string; label: string; icon: typeof Home };
 
 export const NAV_OPERATE: NavItem[] = [
+  { href: '/mission-control', label: 'Mission Control', icon: Target },
   { href: '/', label: 'Home', icon: Home },
   { href: '/comms', label: 'Comms', icon: MessageSquare },
   { href: '/funnel', label: 'Funnel', icon: Filter },

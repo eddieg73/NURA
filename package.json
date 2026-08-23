@@ -18,7 +18,7 @@
     "@slack/web-api": "^7.16.0",
     "@types/d3-force": "^3.0.10",
     "ai": "^6.0.208",
-    "better-sqlite3": "^11.3.0",
+    "better-sqlite3": "^13.0.3",
     "d3-force": "^3.0.0",
     "imapflow": "^1.4.0",
     "lucide-react": "^0.441.0",
@@ -32,7 +32,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.11",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.5.5",
     "@types/nodemailer": "^8.0.1",
     "@types/react": "^18.3.8",
