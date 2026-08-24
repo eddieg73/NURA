@@ -12,7 +12,7 @@ case.json = {"patient": {"age":..,"sex":..,"pmh":[...]},
 """
 import sys, json, urllib.request
 
-def local_llm(prompt, model="med42", timeout=1500):
+def local_llm(prompt, model="med42", timeout=120):
     body = json.dumps({"model": model, "prompt": prompt, "stream": False,
                        "options": {"num_predict": 1000, "temperature": 0.2}}).encode()
     req = urllib.request.Request("http://127.0.0.1:11434/api/generate", data=body,
@@ -31,14 +31,39 @@ LAB_REF = {  # rough reference ranges (adult) — flags only, provider interpret
     "AST": (5, 40, "U/L"), "ALT": (5, 40, "U/L"), "TSH": (0.4, 4.0, "mIU/L"),
 }
 
-def flag_labs(labs):
-    out = []
-    for k, v in labs.items():
+def tool_lab_facts(labs):
+    """DETERMINISTIC, LITERAL copy of the tool-derived lab data.
+
+    This is the AUTHORITATIVE record of what the data source returned. It is
+    computed in pure Python and NEVER passes through the LLM, so the model
+    cannot alter, paraphrase, or drift these values. Every numeric value and
+    its unit is preserved byte-identical from the input.
+    Returns a list of dicts: {test, value, unit, ref_low, ref_high, flag}.
+    """
+    facts = []
+    for k in sorted(labs.keys()):
+        v = labs[k]
         ref = LAB_REF.get(k)
         if ref and isinstance(v, (int, float)):
             lo, hi, unit = ref
-            if v < lo: out.append(f"{k} {v} {unit} — LOW (ref {lo}-{hi})")
-            elif v > hi: out.append(f"{k} {v} {unit} — HIGH (ref {lo}-{hi})")
+            flag = None
+            if v < lo: flag = "LOW"
+            elif v > hi: flag = "HIGH"
+            facts.append({"test": k, "value": v, "unit": unit,
+                          "ref_low": lo, "ref_high": hi, "flag": flag})
+        else:
+            # non-numeric lab (e.g. free text) — literal copy, no flagging
+            facts.append({"test": k, "value": v, "unit": None,
+                          "ref_low": None, "ref_high": None, "flag": None})
+    return facts
+
+def flag_labs(labs):
+    """Human-readable flags derived from the deterministic facts (single source)."""
+    out = []
+    for f in tool_lab_facts(labs):
+        if f["flag"]:
+            lo, hi, unit = f["ref_low"], f["ref_high"], f["unit"]
+            out.append(f"{f['test']} {f['value']} {unit} — {f['flag']} (ref {lo}-{hi})")
     return out
 
 SYNTH_PROMPT = """You are NURA, a clinical synthesis engine working for a licensed PA who makes the final approval.
@@ -57,23 +82,30 @@ def synthesize(case):
     patient = case.get("patient", {})
     labs = case.get("labs", {})
     flags = flag_labs(labs)
+    # Deterministic, tool-verified facts — the AUTHORITATIVE literal record.
+    facts = tool_lab_facts(labs)
     payload = {
         "PATIENT": json.dumps(patient),
         "RADIOLOGY REPORTS": "\n---\n".join(case.get("radiology", [])) or "none provided",
-        "LABORATORY DATA": json.dumps(labs) + ("\nFLAGGED: " + "; ".join(flags) if flags else "\n(all within reference)"),
+        "TOOL DATA (VERBATIM — DO NOT ALTER)": json.dumps(facts, separators=(", ", ": ")),
         "CONSULTATIONS": "\n---\n".join(case.get("consultations", [])) or "none provided",
         "SOAP NOTE": json.dumps(case.get("soap", {})),
     }
-    prompt = SYNTH_PROMPT + "\n\nCASE DATA:\n" + json.dumps(payload, indent=1)
+    prompt = SYNTH_PROMPT + "\n\nLAB VALUES / TOOL DATA ARE VERBATIM SOURCE DATA. Restate them EXACTLY as given (same numbers, same units). NEVER infer, round, or rewrite a tool value. Reference them by test name; do not introduce a value that conflicts with TOOL DATA.\n\nCASE DATA:\n" + json.dumps(payload, indent=1)
     raw = local_llm(prompt, model="med42")
     try:
         raw = raw.strip().lstrip("```json").rstrip("```").strip()
         d = json.loads(raw)
     except json.JSONDecodeError:
         d = {"structured_raw": raw[:1500]}
+    # Immutable facts block: the chart-critical data is a faithful tool copy,
+    # regardless of anything the generative model output above.
+    d["lab_facts"] = facts
+    d["lab_integrity"] = {"source": "tool", "verified": True,
+                          "note": "Values are verbatim from the data source; never model-generated or paraphrased."}
     d["lab_flags"] = flags
     return d
 
 if __name__ == "__main__":
-    case = json.load(open(sys.argv[1])) if len(sys.argv) > 1 else {}
+    case = json.load(open(sys.argv[1])) if len(sys.argv) > 1 else (json.load(sys.stdin) if not sys.stdin.isatty() else {})
     print(json.dumps(synthesize(case), indent=2))

@@ -1,10 +1,10 @@
+import os
 #!/usr/bin/env python3
 """DOCSGPT INGESTOR v4 — the X-Internal-Key auth probe + the form-field upload test."""
 import json, os, sys, urllib.request, subprocess, uuid
 
 BASE = "http://72.61.71.211:7091"
-KEY = "REDACTED"
-
+KEY = os.environ.get("DOCSGPT_API_KEY", "")
 def sh(cmd, timeout=120):
     try:
         r = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=timeout)

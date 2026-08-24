@@ -1,9 +1,10 @@
+import os
 #!/usr/bin/env python3
 """DOCSGPT INGESTOR v3 — the internal-key upload lane (the real source-creation path!)."""
 import json, os, sys, time, urllib.request, subprocess
 
 BASE = "http://72.61.71.211:7091"
-KEY = "REDACTED"
+KEY = os.environ.get("DOCSGPT_API_KEY", "")
 LOCAL_DIR = "/opt/data/nura-corpora-local"
 
 def sh(cmd, timeout=120):

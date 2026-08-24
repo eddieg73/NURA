@@ -1,11 +1,12 @@
+import os
 #!/usr/bin/env python3
 """DOCSGPT INGESTOR v5 — the FULL pipeline: chunks → embeddings → FAISS-index → the X-Internal-Key upload!"""
 import json, os, sys, subprocess, tempfile, uuid, urllib.request, io
 
-os.environ["HF_TOKEN"] = "hf_REDACTED"
+os.environ["HF_TOKEN"] = os.environ.get("HF_TOKEN", "")
 sys.path.insert(0, "/opt/data/profiles/nura/python-packages")
 LOCAL_DIR = "/opt/data/nura-corpora-local"
-KEY = "REDACTED"
+KEY = os.environ.get("DOCSGPT_API_KEY", "")
 BASE = "http://72.61.71.211:7091"
 
 def sh(cmd, timeout=300):

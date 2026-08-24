@@ -1,9 +1,10 @@
+import os
 #!/usr/bin/env python3
 """DOCSGPT INGESTOR v2 — stream the Lab corpus into the DocsGPT sources (chunked, keyed, verified)."""
 import json, os, sys, time, urllib.request
 
 BASE = "http://72.61.71.211:7091"
-KEY = "REDACTED"
+KEY = os.environ.get("DOCSGPT_API_KEY", "")
 REMOTE = "root@72.60.163.140"
 CORPUS_DIR = "/opt/nura-corpora/textbooks/chunk"
 LOCAL_DIR = "/opt/data/nura-corpora-local"

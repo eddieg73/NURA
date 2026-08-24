@@ -1,9 +1,10 @@
+import os
 #!/usr/bin/env python3
 """DOCSGPT CORPUS INGESTOR — chunk the textbook JSONLs -> DocsGPT sources via the API."""
 import json, os, sys, time, urllib.request
 
 BASE = "http://72.61.71.211:7091"
-KEY = "REDACTED"
+KEY = os.environ.get("DOCSGPT_API_KEY", "")
 CORPUS = "/opt/nura-corpora/textbooks/chunk"
 BATCH = 50
 

@@ -1,13 +1,14 @@
+import os
 #!/usr/bin/env python3
 """DOCSGPT FULL-CORPUS TRAINING — every textbook, the proven pipeline, batched.
 The 202MB corpus → per-book chunks → embeddings → FAISS index → X-Internal-Key upload."""
 import json, os, sys, subprocess, tempfile, uuid, urllib.request
 
-os.environ["HF_TOKEN"] = "hf_REDACTED"
+os.environ["HF_TOKEN"] = os.environ.get("HF_TOKEN", "")
 sys.path.insert(0, "/opt/data/profiles/nura/python-packages")
 LOCAL_DIR = "/opt/data/nura-corpora-local"
 BASE = "http://72.61.71.211:7091"
-KEY = "REDACTED"
+KEY = os.environ.get("DOCSGPT_API_KEY", "")
 REMOTE = "root@72.60.163.140"
 CORPUS = "/opt/nura-corpora/textbooks/chunk"
 
