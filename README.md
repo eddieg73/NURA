@@ -156,16 +156,22 @@ placeholder data.
 ```
 app/                 Next.js App Router; one folder per view plus /api routes
 components/          UI: dashboard sections, graphs, terminal primitives
+docs/                design docs (GOVERNANCE.md — the control-plane audit + approval layer)
 lib/
   data.ts db.ts      repository layer plus app DB singleton
   seed.ts            all seeded demo content
   schemas.ts         Zod schemas (validate every DB/API boundary)
+  governance.ts      control-plane governance: immutable audit trail + evidence-bound approvals
   connectors/        20+ honest-status integrations
   agents/            agent registry plus runtimes
   knowledge-graph.ts, memory-core.ts   brain graph plus memory model
 scripts/             seed plus doc-generation scripts
 tests/               vitest suite (one file per module)
 ```
+
+> **For engineers:** start at [`docs/GOVERNANCE.md`](docs/GOVERNANCE.md) — it explains the
+> control-plane governance layer (audit trail, evidence-before-pass, approvals) and lists the
+> open design questions. Comment there or open a PR/Issue.
 
 ---
 
