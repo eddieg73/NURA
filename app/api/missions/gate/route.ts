@@ -1,18 +1,20 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/data';
-import { advanceGate, blockingGate, missionComplete } from '@/lib/control-plane';
+import { advanceGateGoverned } from '@/lib/governance';
+import { blockingGate, missionComplete } from '@/lib/control-plane';
 import { GATE_ORDER, type GateId, type GateStatus } from '@/lib/schemas';
 
 export const dynamic = 'force-dynamic';
 
 /**
- * Advance one gate on a mission. Enforces the change-policy ladder: you cannot
- * pass a gate while an earlier gate is not `pass`. A `waiting` status arms the
- * approval (mission → awaiting_approval); a `fail` blocks it.
+ * Advance one gate on a mission UNDER GOVERNANCE. Enforces the evidence-before-pass
+ * rule (a `pass` requires the mission to carry evidence) and writes the immutable
+ * audit event for every transition — including denials. Passing any gate still
+ * requires the earlier ladder steps to be pass.
  */
 export async function POST(req: Request) {
   const db = getDb();
-  let body: { missionId?: string; gate?: string; status?: string };
+  let body: { missionId?: string; gate?: string; status?: string; actor?: string };
   try {
     body = await req.json();
   } catch {
@@ -29,15 +31,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'status must be pending | pass | review | waiting | fail' }, { status: 400 });
   }
 
-  const mission = advanceGate(db, missionId, gate as GateId, status as GateStatus);
-  if (!mission) {
+  const actor = body.actor?.trim() || 'operator';
+  const res = advanceGateGoverned(db, missionId, gate as GateId, status as GateStatus, actor);
+  if (!res.mission) {
     return NextResponse.json(
       { error: missionId && !db.missions.byId(missionId) ? 'unknown mission' : 'gate blocked by an earlier step in the ladder' },
       { status: missionId && !db.missions.byId(missionId) ? 404 : 409 },
     );
   }
 
-  // If this pass completed the pipeline, mark the mission complete.
+  // Evidence-before-pass denial is a 409 with the reason; the mission is unchanged.
+  if (res.denial) {
+    return NextResponse.json({ mission: res.mission, denial: res.denial }, { status: 409 });
+  }
+
   const completed = missionComplete(db, missionId);
-  return NextResponse.json({ mission: completed ?? mission, blockingGate: blockingGate(completed ?? mission) });
+  return NextResponse.json({ mission: completed ?? res.mission, blockingGate: blockingGate(completed ?? res.mission) });
 }

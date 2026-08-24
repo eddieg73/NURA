@@ -708,3 +708,50 @@ export const CommandSchema = z.object({
   createdAt: z.string().min(1),
 });
 export type Command = z.infer<typeof CommandSchema>;
+
+// ---------------------------------------------------------------------------
+// GOVERNANCE — immutable audit trail + governed approvals (control-plane evidence)
+// A control plane is only defensible if every consequential write carries an
+// immutable, replayable record of WHO did WHAT, WHEN, under WHICH gate, and WHY.
+// ---------------------------------------------------------------------------
+export const MissionEventActionSchema = z.enum([
+  'mission_created',
+  'command_queued',
+  'command_dispatched',
+  'status_changed',
+  'gate_change',
+  'gate_waiting',
+  'approval_requested',
+  'approval_decided',
+  'evidence_attached',
+  'gate_pass_denied_no_evidence',
+  'mission_complete',
+]);
+export type MissionEventAction = z.infer<typeof MissionEventActionSchema>;
+
+export const MissionEventSchema = z.object({
+  id: z.string().min(1),
+  missionId: z.string().min(1),
+  actor: z.string().min(1),
+  action: MissionEventActionSchema,
+  gate: GateIdSchema.nullable().default(null),
+  detail: z.string().default(''),
+  at: z.string().min(1),
+});
+export type MissionEvent = z.infer<typeof MissionEventSchema>;
+
+export const ApprovalStatusSchema = z.enum(['open', 'approved', 'rejected']);
+export type ApprovalStatus = z.infer<typeof ApprovalStatusSchema>;
+
+export const ApprovalSchema = z.object({
+  id: z.string().min(1),
+  missionId: z.string().min(1),
+  gate: GateIdSchema,
+  requestedBy: z.string().min(1),
+  requestedAt: z.string().min(1),
+  status: ApprovalStatusSchema,
+  decidedBy: z.string().nullable().default(null),
+  rationale: z.string().default(''),
+  decidedAt: z.string().nullable().default(null),
+});
+export type Approval = z.infer<typeof ApprovalSchema>;

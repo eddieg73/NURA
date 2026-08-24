@@ -34,6 +34,8 @@ import {
   ToolSchema,
   MissionSchema,
   CommandSchema,
+  MissionEventSchema,
+  ApprovalSchema,
   type Agent,
   type AgentCron,
   type AgentMessage,
@@ -69,6 +71,9 @@ import {
   type Command,
   type GateId,
   type GateStatus,
+  type MissionEvent,
+  type Approval,
+  type ApprovalStatus,
 } from '@/lib/schemas';
 
 const DDL = `
@@ -348,6 +353,28 @@ CREATE TABLE IF NOT EXISTS commands (
   status TEXT NOT NULL,
   created_at TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS mission_events (
+  id TEXT PRIMARY KEY,
+  mission_id TEXT NOT NULL,
+  actor TEXT NOT NULL,
+  action TEXT NOT NULL,
+  gate TEXT,
+  detail TEXT NOT NULL DEFAULT '',
+  at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_mission_events_mission ON mission_events(mission_id, at DESC);
+CREATE TABLE IF NOT EXISTS approvals (
+  id TEXT PRIMARY KEY,
+  mission_id TEXT NOT NULL,
+  gate TEXT NOT NULL,
+  requested_by TEXT NOT NULL,
+  requested_at TEXT NOT NULL,
+  status TEXT NOT NULL,
+  decided_by TEXT,
+  rationale TEXT NOT NULL DEFAULT '',
+  decided_at TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_approvals_open ON approvals(status);
 `;
 
 /** Databases created before the hierarchy build lack these columns. */
@@ -1281,6 +1308,104 @@ export function openDb(path: string) {
     },
   };
 
+  const rowToMissionEvent = (r: any): MissionEvent =>
+    MissionEventSchema.parse({
+      id: r.id,
+      missionId: r.mission_id,
+      actor: r.actor,
+      action: r.action,
+      gate: r.gate ?? null,
+      detail: r.detail || '',
+      at: r.at,
+    });
+
+  const events = {
+    insert(e: MissionEvent): void {
+      const parsed = MissionEventSchema.parse(e);
+      db.prepare(
+        'INSERT OR REPLACE INTO mission_events (id, mission_id, actor, action, gate, detail, at) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      ).run(parsed.id, parsed.missionId, parsed.actor, parsed.action, parsed.gate, parsed.detail, parsed.at);
+    },
+    forMission(missionId: string): MissionEvent[] {
+      return db
+        .prepare('SELECT * FROM mission_events WHERE mission_id = ? ORDER BY at DESC')
+        .all(missionId)
+        .map(rowToMissionEvent);
+    },
+    recent(limit = 40): MissionEvent[] {
+      return db
+        .prepare('SELECT * FROM mission_events ORDER BY at DESC LIMIT ?')
+        .all(limit)
+        .map(rowToMissionEvent);
+    },
+  };
+
+  const rowToApproval = (r: any): Approval =>
+    ApprovalSchema.parse({
+      id: r.id,
+      missionId: r.mission_id,
+      gate: r.gate,
+      requestedBy: r.requested_by,
+      requestedAt: r.requested_at,
+      status: r.status,
+      decidedBy: r.decided_by ?? null,
+      rationale: r.rationale || '',
+      decidedAt: r.decided_at ?? null,
+    });
+
+  const approvals = {
+    insert(a: Approval): void {
+      const parsed = ApprovalSchema.parse(a);
+      db.prepare(
+        `INSERT OR REPLACE INTO approvals
+          (id, mission_id, gate, requested_by, requested_at, status, decided_by, rationale, decided_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ).run(
+        parsed.id, parsed.missionId, parsed.gate, parsed.requestedBy, parsed.requestedAt,
+        parsed.status, parsed.decidedBy, parsed.rationale, parsed.decidedAt,
+      );
+    },
+    byId(id: string): Approval | null {
+      const r = db.prepare('SELECT * FROM approvals WHERE id = ?').get(id) as any;
+      return r ? rowToApproval(r) : null;
+    },
+    open(): Approval[] {
+      return db
+        .prepare("SELECT * FROM approvals WHERE status = 'open' ORDER BY requested_at DESC")
+        .all()
+        .map(rowToApproval);
+    },
+    openForGate(missionId: string, gate: GateId): Approval | null {
+      const r = db
+        .prepare("SELECT * FROM approvals WHERE mission_id = ? AND gate = ? AND status = 'open' ORDER BY requested_at DESC LIMIT 1")
+        .get(missionId, gate) as any;
+      return r ? rowToApproval(r) : null;
+    },
+    decide(id: string, status: ApprovalStatus, actor: string, rationale: string, decidedAt: string): void {
+      db.prepare('UPDATE approvals SET status = ?, decided_by = ?, rationale = ?, decided_at = ? WHERE id = ?').run(
+        status, actor, rationale, decidedAt, id,
+      );
+    },
+  };
+
+  /**
+   * Governance bridge: advance one gate on a mission and re-derive its status,
+   * WITHOUT the control-plane ladder restriction, so the governance layer can
+   * apply an approval consequence (pass/fail) directly. Prefer the governed
+   * path (lib/governance.ts) which enforces evidence + audit — this is a thin
+   * state-transition primitive.
+   */
+  function controlPlaneSetGate(id: string, gate: GateId, status: GateStatus): Mission | null {
+    const mission = missions.byId(id);
+    if (!mission) return null;
+    const gates = { ...mission.gates, [gate]: status };
+    db.prepare('UPDATE missions SET gates = ?, updated_at = ? WHERE id = ?').run(
+      JSON.stringify(gates), new Date().toISOString(), id,
+    );
+    if (status === 'fail') missions.setStatus(id, 'blocked', new Date().toISOString());
+    return missions.byId(id);
+  }
+
   return {
     departments,
     agents,
@@ -1307,6 +1432,9 @@ export function openDb(path: string) {
     skills,
     missions,
     commands,
+    events,
+    approvals,
+    controlPlaneSetGate,
     close: () => db.close(),
   };
 }

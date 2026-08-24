@@ -1,5 +1,6 @@
 import { getDb } from '@/lib/data';
 import { controlPlaneSummary } from '@/lib/control-plane';
+import { pendingApprovals } from '@/lib/governance';
 import { PageHeader } from '@/components/PageHeader';
 import { Badge, Dot, Kbd, Label, SectionHead } from '@/components/terminal';
 import { GateLadder } from '@/components/GateLadder';
@@ -37,6 +38,8 @@ export default async function MissionControlPage() {
   const summary = controlPlaneSummary(db);
   const missions = db.missions.all();
   const commands = db.commands.all().slice(0, 6);
+  const openApprovals = pendingApprovals(db);
+  const audit = db.events.recent(12);
 
   return (
     <div>
@@ -68,6 +71,32 @@ export default async function MissionControlPage() {
             <div className={`font-mono text-[26px] font-semibold tracking-[-0.02em] ${s.tone}`}>{s.value}</div>
           </div>
         ))}
+      </section>
+
+      {/* Governance — approval inbox (human-in-the-loop) */}
+      <section className="mb-[22px]">
+        <SectionHead label="Approval inbox" count={`${openApprovals.length} awaiting decision`} />
+        {openApprovals.length === 0 ? (
+          <div className="rounded-lg-t border border-os-border bg-os-bg2 px-4 py-3 font-mono text-[11px] text-os-muted">
+            No open approvals — every armed gate has been decided.
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {openApprovals.map((a) => (
+              <div key={a.id} className="flex items-center justify-between gap-4 rounded-lg-t border border-os-border bg-os-surface px-[18px] py-3">
+                <div className="min-w-0 font-mono text-[11px]">
+                  <div className="flex items-center gap-2">
+                    <Dot state="warn" pulse />
+                    <span className="uppercase tracking-[0.08em]">{a.gate}</span>
+                    <span className="text-os-dim">· requested by {a.requestedBy}</span>
+                  </div>
+                  <div className="mt-1 truncate text-os-muted">{db.missions.byId(a.missionId)?.mission ?? a.missionId}</div>
+                </div>
+                <span className="shrink-0 font-mono text-[10px] text-os-dim">{a.id.slice(0, 12)}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Command composer — the executive input surface */}
@@ -146,6 +175,26 @@ export default async function MissionControlPage() {
                 <span className="shrink-0 text-os-accent">{c.source}</span>
                 <span className="min-w-0 flex-1 truncate text-os-muted">{c.intent}</span>
                 <span className="shrink-0 text-os-dim">{c.status}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* Governance — immutable audit trail */}
+      {audit.length > 0 && (
+        <section className="mt-[22px]">
+          <SectionHead label="Audit trail" count={`${audit.length} recent events`} />
+          <ul className="flex flex-col gap-1.5">
+            {audit.map((e) => (
+              <li
+                key={e.id}
+                className="flex items-baseline gap-2.5 rounded-sm-t border border-os-border bg-os-surface px-3 py-2 font-mono text-[11px]"
+              >
+                <span className="shrink-0 text-os-dim">{e.at.slice(11, 19)}</span>
+                <span className="shrink-0 text-os-accent">{e.actor}</span>
+                <span className="shrink-0 uppercase tracking-[0.06em]">{e.action}</span>
+                <span className="min-w-0 flex-1 truncate text-os-muted">{e.detail || e.missionId}</span>
               </li>
             ))}
           </ul>
