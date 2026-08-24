@@ -6,7 +6,7 @@ local Med42 model + the DocsGPT textbook RAG (fallback-graceful).
 THE LABELS: "DIFFERENTIAL — decision-support. The provider confirms the diagnosis."
 Usage: python3 nura-dx.py '{"age":68,"sex":"M","presentation":"acute chest pain, dyspnea","findings":"S1Q3T3, JVD","labs":"troponin elevated"}'
 """
-import sys, json, urllib.request, urllib.error, subprocess
+import os, sys, json, urllib.request, urllib.error, subprocess
 
 def local_llm(prompt, model="med42", timeout=240):
     body = json.dumps({"model": model, "prompt": prompt, "stream": False}).encode()
@@ -22,7 +22,7 @@ def docsgpt_ground(question):
     """Textbook grounding via the DocsGPT RAG (Clinic :7091). Graceful on failure.
     Runs over SSH (no tunnel needed; the self-signed-avoidance path)."""
     try:
-        body = json.dumps({"question": question, "api_key": "REDACTED"})
+        body = json.dumps({"question": question, "api_key": os.environ.get("DOCSGPT_API_KEY", "")})
         cmd = f"curl -s -m 150 -X POST http://127.0.0.1:7091/api/answer -H 'Content-Type: application/json' -d '{body}'"
         r = subprocess.run(["ssh", "-o", "BatchMode=yes",
                             "-i", "/opt/data/profiles/nura/home/.ssh/id_nura_clean",
