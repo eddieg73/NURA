@@ -1,7 +1,13 @@
 import re, http.cookiejar, urllib.request, urllib.error, ssl
 
 BASE = "https://carepilot.nuratech.ai"
-USER, PWD = "Alexsis", "Alexsis"
+# credentials NEVER hardcoded — read from the sealed .env (credential-SOP)
+import os
+_env = open("/opt/data/profiles/nura/.env").read()
+def _ev(k):
+    m = re.search(r"^" + k + r"=(.+)$", _env, re.M)
+    return m.group(1).strip().strip('"').strip("'") if m else ""
+USER, PWD = _ev("CAREPILOT_USERNAME"), _ev("CAREPILOT_PASSWORD")
 cj = http.cookiejar.CookieJar()
 opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
 opener.addheaders = [("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)")]
