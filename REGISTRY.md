@@ -82,3 +82,6 @@ Core: openemr/openemr. Ops: openemr-devops, openemr-on-ecs, openemr-on-eks, dock
 - mem0: stale embedded-Qdrant lock removed; restart gateway if contention persists.
 - Hermes upgrade pending: v0.20.0 → Hub v2026.8.18 (docker pull, blocked).
 - X lane needs OAuth re-auth before "Check X" requests can run.
+
+### 08-28 CTO Session Ledger
+- `docs/CTO-Session-Ledger-2026-08-28.md` — sovereign free-first model lane (dock Ollama :11435, qwen2.5:3b verified) + Telegram gateway fix (valid @Nuratechbot token, s6 restart, connected).
