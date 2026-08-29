@@ -1,0 +1,39 @@
+{
+  "generated_at": "2026-08-29T07:01:29.789592+00:00",
+  "total_rows": 1624,
+  "v24_scored_rows": 508,
+  "recapture_count": 72,
+  "sum_weight_delta": 24.328,
+  "prio_counts": {
+    "HIGH": 48,
+    "MEDIUM": 24
+  },
+  "hcc_recapture_counts": [
+    {
+      "hcc": "138",
+      "count": 32
+    },
+    {
+      "hcc": "48",
+      "count": 16
+    },
+    {
+      "hcc": "23",
+      "count": 8
+    },
+    {
+      "hcc": "112",
+      "count": 8
+    },
+    {
+      "hcc": "6",
+      "count": 4
+    },
+    {
+      "hcc": "1",
+      "count": 4
+    }
+  ],
+  "fully_v24_member_count": 2,
+  "note": "DE-IDENTIFIED. Raw MemberNbr/name queue available locally at /opt/data/raf-recapture/recapture_queue.csv (PHI, never in git)."
+}
