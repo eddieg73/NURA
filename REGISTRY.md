@@ -88,3 +88,6 @@ Core: openemr/openemr. Ops: openemr-devops, openemr-on-ecs, openemr-on-eks, dock
 
 ### Medisun Health-Ware (sovereign clinical edge, 2026-08-28)
 - `medisun-health-ware/` — ingest bridge (:8108) + clinic identity/safety-cam flow (:8107 face lane) + wearable firmware skeleton + spec. Local-first, provider-gated, PHI-safe. See README.md + SPEC.md.
+
+### CLI-Anything audit + wire-in (2026-08-28)
+- Audited HKUDS/CLI-Anything (Apache-2.0): all 79 CLIs = pip strategy (no shell=True); telemetry ON by default -> disable with CLI_HUB_NO_ANALYTICS=1. Adopted methodology as skill `gui-to-cli-harness`. Wired (verified live): cli-anything-ollama (drives sovereign dock :11435 -> "OK"), cli-anything-exa (EXA_API_KEY valid, live CMS 2026 risk-adjustment search). Venv /opt/data/cli-anything-venv.
