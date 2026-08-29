@@ -4,6 +4,31 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>NURA uses the camera to capture clinical documentation and verify your identity for licensed access.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>NURA uses the microphone for ambient clinical dictation — the Scribe engine listens during an encounter and drafts a structured SOAP note for your review.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>NURA uses your photo library to attach clinical documents, lab results, and imaging summaries to a note for review.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
