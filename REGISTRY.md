@@ -85,3 +85,6 @@ Core: openemr/openemr. Ops: openemr-devops, openemr-on-ecs, openemr-on-eks, dock
 
 ### 08-28 CTO Session Ledger
 - `docs/CTO-Session-Ledger-2026-08-28.md` — sovereign free-first model lane (dock Ollama :11435, qwen2.5:3b verified) + Telegram gateway fix (valid @Nuratechbot token, s6 restart, connected).
+
+### Medisun Health-Ware (sovereign clinical edge, 2026-08-28)
+- `medisun-health-ware/` — ingest bridge (:8108) + clinic identity/safety-cam flow (:8107 face lane) + wearable firmware skeleton + spec. Local-first, provider-gated, PHI-safe. See README.md + SPEC.md.
