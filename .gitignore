@@ -1,0 +1,16 @@
+# PHI — NEVER staged. Mom's health record + any future patient data.
+Life/Health/
+Life/Health/Mom-Health-Record.md
+*.md.bak
+
+# Obsidian runtime
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.trash/
+
+# OS / caches
+.DS_Store
+Thumbs.db
+node_modules/
+NURA-OS/Atlas-Playbook/gstack-repo/
+.obsidian/

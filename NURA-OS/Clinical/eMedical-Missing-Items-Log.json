@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T20:01:05+00:00",
+  "run": {
+    "mode": "live",
+    "login": false,
+    "multiple_login_alert": false,
+    "logout": "failed",
+    "patients_scanned": 0,
+    "read_only": true
+  },
+  "notes": [
+    "login blocked: login exception: TimeoutError"
+  ],
+  "patients": [],
+  "summary": {
+    "patients": 0,
+    "missing_labs": 0,
+    "missing_imaging": 0,
+    "missing_consults": 0,
+    "soap_gaps": 0,
+    "open": 0,
+    "ordered": 0,
+    "received": 0
+  },
+  "history_line": "| 2026-08-29T20:01:05+00:00 | live | 0 | 0 | 0 | 0 |"
+}

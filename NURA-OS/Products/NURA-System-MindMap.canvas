@@ -1,0 +1,300 @@
+{
+ "nodes": [
+  {
+   "id": "30877432d1026706",
+   "type": "text",
+   "x": 1200,
+   "y": 500,
+   "width": 260,
+   "height": 120,
+   "text": "# \ud83d\udc51 FOUNDER\n\nEddie Garrido\nDecisions \u00b7 Gates \u00b7 Vision",
+   "color": "6"
+  },
+  {
+   "id": "d7e805da846a32c3",
+   "type": "text",
+   "x": 520,
+   "y": 150,
+   "width": 260,
+   "height": 120,
+   "text": "# \ud83e\udde0 SKILL LIBRARY\n\n250+ live\nEvery skill = P&P!",
+   "color": "4"
+  },
+  {
+   "id": "bb81e3c29b621792",
+   "type": "text",
+   "x": 1900,
+   "y": 150,
+   "width": 260,
+   "height": 120,
+   "text": "# \ud83e\uddec SELF-IMPROVEMENT\n\nThe 8-rung ladder\nGEPA code-writing!",
+   "color": "5"
+  },
+  {
+   "id": "73c8eb5bb682575e",
+   "type": "text",
+   "x": 1900,
+   "y": 900,
+   "width": 260,
+   "height": 120,
+   "text": "# \u23f0 AUTOMATION\n\nThe 53-cron grid\nWatchdogs \u00b7 briefs",
+   "color": "2"
+  },
+  {
+   "id": "c87a171ac826a6fc",
+   "type": "text",
+   "x": 520,
+   "y": 900,
+   "width": 260,
+   "height": 120,
+   "text": "# \ud83d\udcbe MEMORY\n\nRedis \u00b7 Qdrant\nPostgres \u00b7 Vault",
+   "color": "6"
+  },
+  {
+   "id": "e48478dcb74f2134",
+   "type": "text",
+   "x": 520,
+   "y": 520,
+   "width": 260,
+   "height": 120,
+   "text": "# \ud83c\udf10 ECOSYSTEM\n\nCatalog \u00b7 obsidian-5\nEvolution-engine",
+   "color": "3"
+  },
+  {
+   "id": "5d2cce8038a39d5e",
+   "type": "text",
+   "x": 1900,
+   "y": 520,
+   "width": 260,
+   "height": 120,
+   "text": "# \ud83d\udee1\ufe0f SECURITY\n\nScans \u00b7 gates\nInjection-checks",
+   "color": "1"
+  },
+  {
+   "id": "0853964b50af03b9",
+   "type": "text",
+   "x": 1200,
+   "y": 1080,
+   "width": 260,
+   "height": 120,
+   "text": "# \ud83d\udcf1 PRODUCT\n\nThe mobile app\n(the build-queue!)",
+   "color": "2"
+  },
+  {
+   "id": "71722f244f58d669",
+   "type": "text",
+   "x": 200,
+   "y": 40,
+   "width": 200,
+   "height": 90,
+   "text": "SAFETY SPINE\nemergency-med \u00b7 clinical family",
+   "color": "4"
+  },
+  {
+   "id": "cbee3772a0770217",
+   "type": "text",
+   "x": 900,
+   "y": 40,
+   "width": 200,
+   "height": 90,
+   "text": "P&P MANUAL\nPolicy + Procedure\nfor every skill",
+   "color": "4"
+  },
+  {
+   "id": "21a278f64f7fd633",
+   "type": "text",
+   "x": 1720,
+   "y": 40,
+   "width": 200,
+   "height": 90,
+   "text": "DOJO\nmeasure \u2192 improve \u2192 verify",
+   "color": "5"
+  },
+  {
+   "id": "dbdde131ca3766e4",
+   "type": "text",
+   "x": 2220,
+   "y": 40,
+   "width": 200,
+   "height": 90,
+   "text": "GEPA ENGINE\nevolve_skill \u2014 LIVE \u2713\nwrites skills + code",
+   "color": "5"
+  },
+  {
+   "id": "d58e72e310275dff",
+   "type": "text",
+   "x": 1720,
+   "y": 980,
+   "width": 200,
+   "height": 90,
+   "text": "53 CRONS\nerror-watchdog \u00b7 sentinel\nurl-review \u00b7 backups",
+   "color": "2"
+  },
+  {
+   "id": "6c15c0c8e9df4696",
+   "type": "text",
+   "x": 200,
+   "y": 980,
+   "width": 200,
+   "height": 90,
+   "text": "4 LAYERS\nhot \u00b7 semantic\ntruth \u00b7 durable",
+   "color": "6"
+  },
+  {
+   "id": "11a11f5125227c37",
+   "type": "text",
+   "x": 200,
+   "y": 640,
+   "width": 200,
+   "height": 90,
+   "text": "OBSIDIAN-5\ncli \u00b7 markdown\ncanvas \u00b7 bases \u00b7 defuddle",
+   "color": "3"
+  },
+  {
+   "id": "12da86a78c49ea20",
+   "type": "text",
+   "x": 1720,
+   "y": 640,
+   "width": 200,
+   "height": 90,
+   "text": "INJECTION-CHECK\nscan-before-integrate\nnever-blind-installs",
+   "color": "1"
+  },
+  {
+   "id": "e32684b27b95e909",
+   "type": "text",
+   "x": 1100,
+   "y": 1240,
+   "width": 260,
+   "height": 90,
+   "text": "THE GAP\nThe app's the crown\nbackend 30-40% \u00b7 shell 10-15%",
+   "color": "2"
+  }
+ ],
+ "edges": [
+  {
+   "id": "348334896a68f812",
+   "fromNode": "30877432d1026706",
+   "toNode": "d7e805da846a32c3",
+   "toEnd": "arrow"
+  },
+  {
+   "id": "d810a485ed03241b",
+   "fromNode": "30877432d1026706",
+   "toNode": "bb81e3c29b621792",
+   "toEnd": "arrow"
+  },
+  {
+   "id": "4d419b1b673bd475",
+   "fromNode": "30877432d1026706",
+   "toNode": "73c8eb5bb682575e",
+   "toEnd": "arrow"
+  },
+  {
+   "id": "5d05ad7853c1f76e",
+   "fromNode": "30877432d1026706",
+   "toNode": "c87a171ac826a6fc",
+   "toEnd": "arrow"
+  },
+  {
+   "id": "b97706ca828bca03",
+   "fromNode": "30877432d1026706",
+   "toNode": "e48478dcb74f2134",
+   "toEnd": "arrow"
+  },
+  {
+   "id": "85813dbad3c681d0",
+   "fromNode": "30877432d1026706",
+   "toNode": "5d2cce8038a39d5e",
+   "toEnd": "arrow"
+  },
+  {
+   "id": "6bd2aa399dac946d",
+   "fromNode": "30877432d1026706",
+   "toNode": "0853964b50af03b9",
+   "toEnd": "arrow"
+  },
+  {
+   "id": "c59c0996daeee6f5",
+   "fromNode": "d7e805da846a32c3",
+   "toNode": "71722f244f58d669",
+   "toEnd": "arrow"
+  },
+  {
+   "id": "29a279764017f2ed",
+   "fromNode": "d7e805da846a32c3",
+   "toNode": "cbee3772a0770217",
+   "toEnd": "arrow"
+  },
+  {
+   "id": "6cfc7403d75e173e",
+   "fromNode": "bb81e3c29b621792",
+   "toNode": "21a278f64f7fd633",
+   "toEnd": "arrow"
+  },
+  {
+   "id": "4eaede5fe878f78e",
+   "fromNode": "bb81e3c29b621792",
+   "toNode": "dbdde131ca3766e4",
+   "toEnd": "arrow"
+  },
+  {
+   "id": "2978aa2447c462dd",
+   "fromNode": "73c8eb5bb682575e",
+   "toNode": "d58e72e310275dff",
+   "toEnd": "arrow"
+  },
+  {
+   "id": "aed16dc0cf0b9cd7",
+   "fromNode": "c87a171ac826a6fc",
+   "toNode": "6c15c0c8e9df4696",
+   "toEnd": "arrow"
+  },
+  {
+   "id": "f78df0cac5e40c02",
+   "fromNode": "e48478dcb74f2134",
+   "toNode": "11a11f5125227c37",
+   "toEnd": "arrow"
+  },
+  {
+   "id": "d4e518ca6eaac8d8",
+   "fromNode": "5d2cce8038a39d5e",
+   "toNode": "12da86a78c49ea20",
+   "toEnd": "arrow"
+  },
+  {
+   "id": "2f01b7210760474f",
+   "fromNode": "0853964b50af03b9",
+   "toNode": "e32684b27b95e909",
+   "toEnd": "arrow"
+  },
+  {
+   "id": "36e8b5359309cc62",
+   "fromNode": "e48478dcb74f2134",
+   "toNode": "d7e805da846a32c3",
+   "toEnd": "arrow",
+   "label": "installs"
+  },
+  {
+   "id": "73931bdb2a0df3db",
+   "fromNode": "bb81e3c29b621792",
+   "toNode": "d7e805da846a32c3",
+   "toEnd": "arrow",
+   "label": "patches"
+  },
+  {
+   "id": "e4d58fed8a728e7e",
+   "fromNode": "5d2cce8038a39d5e",
+   "toNode": "e48478dcb74f2134",
+   "toEnd": "arrow",
+   "label": "guards"
+  },
+  {
+   "id": "ca0fa5f6b8a88062",
+   "fromNode": "73c8eb5bb682575e",
+   "toNode": "c87a171ac826a6fc",
+   "toEnd": "arrow",
+   "label": "feeds"
+  }
+ ]
+}

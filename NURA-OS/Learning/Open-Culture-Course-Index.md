@@ -1,0 +1,387 @@
+# The Open Culture course index — the NURA learning stack's the source list
+
+Scraped 2026-08-19 from openculture.com/freeonlinecourses. The all free (the MOOC audits = $0).
+
+## Health (22)
+
+- **Biohacking Your Brain’s Health** — Emory Uni­ver­si­ty — https://coursera.pxf.io/yRxN6W
+- **Causes of Human Disease: Understanding Causes of Disease** — Uni­ver­si­ty of Leeds — https://www.futurelearn.com/courses/human-disease-transmitting-and-fighting-infection
+- **COVID-19, SARS-CoV‑2 and the Pandemic** — Mul­ti­ple fac­ul­ty, MIT — http://www.openculture.com/2020/09/mit-presents-a-free-course-on-the-covid-19-pandemic.html
+- **Dementia and the Arts: Sharing Practice, Developing Understanding and Enhancing Lives** — Uni­ver­si­ty Col­lege Lon­don — https://www.futurelearn.com/courses/dementia-arts
+- **Engineering Health: Introduction to Yoga and Physiology** — NYU — https://coursera.pxf.io/rnqgGQ
+- **Epidemics** — Uni­ver­si­ty of Hong Kong — https://coursera.pxf.io/EaYDv2
+- **Epidemiology and Control of Infectious Diseases** — Pro­fes­sor Tomas Aragon, UC Berke­ley — https://archive.org/details/ucberkeley_webcast_itunesu_438309419
+- **Exploring Play: the Importance of Play in Everyday Life** — The Uni­ver­si­ty of Sheffield — https://www.futurelearn.com/courses/play
+- **Finding Purpose and Meaning In Life: Living for What Matters Most** — Uni­ver­si­ty of Michi­gan — https://coursera.pxf.io/EaYDv2
+- **Food and Mood: Improving Mental Health Through Diet and Nutrition** — Deakin Uni­ver­si­ty — https://www.futurelearn.com/courses/food-and-mood
+- **Foundations of Understanding and Combating Cancer** — Harold Var­mus, Cor­nell Medicine/World Sci­ence U. — https://worldscienceu.com/courses/foundations-of-understanding-and-combating-cancer/
+- **Hacking Exercise For Health. The Surprising New Science of Fitness** — McMas­ter Uni­ver­si­ty — https://coursera.pxf.io/vngd6j
+- **Healing with the Arts** — Uni­ver­si­ty of Flori­da — https://coursera.pxf.io/vn92yd
+- **Machine Learning for Healthcare** — &nbsp;David Son­tag,&nbsp;Peter Szolovits, MIT — https://www.youtube.com/playlist?list=PLUl4u3cNGP60B0PQXVQyGNdCyCTDU1Q5j
+- **Medical Cannabis: The Health Effects of THC and CBD Specialization** — UC Boul­der — https://coursera.pxf.io/yRPryV
+- **Physics of COVID-19 Transmission** — Prof. Mar­tin Bazant &amp; Dr. Joey Gu, MIT — https://www.youtube.com/playlist?list=PLUl4u3cNGP62-vPzt_GMdZRflJPjNdspG
+- **Positive Psychiatry and Mental Health** — The Uni­ver­si­ty of Syd­ney — https://coursera.pxf.io/RyDVdb
+- **Science Matters: Let’s Talk About COVID-19/Coronavirus** — Impe­r­i­al Col­lege Lon­don — https://coursera.pxf.io/gbQdkA
+- **Traditional Herbal Medicine in Supportive Cancer Care: From Alternative to Integrative** — Tech­nion Israel Insti­tute of Tech­nol­o­gy — https://coursera.pxf.io/x9jnyA
+- **The Addicted Brain** — Emory Uni­ver­si­ty — https://coursera.pxf.io/QOvKNP
+- **The Science of Exercise** — UC Boul­der — https://coursera.pxf.io/kj1Raz
+- **Vital Signs: Understanding What the Body Is Telling Us** — Uni­ver­si­ty of Penn­syl­va­nia — https://coursera.pxf.io/Ao1Kyj
+
+## Biology (51)
+
+- **Animal Behavior** — &nbsp;Ger­ald Schnei­der, MIT — http://ocw.mit.edu/courses/brain-and-cognitive-sciences/9-20-animal-behavior-fall-2013/
+- **Biochemistry** — Carnegie Mel­lon — https://oli.cmu.edu/courses/biochemistry-open-free/
+- **Biodiversity and the Meaning of Human Existence** — E.O. Wil­son, Duke — https://www.youtube.com/user/nicholasschoolatduke/search?query=Biodiversity+and+the+Meaning+of+Human+Existence+
+- **Biology Beyond Genes** — Denis Noble, Oxford — https://iai.tv/iai-academy/courses/info?course=biology-beyond-genes
+- **Biophotonics** — UC Davis — https://archive.org/details/podcast_integrated-studies-introducti_389259173
+- **Brain and Behavior** — &nbsp;Wendy Suzu­ki, NYU — http://www.youtube.com/playlist?list=PLtXCbh6IFA7QCsei-t8WesusKi8I2LXUJ
+- **Brain Machine Interfaces** — Miguel Nicolelis, Duke School of Medicine/World Sci­ence U — https://worldscienceu.com/courses/brain-machine-interfaces-from-basic-science-to-neurobiological-rehabilitation/
+- **Computational Molecular Biology** — &nbsp;Dou­glas Brut­lag, Stan­ford — http://biochem218.stanford.edu/
+- **COVID-19, SARS-CoV‑2 and the Pandemic** — Mul­ti­ple fac­ul­ty, MIT — http://www.openculture.com/2020/09/mit-presents-a-free-course-on-the-covid-19-pandemic.html
+- **Darwin’s Legacy** — Stan­ford — https://www.youtube.com/playlist?list=PLF2E17B4CDCCE15F5
+- **Diet and Nutrition** — Aus­tralia — https://itunes.apple.com/us/itunes-u/diet-and-nutrition/id595246421?mt=10
+- **Evolution: A Course for Educators** — &nbsp;Mas­sive Open Online Course (MOOC)&nbsp;‑Joel Cracraft, Ph.D., Amer­i­can Muse­um of Nat­ur­al His­to­ry — https://imp.i384100.net/6b5kDK
+- **Evolution and Medicine** — &nbsp;Stephen C. Stearns, Yale — https://www.youtube.com/playlist?list=PLh9mgdi4rNezvm7QkQ_PioadoAWqfa2L0
+- **Evolution, Ecology and Behavior** — &nbsp;Stephen C. Stearns, Yale — http://www.youtube.com/playlist?list=PL6299F3195349CCDA&amp;feature=plcp
+- **Exploring Our Humanity** — Lee Berg­er, World Sci­ence U — https://worldscienceu.com/courses/exploring-humanity-lee-berger/
+- **Foundations of Computational and Systems Biology** — Christo­pher Burge, David Gif­ford, Ernest Fraenkel, MIT — https://www.youtube.com/playlist?list=PLUl4u3cNGP63uK-oWiLgO7LLJV6ZCWXac
+- **Foundations of Understanding and Combating Cancer** — Harold Var­mus, Cor­nell Medicine/World Sci­ence U. — https://worldscienceu.com/courses/foundations-of-understanding-and-combating-cancer/
+- **Frontiers in Biomedical Engineering** — &nbsp;W. Mark Saltz­man, Yale — http://www.youtube.com/playlist?list=PL27E877E8206F196B&amp;feature=plcp
+- **Fundamentals of Biology** — Mul­ti­ple Instruc­tors, MIT — https://www.youtube.com/playlist?list=PLF83B8D8C87426E44
+- **General Biochemistry** — &nbsp;Michael Yaffe&nbsp;+&nbsp;Matthew Van­der Hei­den, MIT — https://ocw.mit.edu/courses/biology/7-05-general-biochemistry-spring-2020/
+- **General Biochemistry and Molecular Biology** — Mul­ti­ple pro­fes­sors, UC Berke­ley — https://archive.org/details/ucberkeley_webcast_itunesu_461119994
+- **General Human Anatomy/Integrative Biology** — &nbsp;Mar­i­an Dia­mond, UC Berke­ley — https://www.youtube.com/playlist?list=PL24206A985EF5F5CE
+- **Genetic Engineering in Medicine, Agriculture, and Law** — &nbsp;Robert B. Gold­berg, UCLA — http://www.youtube.com/playlist?list=PL3D6BD220BC6AC096&amp;feature=plcp
+- **Genomes and Diversity** — &nbsp;Mark Sie­gal, NYU — http://www.openculture.com/genomes-and-diversity-a-free-online-course-from-n-y-u
+- **Genomics &amp; Computational Biology** — &nbsp;George Church, MIT — https://www.youtube.com/playlist?list=PLUl4u3cNGP61gaHWysmlYNeGsuUI8y5GV
+- **Genomic Medicine** — &nbsp;Isaac Kohane, MIT — https://www.youtube.com/playlist?list=PLUl4u3cNGP613PJMNmRjAIdBr76goU1V5
+- **Getting Started in Crypto-EM** — &nbsp;Free Online Course&nbsp;-&nbsp;Grant Jensen, Cal­tech — https://www.youtube.com/playlist?list=PLryzeKTTHxyUL9NA-D5zZ29U7NFd6GKE5
+- **Getting Up to Speed in Biology** — &nbsp;Prof. Hazel Sive, MIT — https://openlearninglibrary.mit.edu/courses/course-v1:OCW+Pre-7.01+1T2020/about
+- **Global Problems of Population Growth** — &nbsp;Course Mate­ri­als&nbsp;-&nbsp;Robert Wyman, Yale — http://www.youtube.com/playlist?list=PLE60A08636F41C128&amp;feature=plcp
+- **Growing Up in the Universe** — &nbsp;Richard Dawkins, Oxford — http://www.openculture.com/2012/04/igrowing_up_in_the_universei_richard_dawkins_presents_captivating_science_lectures_for_kids_1991.html
+- **Human Behavioral Biology** — &nbsp;Var­i­ous for­mats&nbsp;-&nbsp;Robert Sapol­sky, Stan­ford — http://www.openculture.com/2011/03/freesapolskycourse.html
+- **Introduction to Biochemistry** — Kevin Ahern, Ore­gon State — https://www.youtube.com/playlist?list=PL74ED4174166F94A8
+- **Introductory Biology (2018)&nbsp;** — Mul­ti­ple pro­fes­sors, MIT — https://www.youtube.com/playlist?list=PLUl4u3cNGP63LmSVIVzy584-ZbjbJ-Y63
+- **Introduction to Biology** — Carnegie Mel­lon — https://oli.cmu.edu/courses/introduction-to-biology-open-free/
+- **Introduction to Genetics and Evolution** — Duke Uni­ver­si­ty — https://coursera.pxf.io/Ao1yzN
+- **Introduction to Human Nutrition** — Nan­cy Amy, UC Berke­ley — http://archive.org/details/NS_10_Spring_2006_UC_Berkeley
+- **Life, Concepts and Issues: Introduction to Life Sciences for Non-Science Majors** — &nbsp;Jay Phe­lan, UCLA — http://www.youtube.com/playlist?list=PL8EE54070B382E73A&amp;feature=plcp
+- **Molecular and Cell Biology** — UC Berke­ley, Mul­ti­ple Profs — https://archive.org/details/ucberkeley_webcast_itunesu_461120043
+- **Principles of Human Nutrition** — Aus­tralia — https://podcasts.apple.com/us/podcast/introduction-to-human-nutrition/id595246421?i=1000411426257
+- **Replaceable You: Stem Cells and Tissue Engineering** — &nbsp;Jill Helms, Stan­ford — http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewPodcast?id=384237190
+- **Straight Talk About Stem Cells** — &nbsp;Free iTunes Audio&nbsp;-&nbsp;Christo­pher Scott, Stan­ford — https://podcasts.apple.com/us/podcast/straight-talk-about-stem-cells/id384237126
+- **Stem Cells: Policy and Ethics&nbsp;** — &nbsp;Christo­pher Scott, Stan­ford — https://podcasts.apple.com/us/podcast/stem-cells-policy-and-ethics/id384237187
+- **The Biology of Consciousness** — Christof Koch, Allen Insti­tute for Brain Science/ World Sci­ence U — https://worldscienceu.com/courses/the-biology-of-consciousness-chistof-koch/
+- **The Brain: A User’s Guide** — Bar­ry Jacobs, Prince­ton — https://itunes.apple.com/us/itunes-u/the-brain-a-users-guide/id830845473?mt=10
+- **The Human Brain** — &nbsp;Pro­fes­sor Nan­cy Kan­wish­er,&nbsp;MIT — https://www.openculture.com/2021/10/the-human-brain-a-free-online-course-from-mit.html
+- **The Future of Human Health** — &nbsp;Jen­nifer Ray­mond, Stan­ford — https://www.youtube.com/playlist?list=PL32BC95C9D7E5959C
+- **The Physics of COVID-19 Transmission** — &nbsp;Prof. Mar­tin Bazant&nbsp;and&nbsp;Dr. Joey Gu, MIT — https://www.youtube.com/playlist?list=PLUl4u3cNGP62-vPzt_GMdZRflJPjNdspG
+- **The Stanford Mini Med School (Fall)** — Mul­ti­ple Pro­fes­sors — https://www.youtube.com/playlist?list=PL7B4CF223589DC91E
+- **The Stanford Mini Med School (Winter)** — Mul­ti­ple Pro­fes­sors — https://www.youtube.com/playlist?list=PL46B6FF964010B022
+- **The Stanford Mini Med School (Spring)&nbsp;** — Mul­ti­ple Pro­fes­sors — https://www.youtube.com/playlist?list=PLED5A3070DB689731
+- **The Stanford Mini Med School: The Heart** — Mul­ti­ple Pro­fes­sors — https://podcasts.apple.com/us/podcast/mini-med-school-the-heart/id501198620
+
+## Psychology & Neuroscience (68)
+
+- **A Life of Happiness and Fulfillment** — Indi­an School of Busi­ness — https://coursera.pxf.io/ORLAdn
+- **An Introduction to Consumer Neuroscience &amp; Neuromarketing** — Uni­ver­si­ty of Copen­hagen — https://coursera.pxf.io/DVMEWG
+- **Animal Behavior** — &nbsp;Ger­ald Schnei­der, MIT — http://ocw.mit.edu/courses/brain-and-cognitive-sciences/9-20-animal-behavior-fall-2013/
+- **Behavioral Neuroscience Laboratory** — William Grisham, UCLA — https://www.youtube.com/playlist?list=PL881C1F27782297D6
+- **Big Brains, Small Brains** — Van­der­bilt University/World Sci­ence U — https://worldscienceu.com/courses/big-brains-small-brains-the-conundrum-of-comparing-brains-and-intelligence/
+- **Brain and Behavior** — Wendy Suzu­ki, NYU — http://www.youtube.com/playlist?list=PLtXCbh6IFA7QCsei-t8WesusKi8I2LXUJ
+- **Brain Machine Interfaces** — Miguel Nicolelis, Duke School of Medicine/World Sci­ence U — https://worldscienceu.com/courses/brain-machine-interfaces-from-basic-science-to-neurobiological-rehabilitation/
+- **Brains, Minds and Machines** — Toma­so Pog­gio &amp; Gabriel Kreiman, MIT — https://www.youtube.com/playlist?list=PLUl4u3cNGP61RTZrT3MIAikp2G5EEvTjf
+- **Brain Structure and its Origins** — YouTube Ver­sion- Ger­ald Schnei­der, MIT — https://ocw.mit.edu/courses/brain-and-cognitive-sciences/9-14-brain-structure-and-its-origins-spring-2014/
+- **Buddhism and Cognitive Science** — John Ver­vaeke, U Toron­to — https://www.youtube.com/playlist?list=PLwzqpDoZ6TCKqhjfiXmgxtPB1LLBrBvKd
+- **Buddhism and Modern Psychology** — Robert Wright, for­mer­ly Prince­ton — https://www.youtube.com/playlist?list=PLNKMRlDojbRI1R0m_fdj0Y-05onjLo5Pq
+- **Coding and Vision I** — &nbsp;Christof Koch&nbsp;&amp;&nbsp;R. Clay Reid,&nbsp;Allen Insti­tute for Brain Sci­ence — https://www.youtube.com/playlist?list=PLCEC78997E3E2DAB4
+- **Communication and Conflict in Families and Couples** — &nbsp;Ben­jamin Kar­ney, UCLA — http://www.youtube.com/playlist?list=PLA1DA9D11E15C116D&amp;feature=plcp
+- **Cultural Psychology** — Herb Agan, U. of Hous­ton — https://www.youtube.com/playlist?list=PL5000C8B6C858E277
+- **De-Mystifying Mindfulness** — &nbsp;Chris Goto-Jones, Uni­ver­si­ty of Lei­den — https://coursera.pxf.io/VyjXd3
+- **Environmental Psychology** — Daniel Stokols, UC Irvine — https://www.youtube.com/playlist?list=PLA2E69FC89640C272
+- **Discovering Psychology** — Philip Zim­bar­do, Stan­ford — https://www.learner.org/series/discovering-psychology/#:~:text=Zimbardo-,Philip%20G.,researcher%2C%20teacher%2C%20and%20author.&amp;text=He%20helped%20to%20create%20both,of%20this%20influential%20learning%20experience.
+- **Everyday Parenting: The ABCs of Child Rearing** — Yale Uni­ver­si­ty — https://coursera.pxf.io/kjPn4x
+- **Free Will and Neuroscience** — Alfred Mele, Flori­da State/World Sci­ence U — https://worldscienceu.com/courses/free-will-and-neuroscience-alfred-mele/
+- **Hallucinations** — Richard Ben­tall, Uni­ver­si­ty of Liv­er­pool — https://iai.tv/iai-academy/courses/info?course=hallucinations
+- **Health Psychology** — Mirn­moyi Kulka­rni, IIT — http://nptel.ac.in/courses/109101007/
+- **How to Think About Dubious Claims** — &nbsp;Ray Hyman, Uni­ver­si­ty of Ore­gon — https://www.youtube.com/playlist?list=PL8MfjLNsf_mg9p_Dl2jLbMPxiCVwhQ0-L
+- **How to Think Like a Psychologist** — Stan­ford — http://itunes.apple.com/itunes-u/how-to-think-like-psychologist/id513506131
+- **Industrial/Organizational Psychology** — &nbsp;Lyn­da Vil­lanue­va, Uni­ver­si­ty of Hous­ton — https://www.youtube.com/playlist?list=PLED1F29DB94124206
+- **Introduction to Cognitive Psychology** — &nbsp;Richard A. Kass­chau, Uni­ver­si­ty of Hous­ton — https://www.youtube.com/playlist?list=PL8DC6550C29B99AC1
+- **Introduction to Psychology** — Steve Joor­dens, U. Toron­to — https://coursera.pxf.io/3PMBqn
+- **Introduction to Psychology** — &nbsp;Paul Bloom, Yale — http://www.openculture.com/introduction-to-psychology-a-free-course-from-yale
+- **Introduction to Psychology** — Jere­my Wolfe, MIT — https://www.youtube.com/playlist?list=PLUl4u3cNGP615Y1j9Ok3szAH5DxhFjTHo
+- **Introduction to Psychology** — John Gabrieli, MIT — http://www.youtube.com/playlist?list=PL44ABC9278E2EE706&amp;feature=plcp&amp;fb_source=message
+- **Introduction to Psychology** — Carnegie Mel­lon — https://oli.cmu.edu/courses/introduction-to-psychology-open-free/
+- **Introduction to Psychology** — &nbsp;Richard A. Kass­chau, Uni­ver­si­ty of Hous­ton — https://www.youtube.com/playlist?list=PLFA74B4818F7AD751
+- **Know Thyself — The Value and Limits of Self-Knowledge: The Unconscious** — Uni­ver­si­ty of Edin­burgh — https://coursera.pxf.io/yRxaPG
+- **Learning How to Learn: Powerful mental tools to help you master tough subjects** — Bar­bara Oak­ley and Ter­rence Sejnows­ki — https://www.openculture.com/2016/05/learning-how-to-learn-enroll-in-the-latest-edition-of-the-most-popular-mooc.html
+- **Maps of Meaning: The Architecture of Belief (2017)** — &nbsp;Jor­dan Peter­son, Uni­ver­si­ty of Toron­to — https://www.youtube.com/playlist?list=PL22J3VaeABQAT-0aSPq-OKOpQlHyR4k5h
+- **Maps of Meaning (2014)** — &nbsp;Jor­dan Peter­son, Uni­ver­si­ty of Toron­to — https://www.youtube.com/playlist?list=PL22J3VaeABQByVcW4lXQ46glULC-ekhOp
+- **Maps of Meaning (2016)** — &nbsp;Jor­dan Peter­son, Uni­ver­si­ty of Toron­to — https://www.youtube.com/playlist?list=PL22J3VaeABQAGbKJNDrRa6GNL0iL4KoOj
+- **Maps of Meaning (1996)** — &nbsp;Jor­dan Peter­son,&nbsp;Har­vard — https://www.youtube.com/playlist?list=PL22J3VaeABQCxX-ScLugqRqPNr1q-HxLf
+- **Medical Neuroscience** — Duke Uni­ver­si­ty — https://coursera.pxf.io/LPYj10
+- **Moralities of Everyday Life** — Yale — https://coursera.pxf.io/AoY6Gj
+- **Neuroscience and Behavior** — Ger­ald Schnei­der, MIT — http://ocw.mit.edu/courses/brain-and-cognitive-sciences/9-01-neuroscience-and-behavior-fall-2003/
+- **Neuroscience and Free Will** — Alfred Mele, World Sci­ence U/Florida State — https://worldscienceu.com/courses/free-will-and-neuroscience-alfred-mele/
+- **Personality and Its Transformations (2016)** — Jor­dan Peter­son, Uni­ver­si­ty of Toron­to — https://www.youtube.com/playlist?list=PL22J3VaeABQAOhH1CLMNnMl2R-O1abW1T
+- **Personality and Its Transformations (2017)** — Jor­dan Peter­son, Uni­ver­si­ty of Toron­to — https://www.youtube.com/playlist?list=PL22J3VaeABQApSdW8X71Ihe34eKN6XhCi
+- **Positive Psychology** — UNC Chapel Hill — https://coursera.pxf.io/5bBWG1
+- **Positive Psychology: Martin E. P. Seligman’s Visionary Science** — Uni­ver­si­ty of Penn­syl­va­nia — https://coursera.pxf.io/qnGQvN
+- **Positive Psychology: Resilience Skills** — Uni­ver­si­ty of Penn­syl­va­nia — https://coursera.pxf.io/e4xo16
+- **Positive Psychiatry and Mental Health** — The Uni­ver­si­ty of Syd­ney — https://coursera.pxf.io/RyDVdb
+- **Positive Psychology** — Tal Ben-Sha­har, Har­vard Uni­ver­si­ty — http://www.openculture.com/2017/08/find-happiness-by-watching-30-lectures-from-harvards-extremely-popular-positive-psychology-course.html
+- **Psychological First Aid** — Johns Hop­kins — https://coursera.pxf.io/P0qJYe
+- **Psychology Fundamentals** — Mark Steyvers, UC-Irvine — https://www.youtube.com/playlist?list=PLqOZ6FD_RQ7nV12hbu1h_MJ6BoG2IcS3j
+- **Psychology of Gender** — Herb Agan, Uni­ver­si­ty of Hous­ton — https://www.youtube.com/playlist?list=PLC81A94E1DB14BF04
+- **Psychology and Religion** — &nbsp;Jor­dan Peter­son, Uni­ver­si­ty of Toron­to — https://www.youtube.com/playlist?list=PL22J3VaeABQC6oShltYc6rMUDAGJ7_G5e
+- **Psychology of Personality** — Edward Sheri­dan, Uni­ver­si­ty of Hous­ton — https://www.youtube.com/playlist?list=PLECB213EC27515581
+- **Sensory Systems** — Peter Schiller, MIT — https://www.youtube.com/playlist?list=PLUl4u3cNGP63Wy1oqQW2oD2HBdDSY8Ghi
+- **Social Psychology** — Wes­leyan — https://coursera.pxf.io/GjY93m
+- **Social Psychology&nbsp;** — Robb Willer, UC Berke­ley — https://archive.org/details/ucberkeley-webcast-PLBFB989AB595269F6
+- **Synapses, Neurons and Brains** — Hebrew Uni­ver­si­ty — https://coursera.pxf.io/5bB2Ln
+- **The Arts and Science of Relationships: Understanding Human Needs** — Uni­ver­si­ty of Toron­to — https://coursera.pxf.io/BXYmA9
+- **The Biology of Consciousness** — Christof Koch, CalTech/World Sci­ence U — https://worldscienceu.com/courses/the-biology-of-consciousness-chistof-koch/
+- **The Foundations of Positive Psychology** — Uni­ver­si­ty of Penn­syl­va­nia — https://www.openculture.com/the-foundations-of-positive-psychology-free-courses-from-the-university-of-pennsylvania
+- **The Neuronal Basis of Psychology** — Christof Koch, Cal­Tech — http://www.openculture.com/the-neuronal-basis-of-consciousness-course-a-free-online-course-from-caltech
+- **The New Psychology of Depression** — &nbsp;Mark Williams and Dan­ny Pen­man, Oxford — http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewPodcast?id=474787597
+- **The Psychology, Biology and Politics of Food** — Pro­fes­sor Kel­ly D. Brownell, Yale — http://oyc.yale.edu/psychology/psyc-123#sessions
+- **The Science of Psychedelics** — David Nutt — https://iai.tv/iai-academy/courses/info?course=the-science-of-psychedelics
+- **The Science of Well-Being** — Lau­rie San­tos, Yale — https://www.openculture.com/2018/02/taken-a-free-online-version-of-yales-most-popular-course-the-science-of-well-being-and-learn-the-keys-to-happiness.html
+- **The World of Abnormal Psychology** — Philip Zim­bar­do, Stan­ford — https://www.learner.org/series/the-world-of-abnormal-psychology/
+- **Understanding the Brain: The Neurobiology of Everyday Life** — Uni­ver­si­ty of Chica­go — https://coursera.pxf.io/vn9DLN
+- **Understanding Memory: Explaining the Psychology of Memory through Movies** — Wes­leyan — https://coursera.pxf.io/doPyXy
+
+## Aeronautics (2)
+
+- **Aircraft Systems Engineering** — Mul­ti­ple pro­fes­sors, MIT — https://ocw.mit.edu/courses/aeronautics-and-astronautics/16-885j-aircraft-systems-engineering-fall-2005/
+- **Space Flight Mechanics** — Manoran­jan Sin­ha, IIT Kharag­pur — http://www.youtube.com/playlist?list=PLbMVogVj5nJSiVuBHAyAKBtC7-E0hsApp
+
+## Computer Science (187)
+
+- **36 Lectures on the Future** — &nbsp;Kevin Kel­ly,&nbsp;found­ing exec­u­tive edi­tor of&nbsp;Wired — https://www.openculture.com/2021/02/wired-co-founder-kevin-kelly-gives-36-lectures-on-our-future-world.html
+- **Advanced Algorithms** — &nbsp;Jelani Nel­son, Har­vard — http://www.openculture.com/2017/12/advanced-algorithms-a-free-course-from-harvard-university.html
+- **Advanced Data Structures** — &nbsp;Erik Demaine,&nbsp;MIT — http://www.youtube.com/playlist?list=PLUl4u3cNGP61hsJNdULdudlRL493b-XZf
+- **Algorithms, Part I** — &nbsp;Robert Sedgewick, Prince­ton — https://coursera.pxf.io/ZdvEzX
+- **Algorithms, Part II** — &nbsp;Robert Sedgewick, Prince­ton — https://coursera.pxf.io/XxvERX
+- **Algorithm Design and Analysis** — Dan Gus­field, UC Davis — https://itunes.apple.com/us/itunes-u/algorithm-design-analysis/id485233258?mt=10
+- **Algorithms for Big Data** — Mul­ti­ple pro­fes­sors, Har­vard — http://www.openculture.com/2017/12/algorithms-for-big-data-a-free-course-from-harvard.html
+- **Algorithmic Lower Bounds: Fun with Hardness Proofs** — &nbsp;Erik Demaine, MIT — https://www.youtube.com/playlist?list=PLUl4u3cNGP63d33STUUBfZUpzFCVR5-PV
+- **AI Essentials** — Google AI experts — https://www.openculture.com/2024/04/google-launches-a-new-course-called-ai-essentials.html
+- **AI for Everyone** — Andrew Ng, Stan­ford — https://www.openculture.com/2019/03/artificial-intelligence-for-everyone-an-introductory-course-from-andrew-ng-the-co-founder-of-coursera.html
+- **Artificial Intelligence** — &nbsp;Patrick Win­ston, MIT — http://www.openculture.com/2017/05/artificial-intelligence-a-free-online-course-from-mit.html
+- **Artificial Intelligence — Introduction to Robotics** — &nbsp;Ous­sama Khat­ib, Stan­ford — https://www.youtube.com/playlist?list=PL65CC0384A1798ADF
+- **Artificial Intelligence: Machine Learning** — Andrew Ng, Stan­ford — https://see.stanford.edu/Course/CS229
+- **Artificial Intelligence: Machine Learning (CS229 2018 Version)** — &nbsp;Andrew Ng, Stan­ford — https://www.youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU
+- **Artificial Intelligence** — P.Dasgupta, IIT — https://www.youtube.com/playlist?list=PL6EE0CD02910E57B8
+- **Authentication &amp; Authorization: OAuth** — Udac­i­ty — https://imp.i115008.net/5bbZxD
+- **AutoLayout** — Udac­i­ty — https://imp.i115008.net/YggB3q
+- **Bitcoin and Cryptocurrency Technologies** — &nbsp;Arvind Narayanan, Prince­ton — http://www.openculture.com/2018/01/bitcoin-and-cryptocurrency-technologies-a-free-course-from-princeton.html
+- **Bitcoin and Cryptocurrency Technologies&nbsp;** — &nbsp;Arvind Narayanan, Prince­ton — https://www.openculture.com/2018/01/bitcoin-and-cryptocurrency-technologies-a-free-course-from-princeton.html
+- **Bitcoin and Cryptocurrencies** — UC Berke­ley — https://edx.sjv.io/vnoyrj
+- **Bits:&nbsp;The Computer Science of Digital Information** — &nbsp;Har­ry Lewis, Har­vard — https://privacytools.seas.harvard.edu/presentations/bits-computer-science-digital-information
+- **Browser Rendering Optimization** — Google — http://imp.i115008.net/QOOnx9
+- **Build Native Mobile Apps with Flutter** — Google — https://imp.i115008.net/MXXBoP
+- **Building High Conversion Web Forms** — Google — https://imp.i115008.net/ZddK4W
+- **Calling Bullshit in the Age of Big Data** — &nbsp;Carl Bergstrom&nbsp;and&nbsp;Jevin West, Uni­ver­si­ty of Wash­ing­ton — http://www.openculture.com/2017/05/calling-bullshit-watch-the-lectures-for-the-college-course.html
+- **C Programming: Getting Started** — Dart­mouth — https://edx.sjv.io/x90yPv
+- **Client-Server Communication** — Google — https://imp.i115008.net/rnnDbB
+- **Codecademy** — &nbsp;Web Site — http://www.openculture.com/2012/10/codeacademys_free_courses_democratize_computer_programming_.html
+- **Compilers: Theory and Practice** — Geor­gia Tech — http://imp.i115008.net/kjjMrz
+- **Computer Architecture** — &nbsp;Anshul Kumar, IIT Del­hi — https://www.youtube.com/playlist?list=PL59E5B57A04EAE09C
+- **Computer Graphics** — Ken­neth Joy, UC Davis — https://itunes.apple.com/us/itunes-u/computer-graphics-fall-2009/id457893733?mt=10
+- **Computer Graphics** — Sukhen­du Das, IIT — https://www.youtube.com/playlist?list=PL338D19C40D6D1732
+- **Computer Language Engineering&nbsp;** — &nbsp;Mar­tin Rinard, MIT — http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-035-computer-language-engineering-sma-5502-fall-2005/lecture-notes/
+- **Computer Networking** — Geor­gia Tech — https://imp.i115008.net/Aoo3QK
+- **Computer Networks** — &nbsp;S.Ghosh, IIT — https://www.youtube.com/playlist?list=PL32DBC269EF768F74
+- **Computer Science for Business Professionals** — Har­vard — https://edx.sjv.io/xkEEy1
+- **Computer Science for Lawyers** — Har­vard — https://edx.sjv.io/QyPPJo
+- **Computer Systems Security** — &nbsp;Nick­o­lai Zel­dovich, MIT — https://www.youtube.com/playlist?list=PLUl4u3cNGP62K2DjQLRxDNRi0z2IRWnNh
+- **Convolutional Neural Networks** — Andrew Ng — https://coursera.pxf.io/4exMAn
+- **Core ML: Machine Learning for iOS** — Udac­i­ty — https://imp.i115008.net/b332nb
+- **Cryptocurrency and Blockchain: An Introduction to Digital Currencies** — Uni­ver­si­ty of Pennsylvania/Wharton — https://coursera.pxf.io/mgJnZ1
+- **Cyber-Physical Systems Security** — Geor­gia Tech — http://imp.i115008.net/5bbZPb
+- **Cybersecurity and Its Ten Domains** — Geor­gia Tech — https://coursera.pxf.io/7m9KVg
+- **Cybersecurity Fundamentals** — RIT — https://edx.sjv.io/P02KZQ
+- **Cybersecurity Risk Management** — Uni­ver­si­ty of Wash­ing­ton — https://edx.sjv.io/GjAn5L
+- **Data Science (What is Data Science?)** — IBM — https://coursera.pxf.io/zaDYKG
+- **Data Structures and Algorithms** — &nbsp;Richard Buck­land, Uni­ver­si­ty of New South Wales — https://www.youtube.com/playlist?list=PLE621E25B3BF8B9D1
+- **Data Wrangling with MongoDB** — Mon­goDB on Udac­i­ty — https://imp.i115008.net/155ye9
+- **Data Visualization in Tableau** — Udac­i­ty — https://imp.i115008.net/7mmO9V
+- **Deep Learning** — &nbsp;Vin­cent Van­houcke, Google — http://www.openculture.com/2017/07/google-launches-free-course-on-deep-learning.html
+- **Deep Learning** — Nan­do de Fre­itas, Oxford — http://www.openculture.com/2018/03/a-free-oxford-course-on-deep-learning.html
+- **Design of Computer Programs: Programming Principles** — Udac­i­ty — https://imp.i115008.net/kjjZ7L
+- **Designing RESTful APIs** — Udac­i­ty — http://imp.i115008.net/oeeLkb
+- **Design in Computing** — &nbsp;Richard Buck­land, Uni­ver­si­ty of New South — https://www.youtube.com/playlist?list=PL0C5D85DBA20E685C
+- **Developing Android Apps with Kotlin** — Google — https://www.udacity.com/course/developing-android-apps-with-kotlin--ud9012
+- **Developing iOS 10 Apps with Swift&nbsp;** — &nbsp;Paul Hegar­ty, Stan­ford — http://www.openculture.com/2017/02/stanford-university-launches-free-course-on-developing-apps-with-ios-10.html
+- **Discrete Mathematical Structures** — &nbsp;Kamala Krithivasan, IIT — https://www.youtube.com/playlist?list=PL0862D1A947252D20
+- **Discrete Stochastic Processes** — &nbsp;Robert Gal­lager, MIT — https://www.youtube.com/playlist?list=PLEEF5322B331C1B98
+- **Firebase Analytics: iOS** — Google — https://imp.i115008.net/Yggnme
+- **Front End Frameworks** — Google — http://imp.i115008.net/KeeXgN
+- **Full Stack Foundation** — Udacity/AWS — https://imp.i115008.net/kjjZjx
+- **Generative AI for Everyone** — Andrew Ng, Stan­ford — https://www.openculture.com/2023/11/generative-ai-for-everyone-a-free-course-from-ai-pioneer-andrew-ng.html
+- **Generative AI for Teachers and Educators** — MIT &amp; Google — https://www.openculture.com/2024/04/google-mit-offer-a-free-course-on-generative-ai-for-teachers-and-educators.html
+- **Google Cloud Platform Fundamentals: Core Infrastructure** — Google — https://coursera.pxf.io/kjPYKV
+- **Grand Central Dispatch (GCD)** — Udac­i­ty — http://imp.i115008.net/MXXBMJ
+- **Graphics Architecture** — &nbsp;Free Online Video&nbsp;- John Owens, UC Davis — https://itunes.apple.com/us/itunes-u/graphics-architecture-winter/id404606990?mt=10
+- **GT Refresher Advanced OS** — Geor­gia Tech — http://imp.i115008.net/n11E56
+- **High Performance Computer Architecture** — Geor­gia Tech — https://imp.i115008.net/a1121q
+- **Higher Computing** — &nbsp;Richard Buck­land, Uni­ver­si­ty of New South Wales — https://www.youtube.com/playlist?list=PL6B940F08B9773B9F
+- **HTML5 Canvas** — &nbsp;Open Online Course&nbsp;- Udac­i­ty — https://www.udacity.com/course/html5-canvas--ud292
+- **Human-Computer Interaction** — Geor­gia Tech — http://imp.i115008.net/mggEy7
+- **Human-Computer Interaction Seminar** — Mul­ti­ple Staff, Stan­ford — https://itunes.apple.com/us/itunes-u/human-computer-interaction/id430470532
+- **Learn to Program in Java** — Microsoft — https://edx.sjv.io/za6yo7
+- **Improving Deep Neural Networks: Hyperparameter tuning, Regularization and Optimization** — Andrew Ng — https://coursera.pxf.io/gbekZg
+- **Innovative Computing** — Mul­ti­ple Profs, Har­vard — https://www.youtube.com/playlist?list=PLE3E96113F544495A
+- **Interactive 3D Graphics** — Udac­i­ty — http://imp.i115008.net/5bbYbo
+- **Internet of Things: Communication Technologies** — UC-San Diego — https://coursera.pxf.io/Xxv3DG
+- **Introduction to Algorithms** — Prof.&nbsp;Charles Leis­er­son&nbsp;&amp;&nbsp;Erik Demaine, MIT — https://www.youtube.com/playlist?list=PL8B24C31197EC371C
+- **Introduction to Computational Thinking (2020)** — Mul­ti­ple fac­ul­ty, MIT — https://ocw.mit.edu/courses/mathematics/18-s191-introduction-to-computational-thinking-fall-2020/
+- **Harvard’s Introduction to Computer Science (2024)** — David Malan, Har­vard — https://www.youtube.com/playlist?list=PLhQjrBD2T381WAHyx1pq-sBfykqMBI7V4
+- **Introduction to Computer Science and Programming in Python** — &nbsp;Eric Grim­son, John Gut­tag, and Ana Bell, MIT — http://www.openculture.com/2017/06/introduction-to-python-data-science-computational-thinking-free-online-courses-from-mit.html
+- **Introduction to Computational Thinking and Data Science** — &nbsp;Eric Grim­son, John Gut­tag, and Ana Bell, MIT — http://www.openculture.com/2017/06/introduction-to-python-data-science-computational-thinking-free-online-courses-from-mit.html
+- **Introduction to Computer Science and Programming (Using Python)&nbsp;** — John Gut­tag, MIT — http://www.openculture.com/introduction-to-computer-science-and-programming-a-free-course-from-mit
+- **Introduction to Computer Science: Programming Methodology** — Mehran Saha­mi, Stan­ford — https://www.youtube.com/playlist?list=PL84A56BC7F4A1F852
+- **Introduction to Computer Science: Programming Abstractions&nbsp;** — Julie Zelen­s­ki, Stan­ford — https://www.youtube.com/playlist?list=PLFE6E58F856038C69
+- **Introduction to Computer Science: Programming Paradigms&nbsp;** — Jer­ry Cain, Stan­ford — https://www.youtube.com/playlist?list=PL9D558D49CA734A02
+- **Introduction to Computer Architecture (2013)** — &nbsp;Onur Mut­lu, Carnegie Mel­lon — https://www.youtube.com/playlist?list=PL5PHm2jkkXmidJOd59REog9jDnPDTG6IJ
+- **Introduction to Computer Architecture (2012)** — &nbsp;Onur Mut­lu, Carnegie Mel­lon — https://www.youtube.com/playlist?list=PL5PHm2jkkXmgejB7LV9zsupb_CUSNVOkz
+- **Introduction to Computer Graphics** — Prem Kalra, IIT — https://www.youtube.com/playlist?list=PL112A527F83F7A5E4
+- **Introduction to Cybersecurity&nbsp;** — Open Uni­ver­si­ty — https://www.futurelearn.com/courses/introduction-to-cyber-security
+- **Introduction to Cybersecurity** — Uni­ver­si­ty of Wash­ing­ton — https://edx.sjv.io/GjAgbn
+- **Introduction to Cybersecurity Tools &amp; Cyber Attacks** — IBM — https://coursera.pxf.io/za59L0
+- **Introduction to Deep Learning** — MIT — https://www.openculture.com/2020/12/mits-introduction-to-deep-learning-a-free-online-course.html
+- **Introduction to Electrical Engineering and Computer Science I** — &nbsp;Mul­ti­ple Pro­fes­sors, MIT — https://www.youtube.com/playlist?list=PL9B24A6A9D5754E70
+- **Introduction to Embedded Systems&nbsp;** — UNC Char­lotte, James Con­rad — https://www.youtube.com/playlist?list=PLE4462C1C306E2EB2
+- **Introduction to Graduate Algorithms** — Geor­gia Tech — https://imp.i115008.net/9WWzaE
+- **Intro to HTML and CSS** — Udac­i­ty — https://imp.i115008.net/QOOn7A
+- **Intro to Information Security** — Geor­gia Tech — http://imp.i115008.net/rnnDBB
+- **Intro to iOS App Development with Swift** — Udac­i­ty — https://imp.i115008.net/a11A4Q
+- **Intro to JavaScript** — Udac­i­ty — http://imp.i115008.net/3PPZvK
+- **Intro to jQuery** — Udac­i­ty — http://imp.i115008.net/DVVed5
+- **Introduction to Linux** — The Lin­ux Foun­da­tion — https://edx.sjv.io/BXDP5B
+- **Introduction to Machine Learning** — Geor­gia Tech — http://imp.i115008.net/VyyY2O
+- **Introduction to Machine Learning** — MIT — https://openlearninglibrary.mit.edu/courses/course-v1:MITx+6.036+1T2019/about
+- **Introduction to Operating Systems** — Geor­gia Tech — http://imp.i115008.net/ZddKRW
+- **Introduction to Problem Solving &amp; Programming** — Deep­ak Gup­ta, IIT — https://www.youtube.com/playlist?list=PL94CA590D7781A9B9
+- **Intro to Progressive Web Apps** — Google — https://imp.i115008.net/P00VvM
+- **Introduction to Python Programming** — Udac­i­ty — http://imp.i115008.net/gbb6YB
+- **Intro to Statistics** — Sebas­t­ian Thru/Udacity — https://imp.i115008.net/jWWyYe
+- **Introduction to TensorFlow for Artificial Intelligence, Machine Learning, and Deep Learning** — Lau­rence Moroney, Google — https://coursera.pxf.io/EagvoW
+- **Intro to Theoretical Computer Science** — Udac­i­ty — https://imp.i115008.net/9WWOb5
+- **Introduction to Virtual Reality** — Google/Udacity — http://imp.i115008.net/b33Nnx
+- **iOS Networking with Swift** — Udac­i­ty — http://imp.i115008.net/mggEaD
+- **iOS Persistence and Core Data** — Udac­i­ty — https://imp.i115008.net/kjjMv0
+- **IT Security: Defense against the Digital Dark Arts** — Google — https://coursera.pxf.io/b3r9Ag
+- **JavaScript Design Patterns** — Udac­i­ty — http://imp.i115008.net/x995Xk
+- **JavaScript Promises** — Google — https://imp.i115008.net/7mmOL3
+- **Kotlin Bootcamp for Programmers** — Udac­i­ty — https://imp.i115008.net/zaarYW
+- **Kotlin for Android Developers** — Google — https://imp.i115008.net/zaab5x
+- **Linux Command Line Basics: Getting Started with the Shell** — Udac­i­ty — http://imp.i115008.net/6bbdVq
+- **Learn Swift Programming Syntax** — Udac­i­ty — https://imp.i115008.net/jWWyjb
+- **Learning from Data: A Machine Learning Course** — &nbsp;Yas­er Abu-Mostafa, Cal­tech — http://www.openculture.com/2017/05/a-free-course-on-machine-learning-data-science-from-caltech.html
+- **Localization Essentials** — Google — https://imp.i115008.net/e44EGQ
+- **Machine Learning** — Andrew Ng, Stan­ford — https://coursera.pxf.io/vngALy
+- **Machine Learning Crash Course** — Google — http://www.openculture.com/2018/03/google-presents-a-free-course-on-artificial-intelligence-sign-up-for-its-new-machine-learning-crash-course.html
+- **Machine Learning for Healthcare** — &nbsp;David Son­tag,&nbsp;Peter Szolovits, MIT — https://www.youtube.com/playlist?list=PLUl4u3cNGP60B0PQXVQyGNdCyCTDU1Q5j
+- **Machine Learning with Python: A Practical Introduction** — IBM — https://edx.sjv.io/dobGyW
+- **Mathematics for Computer Science** — &nbsp;Tom Leighton, MIT — https://www.youtube.com/playlist?list=PLB7540DEDD482705B
+- **Microsoft Power Platform** — Microsoft — http://imp.i115008.net/XxxnWX
+- **Mobile Software Engineering** — David Malan, Har­vard — https://www.youtube.com/playlist?list=PLSlcu3sMjsc_m79MzhUQsJB5AqwK72vae
+- **Natural Language Processing with Deep Learning** — Chris Man­ning, Stan­ford — https://www.youtube.com/playlist?list=PLoROMvodv4rOaMFbaqxPDoLWjDaRAdP9D
+- **Neural Networks and Deep Learning** — Andrew Ng, Stan­ford — https://coursera.pxf.io/4exjQ0
+- **Neural Networks for Machine Learning** — Geof­frey Hin­ton, Uni­ver­si­ty of Toron­to — http://www.openculture.com/2017/04/neural-networks-for-machine-learning-a-free-online-course.html
+- **Object-Oriented JavaScript** — Udac­i­ty — http://imp.i115008.net/Xxxn33
+- **Object Oriented Programming in Java** — Udac­i­ty — http://imp.i115008.net/155PvR
+- **Objective‑C for Swift Developers** — Udac­i­ty — http://imp.i115008.net/ZddKkX
+- **Offline Web Applications** — Google — https://imp.i115008.net/VyyYjJ
+- **Parallel Computing** — Kayvon Fata­halian and Kun­le Oluko­tun, Stan­ford — https://www.youtube.com/playlist?list=PLoROMvodv4rMp7MTFr4hQsDEcX7Bx6Odp
+- **Performance Engineering of Software Systems** — &nbsp;Free Video &amp; Course Info- Mul­ti­ple Pro­fes­sors, MIT — http://www.youtube.com/playlist?list=PLD2AE32F507F10481&amp;feature=plcp
+- **Principles of Digital Communications I&nbsp;** — Profs Gal­lagher and Zheng, MIT — https://www.youtube.com/playlist?list=PL2AD004D035C24F21
+- **Principles of Digital Communications II&nbsp;** — MIT — https://www.youtube.com/playlist?list=PLF8A9EA1E1B28B438
+- **Probabilistic Systems Analysis and Applied Probability** — John Tsit­sik­lis,&nbsp;MIT — https://www.youtube.com/playlist?list=PLUl4u3cNGP61MdtwGTqZA0MreSaDybji8
+- **Probability for Computer Scientists** — &nbsp;Chris Piech, Stan­ford — https://www.youtube.com/playlist?list=PLoROMvodv4rOpr_A7B9SriE_iZmkanvUg
+- **Programming for Everybody (Getting Started with Python)** — Uni­ver­si­ty of Michi­gan — https://coursera.pxf.io/Ygv3Qe
+- **Programming Languages, Part A** — Uni­ver­si­ty of Wash­ing­ton — https://coursera.pxf.io/MXv36M
+- **Programming Languages, Part B** — Uni­ver­si­ty of Wash­ing­ton — https://coursera.pxf.io/7m9kjY
+- **Programming for Designers** — UNSW — https://www.youtube.com/playlist?list=PLEDA875A333663873
+- **Python** — &nbsp;Free Online Course&nbsp;- Nick Par­lante, Google — http://www.openculture.com/learn-python-a-free-online-course-from-google
+- **Python** — John Gut­tag, MIT — http://www.openculture.com/2017/05/learn-python-with-a-free-online-course-from-mit.html
+- **Python for Data Science and AI** — IBM — https://coursera.pxf.io/x9q1xR
+- **Python Data Analysis** — Rice Uni­ver­si­ty — https://coursera.pxf.io/QOv3ma
+- **Python Data Representations** — Rice Uni­ver­si­ty — https://coursera.pxf.io/5bDPeb
+- **Python Data Visualization** — Rice Uni­ver­si­ty — https://coursera.pxf.io/x9jDxy
+- **Python Programming Essentials** — Rice Uni­ver­si­ty — https://coursera.pxf.io/jWGAEZ
+- **Quantum Computing for the Determined&nbsp;** — Michael Nielsen,&nbsp;The Uni­ver­si­ty of Queens­land — https://www.youtube.com/playlist?list=PL1826E60FD05B44E4
+- **Ray Tracing for Global Illumination&nbsp;** — &nbsp;Nel­son Max, UC Davis — https://www.youtube.com/playlist?list=PLslgisHe5tBPckSYyKoU3jEA4bqiFmNBJ
+- **Responsive Images** — Google — https://imp.i115008.net/n11Ejx
+- **Responsive Web Design Fundamentals** — Google — https://imp.i115008.net/qnnxVY
+- **Scalable Microservices with Kubernetes** — Google — https://imp.i115008.net/KeeXYv
+- **Search Engines: Technology, Society and Business** — Mar­ti Hearst, UC Berke­ley — https://archive.org/details/ucberkeley-webcast-PL1777A89066B1D71D
+- **Sequence Models** — Andrew Ng, Stan­ford — https://coursera.pxf.io/QOvL6x
+- **Software Analysis &amp; Testing** — Geor­gia Tech — https://imp.i115008.net/rnnDqj
+- **Software Architecture &amp; Design** — Geor­gia Tech — https://imp.i115008.net/qnnxBO
+- **Software Development Process** — Geor­gia Tech — https://imp.i115008.net/vnnj9W
+- **Software Engineering: Introduction** — Uni­ver­si­ty of British Colum­bia — https://edx.sjv.io/LPzmdZ
+- **Startups** — Peter Thiel, Stan­ford — http://www.openculture.com/2014/10/peter-thiels-stanford-course-on-startups-read-the-lectures-notes-free-online.html
+- **Statistics** — San Jose State on Udac­i­ty — https://imp.i115008.net/x99Q0v
+- **Structuring Machine Learning Projects** — Andrew Ng, Stan­ford — https://coursera.pxf.io/9WjDJj
+- **Swift for Beginners** — Udac­i­ty — https://imp.i115008.net/x995gA
+- **Technical Support Fundamentals** — Google — https://coursera.pxf.io/P0vE6N
+- **Technology-Enabled Blitzscaling** — Reid Hoff­man, Stan­ford — https://www.openculture.com/2017/06/blitzscaling-a-free-stanford-course-on-scaling-a-startup-led-by-linkedins-reid-hoffman.html
+- **The Beauty and Joy of Computing** — Dan Gar­cia, UC Berke­ley — https://www.youtube.com/playlist?list=PLECBD29A17AAF6EF9
+- **The Bits and Bytes of Computer Networking** — Google — https://coursera.pxf.io/a19VWo
+- **The Structure and Interpretation of Computer Programs** — Hal Abel­son and Ger­ald Suss­man, MIT — https://www.youtube.com/playlist?list=PLE18841CABEA24090
+- **Theory of Computation** — &nbsp;Michael Sipser,&nbsp;MIT — https://www.youtube.com/playlist?list=PLUl4u3cNGP60_JNv2MmK3wkOt9syvfQWY
+- **Theory of Computation** — UC Davis, David Gus­field — https://www.youtube.com/playlist?list=PLslgisHe5tBM8UTCt1f66oMkpmjCblzkt
+- **UIKit Fundamentals** — Udac­i­ty — http://imp.i115008.net/jWWy2n
+- **UX Design for Mobile Developers** — Google — https://imp.i115008.net/b33Nrm
+- **Using Python to Access Web Data&nbsp;** — Charles Sev­er­ance, Uni­ver­si­ty of Michi­gan — https://coursera.pxf.io/Ao1eEN
+- **Virtual Reality** — Steven LaValle,&nbsp;IIT, Madras — http://nptel.ac.in/courses/106106138/
+- **Visual Navigation for Flying Robots** — &nbsp;Juer­gen Sturm,&nbsp;Tech­nis­che Uni­ver­sität München — http://www.youtube.com/playlist?list=PLTBdjV_4f-EKeki5ps2WHqJqyQvxls4ha
+- **Web Accessibility** — Google — https://imp.i115008.net/Xxxn5y
+- **Web Tooling &amp; Automation** — Google — http://imp.i115008.net/ORRKzW
+- **Website Performance Optimization** — Google — http://imp.i115008.net/NKK02V
+- **What is Programming?** — Udac­i­ty — https://www.udacity.com/course/what-is-programming--ud994
+- **Writing READMEs** — Udac­i­ty — https://imp.i115008.net/kjjM1x
+- **Xcode Debugging** — Udac­i­ty — https://imp.i115008.net/b33NvB
+
+## Data Science (36)
+
+- **A Crash Course in Data Science** — Johns Hop­kins — https://coursera.pxf.io/e4xY0Q
+- **Building a Data Science Team** — Johns Hop­kins — https://coursera.pxf.io/JrY76v
+- **Creating Dashboards and Storytelling with Tableau** — UC Davis — https://coursera.pxf.io/oeaYKW
+- **Data Science (What is Data Science?)** — IBM — https://coursera.pxf.io/zaDYKG
+- **Databases and SQL for Data Science** — IBM — https://coursera.pxf.io/0JBV6N
+- **Data Science Ethics** — Uni­ver­si­ty of Michi­gan — https://edx.sjv.io/yRnZAG
+- **Data Science: Linear Regression** — Har­vard — https://edx.sjv.io/jWMR7Z
+- **Data Science Methodology** — IBM — https://coursera.pxf.io/b3gYoM
+- **Data Science: Productivity Tools** — Har­vard — https://edx.sjv.io/a1BNoo
+- **Data Science Tools** — IBM — https://edx.sjv.io/XxQ4ab
+- **Data Science: Machine Learning** — Har­vard — https://edx.sjv.io/BXD53W
+- **Data Science Math Skills** — Duke Uni­ver­si­ty — https://coursera.pxf.io/RyD79v
+- **Data Science: Probability** — Har­vard — https://edx.sjv.io/rnAEKy
+- **Data Science: R Basics** — Har­vard — https://edx.sjv.io/Ea506Q
+- **Data Science: Visualization** — Har­vard — https://edx.sjv.io/3PVkNk
+- **Data Science: Wrangling** — Har­vard — https://edx.sjv.io/vnoDay
+- **Developing Data Products** — Johns Hop­kins — https://coursera.pxf.io/4eBXN3
+- **Essential Design Principles for Tableau** — UC Davis — https://coursera.pxf.io/yRxY1G
+- **Exploratory Data Analysis** — Johns Hop­kins — https://coursera.pxf.io/7mBzg5
+- **Getting and Cleaning Data** — Johns Hop­kins — https://coursera.pxf.io/LPY7k0
+- **Inferential Statistics** — Uni­ver­si­ty of Ams­ter­dam — https://coursera.pxf.io/qnGYdg
+- **Introduction to Computational Thinking and Data Science** — &nbsp;Eric Grim­son, John Gut­tag, and Ana Bell, MIT — http://www.openculture.com/2017/06/introduction-to-python-data-science-computational-thinking-free-online-courses-from-mit.html
+- **Introduction to Data Science in Python** — Uni­ver­si­ty of Michi­gan — https://coursera.pxf.io/x9qYdy
+- **Introduction to Probability** — Har­vard — https://edx.sjv.io/LPz0No
+- **Linear Regression and Modeling** — Duke Uni­ver­si­ty — https://coursera.pxf.io/ORLPNr
+- **Machine Learning** — Andrew Ng, Stan­ford — https://coursera.pxf.io/vngALy
+- **Managing Data Analysis** — Johns Hop­kins — https://coursera.pxf.io/NKYjdb
+- **Open Source Tools for Data Science** — IBM — https://coursera.pxf.io/KeYQRy
+- **Practical Machine Learning** — Johns Hop­kins — https://coursera.pxf.io/mgkQ6a
+- **Probability and Statistics in Data Science using Python** — UCSD — https://edx.sjv.io/DVjWNa
+- **Python for Data Science and AI** — IBM — https://coursera.pxf.io/x9q1xR
+- **Python Data Structures** — Uni­ver­si­ty of Michi­gan — https://coursera.pxf.io/kjPxn3
+- **R Programming** — Johns Hop­kins — https://coursera.pxf.io/QOxkqM
+- **Reproducible Research** — Johns Hop­kins — https://coursera.pxf.io/Zdeg2Q
+- **Statistics and R** — Har­vard — https://edx.sjv.io/9WbVYj
+- **The Data Scientist’s Toolbox** — Johns Hop­kins — https://coursera.pxf.io/e4xmoD
