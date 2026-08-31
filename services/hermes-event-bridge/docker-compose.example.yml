@@ -1,0 +1,28 @@
+services:
+  hermes-event-bridge:
+    build: .
+    container_name: hermes-event-bridge
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./data:/data
+    expose:
+      - "8080"
+    networks:
+      - nura_app
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/readyz', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  nura_app:
+    external: true
