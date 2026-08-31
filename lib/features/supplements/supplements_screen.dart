@@ -1,18 +1,76 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:brawlerz_box/shared/widgets/brawlerz_card.dart';
-import 'package:brawlerz_box/shared/repositories/supplement_repository.dart';
+import 'package:brawlerz_box/core/api/api_client.dart';
 import 'package:brawlerz_box/shared/models/supplement.dart';
-import 'package:brawlerz_box/features/supplements/supplements_provider.dart';
+import 'package:brawlerz_box/shared/repositories/cart_repository.dart';
+import 'package:brawlerz_box/shared/repositories/supplement_repository.dart';
+import 'package:brawlerz_box/shared/widgets/async_content.dart';
+import 'package:brawlerz_box/shared/widgets/brawlerz_card.dart';
 
-class SupplementsScreen extends ConsumerWidget {
+class SupplementsScreen extends ConsumerStatefulWidget {
   const SupplementsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final supplements = ref.watch(supplementRepositoryProvider).getSupplements();
-    final cartCount = ref.watch(cartProvider.notifier).totalItems;
+  ConsumerState<SupplementsScreen> createState() => _SupplementsScreenState();
+}
+
+class _SupplementsScreenState extends ConsumerState<SupplementsScreen> {
+  final Set<String> _busy = {};
+
+  int _quantityFor(Map<String, dynamic>? cart, String productId) {
+    final items = cart?['items'];
+    if (items is! List) return 0;
+    for (final item in items.whereType<Map>()) {
+      final product = item['supplement'];
+      if (product is Map && product['id'].toString() == productId) {
+        return (item['quantity'] as num?)?.toInt() ?? 0;
+      }
+    }
+    return 0;
+  }
+
+  int _cartCount(Map<String, dynamic>? cart) {
+    final items = cart?['items'];
+    if (items is! List) return 0;
+    return items.whereType<Map>().fold<int>(
+          0,
+          (sum, item) => sum + ((item['quantity'] as num?)?.toInt() ?? 0),
+        );
+  }
+
+  Future<void> _addToCart(
+    Supplement product,
+    Map<String, dynamic>? cart,
+  ) async {
+    if (_busy.contains(product.id) || !product.inStock) return;
+    setState(() => _busy.add(product.id));
+    try {
+      final quantity = _quantityFor(cart, product.id) + 1;
+      await ref.read(cartRepositoryProvider).setQuantity(product.id, quantity);
+      ref.invalidate(remoteCartProvider);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${product.name} added to your cart.')),
+        );
+      }
+    } on ApiException catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error.message), backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _busy.remove(product.id));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final products = ref.watch(supplementsProvider);
+    final cart = ref.watch(remoteCartProvider);
+    final cartData = cart.asData?.value;
+    final cartCount = _cartCount(cartData);
 
     return Scaffold(
       appBar: AppBar(
@@ -38,10 +96,17 @@ class SupplementsScreen extends ConsumerWidget {
                       color: Color(0xFFFF4500),
                       shape: BoxShape.circle,
                     ),
-                    constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                    constraints: const BoxConstraints(
+                      minWidth: 16,
+                      minHeight: 16,
+                    ),
                     child: Text(
                       '$cartCount',
-                      style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -51,72 +116,80 @@ class SupplementsScreen extends ConsumerWidget {
           const SizedBox(width: 8),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildPersonalizedHeader(),
-            const SizedBox(height: 24),
-            Text(
-              'RECOMMENDED FOR YOU',
-              style: GoogleFonts.oswald(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.2,
-              ),
+      body: products.when(
+        loading: () => const AsyncLoadingView(),
+        error: (error, _) => AsyncErrorView(
+          error: error,
+          onRetry: () => ref.invalidate(supplementsProvider),
+        ),
+        data: (supplements) => RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(supplementsProvider);
+            ref.invalidate(remoteCartProvider);
+            await ref.read(supplementsProvider.future);
+            await ref.read(remoteCartProvider.future);
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const BrawlerzCard(
+                  color: Color(0x1AFF4500),
+                  child: Row(
+                    children: [
+                      Icon(Icons.inventory_2, color: Color(0xFFFF4500)),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Catalog, inventory and cart are synchronized with the backend.',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  'AVAILABLE PRODUCTS',
+                  style: GoogleFonts.oswald(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 0.62,
+                  ),
+                  itemCount: supplements.length,
+                  itemBuilder: (context, index) {
+                    final product = supplements[index];
+                    return _buildProductCard(context, product, cartData);
+                  },
+                ),
+                const SizedBox(height: 40),
+              ],
             ),
-            const SizedBox(height: 16),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 0.65,
-              ),
-              itemCount: supplements.length,
-              itemBuilder: (context, index) {
-                final product = supplements[index];
-                return _buildProductCard(context, ref, product);
-              },
-            ),
-            const SizedBox(height: 40),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildPersonalizedHeader() {
-    return BrawlerzCard(
-      color: const Color(0xFFFF4500).withOpacity(0.1),
-      child: Row(
-        children: [
-          const Icon(Icons.auto_awesome, color: Color(0xFFFF4500)),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'AI RECOMMENDATION',
-                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFFFF4500)),
-                ),
-                Text(
-                  'Based on your HRV and Sleep data, we suggest Sleep Restore.',
-                  style: TextStyle(color: Colors.grey[300], fontSize: 12),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProductCard(BuildContext context, WidgetRef ref, Supplement product) {
+  Widget _buildProductCard(
+    BuildContext context,
+    Supplement product,
+    Map<String, dynamic>? cart,
+  ) {
+    final busy = _busy.contains(product.id);
     return BrawlerzCard(
       padding: EdgeInsets.zero,
       child: Column(
@@ -125,26 +198,40 @@ class SupplementsScreen extends ConsumerWidget {
           Expanded(
             child: Stack(
               children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                  child: Image.network(
-                    product.imageUrl,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
+                SizedBox.expand(
+                  child: product.imageUrl.isEmpty
+                      ? const Icon(Icons.local_drink, size: 48)
+                      : ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(12),
+                          ),
+                          child: Image.network(
+                            product.imageUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) =>
+                                const Icon(Icons.local_drink, size: 48),
+                          ),
+                        ),
                 ),
                 Positioned(
                   top: 8,
                   left: 8,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
-                      color: Colors.green,
+                      color: product.inStock ? Colors.green : Colors.red,
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: const Text(
-                      'IN STOCK',
-                      style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold),
+                    child: Text(
+                      product.inStock ? 'IN STOCK' : 'OUT OF STOCK',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 8,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -152,19 +239,22 @@ class SupplementsScreen extends ConsumerWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   product.name,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '\$${product.price}',
+                  '\$${product.price.toStringAsFixed(2)}',
                   style: GoogleFonts.oswald(
                     color: const Color(0xFFFF4500),
                     fontWeight: FontWeight.bold,
@@ -172,35 +262,36 @@ class SupplementsScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Wrap(
-                  spacing: 4,
-                  runSpacing: 4,
-                  children: product.tags.take(1).map((tag) =>
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey[700]!),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        tag.toUpperCase(),
-                        style: TextStyle(color: Colors.grey[500], fontSize: 7, fontWeight: FontWeight.bold),
-                      ),
+                if (product.tags.isNotEmpty)
+                  Text(
+                    product.tags.first.toUpperCase(),
+                    style: TextStyle(
+                      color: Colors.grey[500],
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ).toList(),
-                ),
+                  ),
                 const SizedBox(height: 12),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 0),
-                      minimumSize: const Size(0, 32),
+                      minimumSize: const Size(0, 34),
+                      padding: EdgeInsets.zero,
                     ),
-                    onPressed: () {
-                      ref.read(cartProvider.notifier).addToCart(product.id);
-                    },
-                    child: const Text('ADD TO CART', style: TextStyle(fontSize: 10)),
+                    onPressed: busy || !product.inStock
+                        ? null
+                        : () => _addToCart(product, cart),
+                    child: busy
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : Text(
+                            'ADD (${_quantityFor(cart, product.id)})',
+                            style: const TextStyle(fontSize: 10),
+                          ),
                   ),
                 ),
               ],

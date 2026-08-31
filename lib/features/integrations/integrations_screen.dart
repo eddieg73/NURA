@@ -1,12 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:brawlerz_box/core/api/api_client.dart';
+import 'package:brawlerz_box/shared/repositories/integration_repository.dart';
+import 'package:brawlerz_box/shared/widgets/async_content.dart';
 import 'package:brawlerz_box/shared/widgets/brawlerz_card.dart';
 
-class IntegrationsScreen extends StatelessWidget {
+class IntegrationsScreen extends ConsumerStatefulWidget {
   const IntegrationsScreen({super.key});
 
   @override
+  ConsumerState<IntegrationsScreen> createState() => _IntegrationsScreenState();
+}
+
+class _IntegrationsScreenState extends ConsumerState<IntegrationsScreen> {
+  final Set<String> _busy = {};
+
+  Future<void> _toggle(IntegrationConnectionModel item) async {
+    if (_busy.contains(item.provider)) return;
+    setState(() => _busy.add(item.provider));
+    try {
+      await ref.read(integrationRepositoryProvider).setConnected(
+            item.provider,
+            !item.connected,
+          );
+      ref.invalidate(integrationsProvider);
+    } on ApiException catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error.message), backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _busy.remove(item.provider));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final integrations = ref.watch(integrationsProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -14,88 +46,114 @@ class IntegrationsScreen extends StatelessWidget {
           style: GoogleFonts.oswald(fontWeight: FontWeight.bold),
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          _buildSectionHeader('HEALTH & WEARABLES'),
-          _buildIntegrationTile('Apple Health', 'Connected', Icons.favorite, Colors.red, true),
-          _buildIntegrationTile('Garmin', 'Connect Account', Icons.watch, Colors.blue, false),
-          _buildIntegrationTile('WHOOP', 'Connect Account', Icons.bolt, Colors.white, false),
-
-          const SizedBox(height: 32),
-          _buildSectionHeader('FOOD & NUTRITION'),
-          _buildIntegrationTile('Instacart', 'Connected', Icons.shopping_basket, Colors.orange, true),
-          _buildIntegrationTile('Amazon Whole Foods', 'Connect Account', Icons.shopping_cart, Colors.green, false),
-          _buildIntegrationTile('DoorDash', 'Connect Account', Icons.delivery_dining, Colors.redAccent, false),
-          _buildIntegrationTile('Uber Eats', 'Connect Account', Icons.restaurant, Colors.black, false),
-
-          const SizedBox(height: 32),
-          _buildSectionHeader('GYM SYSTEMS'),
-          _buildIntegrationTile('Mindbody', 'Connected', Icons.self_improvement, Colors.deepPurple, true),
-
-          const SizedBox(height: 40),
-          const Text(
-            'Integrations allow Brawlerz Box to provide personalized recommendations based on your activity, recovery, and shopping habits.',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey, fontSize: 12),
+      body: integrations.when(
+        loading: () => const AsyncLoadingView(),
+        error: (error, _) => AsyncErrorView(
+          error: error,
+          onRetry: () => ref.invalidate(integrationsProvider),
+        ),
+        data: (items) => RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(integrationsProvider);
+            await ref.read(integrationsProvider.future);
+          },
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(20),
+            children: [
+              const BrawlerzCard(
+                color: Color(0x1AFFB000),
+                child: Text(
+                  'These controls store connection state only. Apple Health, Garmin, WHOOP and Google Fit OAuth/token exchange still require provider-specific server verification before production use.',
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'HEALTH & WEARABLES',
+                style: GoogleFonts.oswald(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.2,
+                  color: const Color(0xFFFF4500),
+                ),
+              ),
+              const SizedBox(height: 16),
+              ...items.map(_buildTile),
+              const SizedBox(height: 40),
+            ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: Text(
-        title,
-        style: GoogleFonts.oswald(
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 1.2,
-          color: const Color(0xFFFF4500),
         ),
       ),
     );
   }
 
-  Widget _buildIntegrationTile(String name, String status, IconData icon, Color iconColor, bool isConnected) {
+  Widget _buildTile(IntegrationConnectionModel item) {
+    final metadata = _metadata(item.provider);
+    final busy = _busy.contains(item.provider);
     return Padding(
-      padding: const EdgeInsets.bottom(12.0),
+      padding: const EdgeInsets.only(bottom: 12),
       child: BrawlerzCard(
-        onTap: () {},
+        onTap: busy ? null : () => _toggle(item),
         child: Row(
           children: [
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: iconColor.withOpacity(0.1),
+                color: metadata.color.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(icon, color: iconColor, size: 24),
+              child: Icon(metadata.icon, color: metadata.color, size: 24),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
                   Text(
-                    status,
+                    metadata.name,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    item.connected ? 'Enabled in profile' : 'Not enabled',
                     style: TextStyle(
-                      color: isConnected ? Colors.green : Colors.grey,
+                      color: item.connected ? Colors.green : Colors.grey,
                       fontSize: 12,
                     ),
                   ),
                 ],
               ),
             ),
-            isConnected
-              ? const Icon(Icons.check_circle, color: Colors.green, size: 20)
-              : const Icon(Icons.add_circle_outline, color: Colors.grey, size: 20),
+            if (busy)
+              const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            else
+              Icon(
+                item.connected ? Icons.check_circle : Icons.add_circle_outline,
+                color: item.connected ? Colors.green : Colors.grey,
+                size: 20,
+              ),
           ],
         ),
       ),
     );
+  }
+
+  ({String name, IconData icon, Color color}) _metadata(String provider) {
+    switch (provider) {
+      case 'apple_health':
+        return (name: 'Apple Health', icon: Icons.favorite, color: Colors.red);
+      case 'garmin':
+        return (name: 'Garmin', icon: Icons.watch, color: Colors.blue);
+      case 'whoop':
+        return (name: 'WHOOP', icon: Icons.bolt, color: Colors.white);
+      case 'google_fit':
+        return (name: 'Google Fit', icon: Icons.directions_run, color: Colors.green);
+      default:
+        return (name: provider, icon: Icons.extension, color: Colors.grey);
+    }
   }
 }

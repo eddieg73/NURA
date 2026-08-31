@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-// Features
-import 'package:brawlerz_box/features/auth/splash_screen.dart';
-import 'package:brawlerz_box/features/auth/login_screen.dart';
-import 'package:brawlerz_box/features/dashboard/dashboard_screen.dart';
-import 'package:brawlerz_box/features/qr_access/qr_screen.dart';
-import 'package:brawlerz_box/features/ai_coach/ai_coach_screen.dart';
-import 'package:brawlerz_box/features/workouts/workouts_screen.dart';
-import 'package:brawlerz_box/features/classes/classes_screen.dart';
-import 'package:brawlerz_box/features/nutrition/nutrition_screen.dart';
-import 'package:brawlerz_box/features/supplements/supplements_screen.dart';
-import 'package:brawlerz_box/features/progress/progress_screen.dart';
-import 'package:brawlerz_box/features/integrations/integrations_screen.dart';
 import 'package:brawlerz_box/features/admin/admin_dashboard_screen.dart';
+import 'package:brawlerz_box/features/ai_coach/ai_coach_screen.dart';
+import 'package:brawlerz_box/features/auth/auth_repository.dart';
+import 'package:brawlerz_box/features/auth/login_screen.dart';
+import 'package:brawlerz_box/features/auth/splash_screen.dart';
+import 'package:brawlerz_box/features/classes/classes_screen.dart';
+import 'package:brawlerz_box/features/dashboard/dashboard_screen.dart';
+import 'package:brawlerz_box/features/integrations/integrations_screen.dart';
+import 'package:brawlerz_box/features/nutrition/nutrition_screen.dart';
+import 'package:brawlerz_box/features/progress/progress_screen.dart';
+import 'package:brawlerz_box/features/qr_access/qr_screen.dart';
+import 'package:brawlerz_box/features/supplements/supplements_screen.dart';
+import 'package:brawlerz_box/features/workouts/workouts_screen.dart';
 import 'package:brawlerz_box/shared/widgets/scaffold_with_navbar.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -82,21 +81,30 @@ final routerProvider = Provider<GoRouter>((ref) {
   );
 });
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(currentUserProvider).asData?.value;
+    final isAdmin = user?['role'] == 'admin';
     return Scaffold(
       appBar: AppBar(title: const Text('Profile')),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          ListTile(
-            leading: const Icon(Icons.admin_panel_settings),
-            title: const Text('Admin Dashboard'),
-            onTap: () => context.push('/admin'),
-          ),
+          if (user != null)
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: Text(user['displayName']?.toString() ?? 'Member'),
+              subtitle: Text(user['email']?.toString() ?? ''),
+            ),
+          if (isAdmin)
+            ListTile(
+              leading: const Icon(Icons.admin_panel_settings),
+              title: const Text('Admin Dashboard'),
+              onTap: () => context.push('/admin'),
+            ),
           ListTile(
             leading: const Icon(Icons.settings),
             title: const Text('Integrations'),
@@ -121,7 +129,11 @@ class ProfileScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),
-            onTap: () => context.go('/login'),
+            onTap: () async {
+              await ref.read(authRepositoryProvider).logout();
+              ref.invalidate(currentUserProvider);
+              if (context.mounted) context.go('/login');
+            },
           ),
         ],
       ),

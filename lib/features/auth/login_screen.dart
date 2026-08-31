@@ -1,10 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:brawlerz_box/core/api/api_client.dart';
+import 'package:brawlerz_box/features/auth/auth_repository.dart';
 import 'package:brawlerz_box/shared/widgets/action_button.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  final _emailController = TextEditingController(text: 'demo@brawlerzbox.com');
+  final _passwordController = TextEditingController(text: 'DemoPass123!');
+  bool _submitting = false;
+  String? _error;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _signIn() async {
+    if (_submitting) return;
+    setState(() {
+      _submitting = true;
+      _error = null;
+    });
+    try {
+      await ref.read(authRepositoryProvider).login(
+            email: _emailController.text,
+            password: _passwordController.text,
+          );
+      ref.invalidate(currentUserProvider);
+      if (mounted) context.go('/dashboard');
+    } on ApiException catch (error) {
+      if (mounted) setState(() => _error = error.message);
+    } catch (_) {
+      if (mounted) {
+        setState(() => _error = 'Unable to sign in. Check the API connection.');
+      }
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +60,13 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              Text(
-                'WELCOME BACK',
-                style: Theme.of(context).textTheme.displayLarge,
-              ),
+              Text('WELCOME BACK', style: Theme.of(context).textTheme.displayLarge),
               const SizedBox(height: 8),
               Text(
                 'Sign in to continue your journey.',
@@ -33,29 +74,29 @@ class LoginScreen extends StatelessWidget {
               ),
               const SizedBox(height: 40),
               _buildTextField(
+                controller: _emailController,
                 label: 'EMAIL ADDRESS',
                 hint: 'name@example.com',
                 icon: Icons.email_outlined,
+                keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 20),
               _buildTextField(
+                controller: _passwordController,
                 label: 'PASSWORD',
                 hint: '••••••••',
                 icon: Icons.lock_outline,
                 isPassword: true,
+                onSubmitted: (_) => _signIn(),
               ),
-              const SizedBox(height: 12),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text('Forgot Password?'),
-                ),
-              ),
+              if (_error != null) ...[
+                const SizedBox(height: 16),
+                Text(_error!, style: const TextStyle(color: Colors.redAccent)),
+              ],
               const SizedBox(height: 24),
               ActionButton(
-                text: 'Sign In',
-                onPressed: () => context.go('/dashboard'),
+                text: _submitting ? 'Signing In…' : 'Sign In',
+                onPressed: _submitting ? null : _signIn,
               ),
               const SizedBox(height: 40),
               Center(
@@ -76,7 +117,7 @@ class LoginScreen extends StatelessWidget {
                     child: _SocialButton(
                       icon: Icons.apple,
                       label: 'Apple',
-                      onPressed: () {},
+                      onPressed: () => _showNotConfigured(context),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -84,28 +125,20 @@ class LoginScreen extends StatelessWidget {
                     child: _SocialButton(
                       icon: Icons.g_mobiledata,
                       label: 'Google',
-                      onPressed: () {},
+                      onPressed: () => _showNotConfigured(context),
                     ),
                   ),
                 ],
               ),
-              const Spacer(),
+              const SizedBox(height: 32),
               Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Don\'t have an account? ',
-                      style: TextStyle(color: Colors.grey[400]),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text('Sign Up'),
-                    ),
-                  ],
+                child: Text(
+                  'API: ${ApiClient.configuredBaseUrl}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey[700], fontSize: 10),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
             ],
           ),
         ),
@@ -113,11 +146,20 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
+  void _showNotConfigured(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Social sign-in is not configured yet.')),
+    );
+  }
+
   Widget _buildTextField({
+    required TextEditingController controller,
     required String label,
     required String hint,
     required IconData icon,
     bool isPassword = false,
+    TextInputType? keyboardType,
+    ValueChanged<String>? onSubmitted,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +175,14 @@ class LoginScreen extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         TextField(
+          controller: controller,
           obscureText: isPassword,
+          keyboardType: keyboardType,
+          textInputAction:
+              isPassword ? TextInputAction.done : TextInputAction.next,
+          onSubmitted: onSubmitted,
+          autocorrect: false,
+          enableSuggestions: !isPassword,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: hint,
@@ -180,7 +229,10 @@ class _SocialButton extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             label,
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),

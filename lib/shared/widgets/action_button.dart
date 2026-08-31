@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ActionButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isSecondary;
   final double? width;
   final IconData? icon;
@@ -26,7 +26,8 @@ class ActionButton extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: isSecondary ? Colors.grey[800] : theme.colorScheme.primary,
+          backgroundColor:
+              isSecondary ? Colors.grey[800] : theme.colorScheme.primary,
           foregroundColor: Colors.white,
           elevation: 0,
         ),
