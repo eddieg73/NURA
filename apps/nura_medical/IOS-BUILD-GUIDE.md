@@ -1,29 +1,96 @@
-# NURA-iOS — the founder's 5-step build-guide (the CI-cloud lane!)
+# NURA Medical — iOS and App Store Build Guide
 
-The machine's done: the bundle (com.nuratech.nuraMedical ✓), the scaffold (the full iOS-structure ✓), the Codemagic workflow (codemagic.yaml ✓) — the founder's 5 steps:
+## Prerequisites
 
-## Step 1 — The Apple-Developer enrollment ($99, once!)
-- developer.apple.com → the account (Eddie_Garrido@me.com) → the enroll → the payment!
-- ⏳ the enrollment-approval: usually 24-48h!
+- Active Apple Developer Program membership
+- App Store Connect access for the release owner
+- Registered bundle identifier, proposed: `ai.nuratech.nuramedical`
+- App Store distribution certificate and provisioning profile
+- Current supported Xcode and Flutter stable toolchains
+- Production HTTPS API URL
+- Public Privacy Policy, Terms, and Support URLs
+- Final app icon and de-identified screenshots
 
-## Step 2 — The App-Store-Connect API-key (for the uploads!)
-- appstoreconnect.apple.com → the Users & Access → the API-Keys → the Generate!
-- Save: the Key-ID + the Issuer-ID + the .p8-file (the machine uses these!)
+## Configure the signed build
 
-## Step 3 — The App-Specific-Password (the signing!)
-- appleid.apple.com → the Sign-In & Security → the App-Specific-Passwords → the Generate!
-- (the machine uses it for the App-Store-Connect-authentication!)
+From `apps/nura_medical`:
 
-## Step 4 — The Codemagic wiring (the CI-cloud!)
-- codemagic.io → the sign-in with the GitHub → the add-the nura_medical-repo → the connect!
-- The team → the app-store-connect integration: paste the Key-ID + Issuer-ID + the .p8 + the app-specific-password!
-- The workflow: the codemagic.yaml is already in the repo — the first build runs on the push!
+```bash
+flutter pub get
+gem install xcodeproj --no-document
+chmod +x scripts/prepare_ios_release.sh
+BUNDLE_ID=ai.nuratech.nuramedical \
+IOS_DEPLOYMENT_TARGET=15.0 \
+scripts/prepare_ios_release.sh
+```
 
-## Step 5 — The TestFlight (the install!)
-- The build → the TestFlight-submission (the workflow does it!) → the TestFlight-app → the iPad/iPhone-install!
-- The founder's test-devices: the UDIDs → the TestFlight → the invite!
+The preparation script:
 
-## The drops for the machine (when ready!)
-- The App-Store-Connect Key-ID + Issuer-ID + the .p8-file → the machine seals them (0600!) + updates the codemagic.yaml!
-- The app-specific-password → same-seal!
-- The App-Store-Apple-ID (after the first upload — the workflow's 0-placeholder!)
+- sets the display name
+- sets microphone and speech-recognition purpose strings
+- records the standard-encryption export declaration
+- disables document/file sharing
+- sets the bundle identifier and minimum iOS version
+- attaches `PrivacyInfo.xcprivacy` to the Runner target
+- validates the property lists
+
+## Validate before signing
+
+```bash
+dart format --output=none lib test
+flutter analyze --no-fatal-infos --no-fatal-warnings
+flutter test
+flutter build ios \
+  --release \
+  --no-codesign \
+  --dart-define=API_BASE_URL=https://api.example.invalid \
+  --dart-define=APP_ENVIRONMENT=release-validation
+```
+
+## Build an IPA
+
+```bash
+flutter build ipa \
+  --release \
+  --build-name=1.0.0 \
+  --build-number=1 \
+  --dart-define=API_BASE_URL=https://api.nuratech.ai \
+  --dart-define=APP_ENVIRONMENT=production \
+  --dart-define=PRIVACY_POLICY_URL=https://nuratech.ai/privacy \
+  --dart-define=TERMS_URL=https://nuratech.ai/terms \
+  --dart-define=SUPPORT_URL=https://nuratech.ai/support \
+  --export-options-plist=ios/ExportOptions.plist
+```
+
+Upload with Xcode Organizer, Transporter, or the configured Codemagic App Store Connect integration.
+
+## Codemagic
+
+Configure these groups and variables:
+
+- `app_store_connect_credentials`
+- `nura_medical_production`
+- `API_BASE_URL`
+- `PRIVACY_POLICY_URL`
+- `TERMS_URL`
+- `SUPPORT_URL`
+- `BUNDLE_ID`
+
+Add or import the App Store distribution certificate and provisioning profile. The workflow in `codemagic.yaml` compiles, signs, creates the IPA, and submits it to TestFlight.
+
+## TestFlight acceptance test
+
+- Sign in and restore a session
+- Exercise microphone permission allowed and denied
+- Submit a de-identified scribe draft
+- Submit synthesis and differential drafts
+- Confirm the provider-review banner is always visible
+- Test backend unavailable and expired-session states
+- Create and complete an operations task
+- Export account data
+- Delete the dedicated test account
+- Confirm no PHI appears in logs, screenshots, crash reports, or review media
+
+## Submission blockers
+
+A successful IPA build is not the same as an approved production release. Do not submit until the `release/app_store/RELEASE_CHECKLIST.md` blockers are complete, including live backend, privacy URLs, Apple signing, clinical validation, BAA/vendor review, final assets, and accountable approvals.
