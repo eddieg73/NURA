@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-08-31T05:00:00Z",
+  "system_status": "ONLINE",
+  "threat_level": "NORMAL",
+  "p0_alerts": 0,
+  "source_health": "HEALTHY",
+  "brief_status": "READY",
+  "top_signal": {
+    "title": "Waiting for next verified high-priority item",
+    "priority": "P2",
+    "confidence": "H",
+    "domain": "Ops/Vendor",
+    "provenance": []
+  },
+  "watch_domains": ["Geo/Regional", "Cyber/Tech", "Ops/Vendor", "Markets", "Space/Aviation", "Weather"]
+}
