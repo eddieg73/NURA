@@ -1,0 +1,41 @@
+name: Feature request
+description: Propose a bounded product or engineering capability
+title: "feat: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user or operational problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: Describe the measurable result, not only the implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: What must be true to call this complete?
+    validations:
+      required: true
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risk domain
+      options:
+        - Standard software
+        - Infrastructure/operations
+        - Security/privacy
+        - PHI/data handling
+        - Clinical/patient-impacting
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies / constraints
