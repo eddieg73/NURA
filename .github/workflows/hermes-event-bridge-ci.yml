@@ -1,0 +1,50 @@
+name: Hermes Event Bridge CI
+
+on:
+  pull_request:
+    paths:
+      - 'services/hermes-event-bridge/**'
+      - '.github/workflows/hermes-event-bridge-ci.yml'
+  push:
+    branches:
+      - artificial-medic-proposal-10801612749289978288
+    paths:
+      - 'services/hermes-event-bridge/**'
+      - '.github/workflows/hermes-event-bridge-ci.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hermes-event-bridge-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/hermes-event-bridge
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: |
+            services/hermes-event-bridge/requirements.txt
+            services/hermes-event-bridge/requirements-dev.txt
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip && pip install -r requirements-dev.txt
+      - name: Compile Python sources
+        run: python -m compileall -q app scripts tests
+      - name: Run tests
+        run: pytest -q
+      - name: Build container
+        run: docker build -t nura/hermes-event-bridge:${{ github.sha }} .
+      - name: Verify no placeholder production secrets are committed
+        run: |
+          if grep -R --line-number -E 'HERMES_WEBHOOK_SECRET=[^r[:space:]]|ADMIN_BEARER_TOKEN=[^r[:space:]]|NOTION_TOKEN=[^[:space:]]+' --exclude='.env.example' .; then
+            echo 'Potential secret detected in bridge tree.'
+            exit 1
+          fi
