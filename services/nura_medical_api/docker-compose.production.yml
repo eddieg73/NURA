@@ -1,0 +1,54 @@
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-nura_medical}
+      POSTGRES_USER: ${POSTGRES_USER:-nura_medical}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    volumes:
+      - nura_medical_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nura_medical} -d ${POSTGRES_DB:-nura_medical}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [clinical_private]
+
+  api:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env.production
+    environment:
+      APP_ENV: production
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-nura_medical}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-nura_medical}
+      JWT_SECRET: ${JWT_SECRET}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
+      ALLOW_SELF_REGISTRATION: ${ALLOW_SELF_REGISTRATION:-false}
+      SEED_DEMO_DATA: ${SEED_DEMO_DATA:-false}
+      AI_PROVIDER: ${AI_PROVIDER:-disabled}
+      CLINICAL_ENGINE_URL: ${CLINICAL_ENGINE_URL:-}
+      CLINICAL_ENGINE_TOKEN: ${CLINICAL_ENGINE_TOKEN:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com/v1}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5-mini}
+      OPENAI_BAA_CONFIRMED: ${OPENAI_BAA_CONFIRMED:-false}
+      OPENAI_PHI_APPROVED: ${OPENAI_PHI_APPROVED:-false}
+    ports:
+      - "127.0.0.1:${API_PORT:-8080}:8080"
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    networks: [clinical_private]
+
+networks:
+  clinical_private:
+    driver: bridge
+
+volumes:
+  nura_medical_postgres:
