@@ -1,0 +1,41 @@
+name: Operations incident
+description: Record a sanitized production or infrastructure incident
+title: "ops: "
+body:
+  - type: markdown
+    attributes:
+      value: "Never place PHI, passwords, tokens, private keys, or unredacted sensitive logs in this issue."
+  - type: input
+    id: service
+    attributes:
+      label: Affected service
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Deployed version / image / commit
+  - type: textarea
+    id: symptoms
+    attributes:
+      label: Symptoms and impact
+    validations:
+      required: true
+  - type: textarea
+    id: timeline
+    attributes:
+      label: Sanitized timeline
+    validations:
+      required: true
+  - type: textarea
+    id: containment
+    attributes:
+      label: Containment / rollback
+  - type: textarea
+    id: verification
+    attributes:
+      label: Recovery verification
+  - type: textarea
+    id: corrective
+    attributes:
+      label: Corrective action and regression test
