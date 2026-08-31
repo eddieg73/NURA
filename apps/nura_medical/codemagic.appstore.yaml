@@ -1,0 +1,103 @@
+workflows:
+  nura-medical-app-store:
+    name: NURA Medical — Signed App Store Candidate
+    working_directory: apps/nura_medical
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+
+    environment:
+      groups:
+        - app_store_connect_credentials
+        - nura_medical_production
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: $BUNDLE_ID
+      vars:
+        BUNDLE_ID: ai.nuratech.nuramedical
+        IOS_DEPLOYMENT_TARGET: "15.0"
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+
+    cache:
+      cache_paths:
+        - $HOME/.pub-cache
+        - $HOME/Library/Caches/CocoaPods
+
+    triggering:
+      events:
+        - push
+        - tag
+      branch_patterns:
+        - pattern: master
+          include: true
+          source: true
+        - pattern: feature/nura-medical-*
+          include: true
+          source: true
+
+    scripts:
+      - name: Validate App Store environment
+        script: |
+          set -euo pipefail
+          : "${API_BASE_URL:?Set API_BASE_URL in nura_medical_production}"
+          : "${PRIVACY_POLICY_URL:?Set PRIVACY_POLICY_URL}"
+          : "${TERMS_URL:?Set TERMS_URL}"
+          : "${SUPPORT_URL:?Set SUPPORT_URL}"
+          : "${BUNDLE_ID:?Set BUNDLE_ID}"
+          case "$API_BASE_URL" in
+            https://*) ;;
+            *) echo "API_BASE_URL must use HTTPS" >&2; exit 1 ;;
+          esac
+          case "$PRIVACY_POLICY_URL$TERMS_URL$SUPPORT_URL" in
+            *example.invalid*|*localhost*) echo "Legal/support URLs must be production URLs" >&2; exit 1 ;;
+          esac
+
+      - name: Install dependencies
+        script: |
+          flutter pub get
+          gem list -i xcodeproj >/dev/null || gem install xcodeproj --no-document
+
+      - name: Validate Flutter application
+        script: |
+          dart format --output=none lib test
+          flutter analyze --no-fatal-infos --no-fatal-warnings
+          flutter test
+
+      - name: Prepare iOS release configuration
+        script: |
+          chmod +x scripts/prepare_ios_release_v2.sh
+          BUNDLE_ID="$BUNDLE_ID" \
+          IOS_DEPLOYMENT_TARGET="$IOS_DEPLOYMENT_TARGET" \
+          scripts/prepare_ios_release_v2.sh
+
+      - name: Install CocoaPods
+        script: |
+          cd ios
+          pod install --repo-update
+
+      - name: Apply App Store provisioning profiles
+        script: |
+          xcode-project use-profiles
+
+      - name: Build signed IPA
+        script: |
+          flutter build ipa \
+            --release \
+            --build-number="$PROJECT_BUILD_NUMBER" \
+            --dart-define="API_BASE_URL=$API_BASE_URL" \
+            --dart-define="APP_ENVIRONMENT=production" \
+            --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
+            --dart-define="TERMS_URL=$TERMS_URL" \
+            --dart-define="SUPPORT_URL=$SUPPORT_URL" \
+            --export-options-plist=ios/ExportOptions.plist
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        expire_build_submitted_for_review: false
