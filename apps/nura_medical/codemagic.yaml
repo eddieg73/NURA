@@ -1,44 +1,98 @@
-# Codemagic workflow — the NURA-medical iOS builds (the CI-cloud lane!)
-# Triggered: on the git-push to the main branch (or the manual build!)
 workflows:
-  ios-build:
-    name: NURA-iOS
-    max_build_duration: 60
+  nura-medical-ios:
+    name: NURA Medical — iOS Release
+    working_directory: apps/nura_medical
     instance_type: mac_mini_m2
-    integrations:
-      app_store_connect: NURA-AppStoreConnect
+    max_build_duration: 60
+
     environment:
+      groups:
+        - app_store_connect_credentials
+        - nura_medical_production
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: $BUNDLE_ID
       vars:
-        XCODE_WORKSPACE: "Runner.xcworkspace"
-        XCODE_SCHEME: "Runner"
-        BUNDLE_ID: "com.nuratech.nuraMedical"
-        APP_STORE_APPLE_ID: 0  # ← the founder's App-Store-Connect app-ID (after the first upload!)
+        BUNDLE_ID: ai.nuratech.nuramedical
+        IOS_DEPLOYMENT_TARGET: "15.0"
       flutter: stable
+      xcode: latest
+      cocoapods: default
+
+    cache:
+      cache_paths:
+        - $HOME/.pub-cache
+        - $HOME/Library/Caches/CocoaPods
+
+    triggering:
+      events:
+        - push
+        - tag
+      branch_patterns:
+        - pattern: master
+          include: true
+          source: true
+        - pattern: feature/nura-medical-*
+          include: true
+          source: true
+
     scripts:
-      - name: Flutter pub get
-        script: flutter pub get
-      - name: Flutter analyze
-        script: flutter analyze
-      - name: Build the iOS release
-        script: flutter build ios --release --no-codesign
-      - name: Archive for the App Store
+      - name: Validate release environment
         script: |
-          xcode-project build-ipa \
-            --workspace "$CM_BUILD_DIR/ios/$XCODE_WORKSPACE" \
-            --scheme "$XCODE_SCHEME" \
-            --bundle-id "$BUNDLE_ID"
+          set -euo pipefail
+          : "${API_BASE_URL:?Set API_BASE_URL in the nura_medical_production group}"
+          case "$API_BASE_URL" in
+            https://*) ;;
+            *) echo "API_BASE_URL must use HTTPS" >&2; exit 1 ;;
+          esac
+          : "${BUNDLE_ID:?Set BUNDLE_ID}"
+
+      - name: Install dependencies
+        script: |
+          flutter pub get
+          gem list -i xcodeproj >/dev/null || gem install xcodeproj --no-document
+
+      - name: Static analysis and tests
+        script: |
+          dart format --output=none --set-exit-if-changed lib test
+          flutter analyze --no-fatal-infos --no-fatal-warnings
+          flutter test
+
+      - name: Prepare iOS release configuration
+        script: |
+          chmod +x scripts/prepare_ios_release.sh
+          BUNDLE_ID="$BUNDLE_ID" \
+          IOS_DEPLOYMENT_TARGET="$IOS_DEPLOYMENT_TARGET" \
+          scripts/prepare_ios_release.sh
+
+      - name: Install CocoaPods
+        script: |
+          cd ios
+          pod install --repo-update
+
+      - name: Apply App Store provisioning profiles
+        script: |
+          xcode-project use-profiles
+
+      - name: Build signed IPA
+        script: |
+          flutter build ipa \
+            --release \
+            --build-number="$PROJECT_BUILD_NUMBER" \
+            --dart-define="API_BASE_URL=$API_BASE_URL" \
+            --dart-define="APP_ENVIRONMENT=production" \
+            --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
+            --dart-define="TERMS_URL=$TERMS_URL" \
+            --dart-define="SUPPORT_URL=$SUPPORT_URL" \
+            --export-options-plist=ios/ExportOptions.plist
+
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+
     publishing:
       app_store_connect:
         auth: integration
         submit_to_testflight: true
-        beta_groups: NURA-Testers
-        submit_to_app_store: false
-      email:
-        recipients:
-          - eg@nuratech.ai
-        notify:
-          success: true
-          failure: true
+        expire_build_submitted_for_review: false
