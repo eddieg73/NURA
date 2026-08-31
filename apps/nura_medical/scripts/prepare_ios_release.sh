@@ -50,9 +50,9 @@ text = re.sub(r"IPHONEOS_DEPLOYMENT_TARGET = [^;]+;", f"IPHONEOS_DEPLOYMENT_TARG
 path.write_text(text)
 PY
 
-ruby <<'RUBY'
+ruby - "$ROOT_DIR" <<'RUBY'
 require 'xcodeproj'
-root = File.expand_path('..', __dir__)
+root = ARGV.fetch(0)
 project_path = File.join(root, 'ios', 'Runner.xcodeproj')
 privacy_path = File.join(root, 'ios', 'Runner', 'PrivacyInfo.xcprivacy')
 project = Xcodeproj::Project.open(project_path)
