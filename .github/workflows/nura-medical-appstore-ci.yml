@@ -1,0 +1,99 @@
+name: NURA Medical App Store Candidate
+
+on:
+  push:
+    branches:
+      - master
+      - feature/nura-medical-*
+    paths:
+      - 'apps/nura_medical/**'
+      - 'services/nura_medical_api/**'
+      - '.github/workflows/nura-medical-appstore-ci.yml'
+  pull_request:
+    paths:
+      - 'apps/nura_medical/**'
+      - 'services/nura_medical_api/**'
+      - '.github/workflows/nura-medical-appstore-ci.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nura-medical-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-contract:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/nura_medical_api
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: services/nura_medical_api/requirements.txt
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements.txt
+      - name: Run API and account-isolation tests
+        env:
+          APP_ENV: test
+          JWT_SECRET: test-secret-with-more-than-thirty-two-characters
+          ALLOWED_ORIGINS: http://localhost:8080
+          ALLOW_SELF_REGISTRATION: 'true'
+          SEED_DEMO_DATA: 'false'
+          AI_PROVIDER: disabled
+        run: PYTHONPATH=. python -m pytest -q
+
+  flutter-contract:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/nura_medical
+    steps:
+      - uses: actions/checkout@v7
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: dart format --output=none lib test
+      - run: flutter analyze --no-fatal-infos --no-fatal-warnings
+      - run: flutter test
+
+  ios-release-compile:
+    runs-on: macos-15
+    defaults:
+      run:
+        working-directory: apps/nura_medical
+    steps:
+      - uses: actions/checkout@v7
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - name: Prepare deterministic iOS release metadata
+        env:
+          BUNDLE_ID: ai.nuratech.nuramedical
+          IOS_DEPLOYMENT_TARGET: '15.0'
+        run: |
+          gem list -i xcodeproj >/dev/null || gem install xcodeproj --no-document
+          chmod +x scripts/prepare_ios_release_v2.sh
+          scripts/prepare_ios_release_v2.sh
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          pod install --repo-update
+      - name: Compile unsigned release application
+        run: |
+          flutter build ios \
+            --release \
+            --no-codesign \
+            --dart-define=API_BASE_URL=https://api.example.invalid \
+            --dart-define=APP_ENVIRONMENT=ci \
+            --dart-define=PRIVACY_POLICY_URL=https://example.invalid/privacy \
+            --dart-define=TERMS_URL=https://example.invalid/terms \
+            --dart-define=SUPPORT_URL=https://example.invalid/support
