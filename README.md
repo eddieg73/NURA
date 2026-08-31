@@ -1,64 +1,106 @@
-# Brawlerz Box - AI Powered Fitness Ecosystem
+# NURA
 
-Brawlerz Box is a premium, AI-powered fitness, boxing, wellness, nutrition, and recovery ecosystem. This Flutter MVP demonstrates the core member experience and business dashboard with a high-performance, dark-athletic aesthetic.
+> AI-enabled healthcare software, clinical workflow orchestration, mobile applications, and edge operations.
 
-## 🚀 MVP Features
+NURA is a multi-component platform under active development. This repository currently contains the Flutter application, backend services, display-state service, edge-display documentation, CI configuration, and supporting technical proposals.
 
-### Member Experience
-- **Premium Dashboard:** Personalized readiness score (HRV, Sleep) and daily workout focus.
-- **QR Gym Access:** Seamless 24/7 facility entry via digital member ID.
-- **AI Coach:** Mock computer vision form analysis for squats and boxing drills.
-- **Workout Library:** Curated boxing, strength, and HIIT programs.
-- **Class Booking:** Real-time reservation system for studio classes.
-- **Nutrition & Macros:** Daily calorie tracking with meal breakdown and grocery integration placeholders.
-- **Supplements Store:** AI-driven personalized supplement recommendations.
-- **Progress Tracking:** Interactive charts for strength gains and body composition.
-- **Integrations:** Mock connection interfaces for Apple Health, WHOOP, Garmin, and delivery services.
+## Repository status
 
-### Business/Admin View
-- **Executive Dashboard:** Real-time metrics for total members, check-ins, and revenue.
-- **Growth Analytics:** Visual representation of revenue and membership trends.
-- **Operations:** Class attendance monitoring and facility status.
+**Development stage:** Active engineering / pre-production
 
-## 🛠 Tech Stack
-- **Framework:** Flutter 3.x (Dart 3.x)
-- **State Management:** Riverpod
-- **Navigation:** GoRouter
-- **Charts:** fl_chart
-- **UI:** Custom Material 3 Dark Theme with Google Fonts (Oswald & Inter)
-- **Architecture:** Clean Architecture (Feature-based modular structure)
+This repository should not be interpreted as a production clinical system merely because a component is present. Clinical, security, infrastructure, and deployment gates must be completed and verified independently before production use.
 
-## 📁 Project Structure
-```
-lib/
-  app/          # Global configuration & routing
-  core/         # Theming, constants, and utilities
-  features/     # Feature-based modules (UI + logic)
-  shared/       # Reusable widgets, models, and repositories
+## Architecture at a glance
+
+```text
+NURA
+├── Flutter application
+│   ├── lib/
+│   ├── ios/
+│   ├── android/
+│   ├── macos/
+│   └── linux/
+├── Backend services
+│   ├── services/app_backend/
+│   └── services/display_state/
+├── Documentation
+│   └── docs/edge-display/
+├── Engineering automation
+│   └── .github/workflows/
+└── Product / research proposals
+    └── ARTIFICIAL_MEDIC_PROPOSAL.md
 ```
 
-## 🏗 Setup Instructions
-1. Ensure you have the [Flutter SDK](https://docs.flutter.dev/get-started/install) installed.
-2. Clone the repository.
-3. Run `flutter pub get` to install dependencies.
-4. Run `flutter run` (supports iOS, Android, and Web).
+## Core components
 
-## 🗺 Future Roadmap & API Integration
+| Component | Location | Purpose |
+| --- | --- | --- |
+| Flutter client | `lib/` | Cross-platform application UI and client logic |
+| App backend | `services/app_backend/` | Application backend service |
+| Display-state service | `services/display_state/` | State delivery for edge / display clients |
+| Edge display | `docs/edge-display/` | Hardware/display integration documentation |
+| CI | `.github/workflows/` | Automated validation for repository changes |
+| Artificial Medic proposal | `ARTIFICIAL_MEDIC_PROPOSAL.md` | Product/research proposal; not a production clinical specification |
 
-### TODO: Wearable Integration
-- [ ] Implement `HealthKit` (iOS) and `Google Fit` (Android) services.
-- [ ] Connect `WHOOP` and `Garmin` Webhooks/APIs for real-time recovery data.
+## Engineering principles
 
-### TODO: AI & Computer Vision
-- [ ] Replace mock AI overlay with `google_ml_kit` or custom TFLite models for pose estimation.
-- [ ] Implement backend analysis for complex boxing drill form feedback.
+NURA engineering follows several non-negotiable operating principles:
 
-### TODO: Commerce & Logistics
-- [ ] Integrate `Stripe` for supplement purchases and membership billing.
-- [ ] Connect `Instacart` and `Amazon` APIs for automated grocery ordering based on nutrition plans.
+- Human authorization remains required for patient-impacting clinical decisions and writes.
+- PHI must stay within explicitly approved systems and infrastructure.
+- Secrets belong in environment variables or an approved secret manager, never source control.
+- Automated jobs must be observable, idempotent where practical, and auditable.
+- Every production service requires health checks, logs, restart verification, backup/recovery planning, and a rollback path.
+- Clinical AI components must be evaluated before promotion from development or shadow operation.
 
-### TODO: Facility Access
-- [ ] Connect QR system with physical access control hardware (IoT integration).
+## Getting started
 
----
-*Disclaimer: This is an MVP prototype for investor demonstration purposes. Medical, supplement, and health claims are for UI/UX demonstration only.*
+### Flutter application
+
+Prerequisites:
+
+- Flutter 3.x
+- Dart 3.x
+- Platform tooling for the target environment
+
+```bash
+flutter pub get
+flutter analyze
+flutter test
+flutter run
+```
+
+### Backend services
+
+Each service is maintained within its own directory under `services/`. Check the service-specific files before running or deploying it; do not assume a common runtime or environment configuration across services.
+
+## Documentation
+
+Start with [`docs/README.md`](docs/README.md) for the documentation map.
+
+Important repository documents:
+
+- [`SECURITY.md`](SECURITY.md) — security and vulnerability reporting policy
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — engineering workflow and contribution standards
+- [`ARTIFICIAL_MEDIC_PROPOSAL.md`](ARTIFICIAL_MEDIC_PROPOSAL.md) — research/product proposal
+- [`docs/edge-display/`](docs/edge-display/) — edge-display documentation
+
+## Branch and pull-request discipline
+
+Production-bound changes should be made through focused branches and pull requests. A change is not considered production-ready solely because it compiles or has been merged. Where applicable, completion requires:
+
+1. automated tests passing;
+2. security and secret review;
+3. deployment configuration review;
+4. synthetic smoke testing;
+5. health/log verification;
+6. restart and persistence verification; and
+7. documented rollback.
+
+## Clinical and regulatory notice
+
+NURA includes healthcare-oriented concepts and software. Repository content, prototypes, AI output, demonstrations, and research materials are **not substitutes for licensed clinical judgment** and are not automatically cleared, approved, or validated for patient care. Production clinical use requires the applicable medical, privacy, security, quality, regulatory, and organizational approvals.
+
+## Ownership
+
+NURA is maintained by the repository owner and authorized project collaborators. See `CODEOWNERS` for the current repository review owner.
