@@ -1,82 +1,177 @@
 import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
-/// The NURA E6B — the aviation flight computer (the pilot's lane).
-/// The time/fuel/distance triangle + the wind correction + the TAS.
 class E6BScreen extends StatefulWidget {
   const E6BScreen({super.key});
+
   @override
   State<E6BScreen> createState() => _E6BScreenState();
 }
 
 class _E6BScreenState extends State<E6BScreen> {
-  final _tas = TextEditingController(text: '150');
-  final _windDir = TextEditingController(text: '0');
-  final _windSpd = TextEditingController(text: '15');
-  final _course = TextEditingController(text: '090');
-  final _dist = TextEditingController(text: '300');
-  String _gsResult = '';
-  String _eteResult = '';
-  String _fuelResult = '';
-  final _burn = TextEditingController(text: '14');
+  final _speed = TextEditingController(text: '120');
+  final _minutes = TextEditingController(text: '60');
+  final _distance = TextEditingController(text: '120');
+  final _fuelBurn = TextEditingController(text: '10');
+  final _windSpeed = TextEditingController(text: '15');
+  final _windAngle = TextEditingController(text: '30');
+  String _result = 'Enter values and select a calculation.';
 
-  void _calc() {
-    final tas = double.tryParse(_tas.text) ?? 0;
-    final wd = double.tryParse(_windDir.text) ?? 0;
-    final ws = double.tryParse(_windSpd.text) ?? 0;
-    final crs = double.tryParse(_course.text) ?? 0;
-    final dist = double.tryParse(_dist.text) ?? 0;
-    final burn = double.tryParse(_burn.text) ?? 0;
-    // the wind triangle (the simplified — the full E6B math)
-    final windAngle = ((wd - crs) % 360 + 360) % 360; // the relative wind
-    final rad = windAngle * math.pi / 180;
-    final crosswind = ws * math.sin(rad);
-    final headwind = ws * math.cos(rad);
-    final wcaDeg = (tas <= 0) ? 0.0 : (crosswind / tas) * 60 / math.pi; // the degrees correction (the tas guard)
-    final hdg = (crs + wcaDeg) % 360;
-    final gs = (tas <= 0) ? 0.0 : tas - headwind;
-    final eteH = dist / (gs == 0 ? 1 : gs);
-    setState(() {
-      _gsResult = 'GS ${gs.toStringAsFixed(0)} kt · HDG ${hdg.toStringAsFixed(0)}°';
-      _eteResult = 'ETE ${(eteH * 60).toStringAsFixed(0)} min (${eteH.toStringAsFixed(2)} h)';
-      _fuelResult = burn > 0 ? 'Fuel ${(burn * eteH).toStringAsFixed(1)} gal + reserve' : '';
-    });
+  @override
+  void dispose() {
+    for (final controller in [
+      _speed,
+      _minutes,
+      _distance,
+      _fuelBurn,
+      _windSpeed,
+      _windAngle,
+    ]) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 
-  Widget _field(TextEditingController c, String label) {
-    return TextField(
-      controller: c,
-      keyboardType: TextInputType.number,
-      decoration: InputDecoration(labelText: label, isDense: true),
-    );
+  double? _value(TextEditingController controller) =>
+      double.tryParse(controller.text.trim());
+
+  void _distanceResult() {
+    final speed = _value(_speed);
+    final minutes = _value(_minutes);
+    if (speed == null || minutes == null || speed < 0 || minutes < 0) {
+      return _invalid();
+    }
+    setState(() => _result =
+        'Distance: ${(speed * minutes / 60).toStringAsFixed(1)} nautical miles');
   }
+
+  void _timeResult() {
+    final speed = _value(_speed);
+    final distance = _value(_distance);
+    if (speed == null || distance == null || speed <= 0 || distance < 0) {
+      return _invalid();
+    }
+    final totalMinutes = distance / speed * 60;
+    final hours = totalMinutes ~/ 60;
+    final minutes = (totalMinutes % 60).round();
+    setState(() => _result = 'Time en route: ${hours}h ${minutes}m');
+  }
+
+  void _fuelResult() {
+    final burn = _value(_fuelBurn);
+    final minutes = _value(_minutes);
+    if (burn == null || minutes == null || burn < 0 || minutes < 0) {
+      return _invalid();
+    }
+    setState(() => _result =
+        'Estimated fuel: ${(burn * minutes / 60).toStringAsFixed(1)} gallons');
+  }
+
+  void _windResult() {
+    final speed = _value(_windSpeed);
+    final angle = _value(_windAngle);
+    if (speed == null || angle == null || speed < 0) return _invalid();
+    final radians = angle * math.pi / 180;
+    final crosswind = speed * math.sin(radians).abs();
+    final headwind = speed * math.cos(radians);
+    final component = headwind >= 0 ? 'headwind' : 'tailwind';
+    setState(() => _result =
+        'Crosswind: ${crosswind.toStringAsFixed(1)} kt · $component: ${headwind.abs().toStringAsFixed(1)} kt');
+  }
+
+  void _invalid() => setState(() => _result = 'Enter valid non-negative numbers.');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('✈️ NURA E6B — the flight computer')),
-      body: Padding(
+      appBar: AppBar(title: const Text('E6B Utility')),
+      body: ListView(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            _field(_tas, 'True Airspeed (kt)'),
-            _field(_windDir, 'Wind Direction (°)'),
-            _field(_windSpd, 'Wind Speed (kt)'),
-            _field(_course, 'Course (°)'),
-            _field(_dist, 'Distance (nm)'),
-            _field(_burn, 'Fuel Burn (gal/h)'),
-            const SizedBox(height: 12),
-            FilledButton(onPressed: _calc, child: const Text('CALCULATE')),
-            const SizedBox(height: 16),
-            Text(_gsResult, style: Theme.of(context).textTheme.titleMedium),
-            Text(_eteResult, style: Theme.of(context).textTheme.titleMedium),
-            Text(_fuelResult, style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 24),
-            const Text('PROVIDER/PILOT USE — the planning aid, not the primary navigation.',
-                style: TextStyle(fontSize: 11)),
-          ],
-        ),
+        children: [
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: Colors.amber.withValues(alpha: 0.16),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: Colors.amber.shade700),
+            ),
+            child: const Text(
+              'Advisory calculation aid only. Verify all values using approved aircraft documentation, current weather, official planning tools, and pilot judgment.',
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
+          ),
+          const SizedBox(height: 14),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  _numberField(_speed, 'Ground speed', 'kt'),
+                  const SizedBox(height: 12),
+                  _numberField(_minutes, 'Time', 'minutes'),
+                  const SizedBox(height: 12),
+                  _numberField(_distance, 'Distance', 'nautical miles'),
+                  const SizedBox(height: 12),
+                  _numberField(_fuelBurn, 'Fuel burn', 'gallons/hour'),
+                  const SizedBox(height: 12),
+                  _numberField(_windSpeed, 'Wind speed', 'kt'),
+                  const SizedBox(height: 12),
+                  _numberField(_windAngle, 'Wind angle', 'degrees off runway/track'),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              FilledButton.tonal(
+                onPressed: _distanceResult,
+                child: const Text('Distance'),
+              ),
+              FilledButton.tonal(
+                onPressed: _timeResult,
+                child: const Text('Time'),
+              ),
+              FilledButton.tonal(
+                onPressed: _fuelResult,
+                child: const Text('Fuel'),
+              ),
+              FilledButton.tonal(
+                onPressed: _windResult,
+                child: const Text('Wind components'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: SelectableText(
+                _result,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(fontWeight: FontWeight.w800),
+              ),
+            ),
+          ),
+          const SizedBox(height: 80),
+        ],
       ),
     );
   }
+
+  Widget _numberField(
+    TextEditingController controller,
+    String label,
+    String suffix,
+  ) =>
+      TextField(
+        controller: controller,
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        decoration: InputDecoration(labelText: label, suffixText: suffix),
+      );
 }
