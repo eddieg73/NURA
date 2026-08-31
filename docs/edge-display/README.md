@@ -1,13 +1,8 @@
 # NURA OSINT Edge Display
 
-## Purpose
+## Status
 
-Create one compact live intelligence display that can be rendered in two places:
-
-1. the physical ESP32/Raspberry Pi edge screen; and
-2. the Notion OSINT command page.
-
-Both surfaces must consume the same normalized state payload so they do not drift.
+Implementation scaffold is now committed. The physical ESP32/Raspberry Pi screen and Notion display are designed as presentation clients of the same normalized state.
 
 ## Architecture
 
@@ -21,19 +16,28 @@ Hermes / collector services
 Verification + confidence layer
     |
     v
-Normalized DisplayState JSON
+GET /api/v1/display-state
     |
     +--> ESP32 / Raspberry Pi display
     |
-    +--> Notion command display
+    +--> Notion / browser edge display
 ```
+
+## Implemented files
+
+- `services/display_state/app.py` — Flask service with `/api/v1/display-state` and `/healthz`.
+- `services/display_state/display_state.example.json` — version 1.0 state contract example.
+- `services/display_state/web/index.html` — live JARVIS-style browser/Notion display, polling every 30 seconds.
+- `services/display_state/Dockerfile` — container build and health check.
+- `services/display_state/test_app.py` — API smoke tests.
+- `docs/edge-display/display.html` — standalone display client that can target an API using `?api=`.
 
 ## DisplayState contract
 
 ```json
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-31T00:00:00-05:00",
+  "generated_at": "2026-08-31T05:00:00Z",
   "system_status": "ONLINE",
   "threat_level": "NORMAL",
   "p0_alerts": 0,
@@ -43,80 +47,60 @@ Normalized DisplayState JSON
     "title": "Waiting for next verified high-priority item",
     "priority": "P2",
     "confidence": "H",
-    "domain": "Ops/Vendor"
+    "domain": "Ops/Vendor",
+    "provenance": []
   },
-  "watch_domains": [
-    "Geo/Regional",
-    "Cyber/Tech",
-    "Ops/Vendor",
-    "Markets",
-    "Space/Aviation",
-    "Weather"
-  ]
+  "watch_domains": ["Geo/Regional","Cyber/Tech","Ops/Vendor","Markets","Space/Aviation","Weather"]
 }
 ```
 
-## Screen sections
+## Local smoke test
 
-### System header
-- NURA OSINT // EDGE DISPLAY
-- online/offline state
-- last sync timestamp
+```bash
+cd services/display_state
+python -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+python -m unittest test_app.py
+python app.py
+```
 
-### Threat
-- NORMAL / ELEVATED / HIGH / CRITICAL
-- count of P0 alerts
+Open `http://127.0.0.1:8787/` and verify `/healthz` and `/api/v1/display-state`.
 
-### Source health
-- HEALTHY / DEGRADED / DOWN
-- source staleness and API failure indicator
+## Docker smoke test
 
-### Brief status
-- READY / BUILDING / STALE
-- confidence state H / M / L
+```bash
+cd services/display_state
+docker build -t nura-display-state .
+docker run --rm -p 8787:8787 nura-display-state
+```
 
-### Top signal
-One verified high-priority item with domain, priority, confidence and source provenance.
+## Hostinger deployment boundary
 
-### Watch domains
-Geo/Regional, Cyber/Tech, Ops/Vendor, Markets, Space/Aviation and Weather.
+Do not deploy over the existing Hermes installation without first inventorying its containers, reverse proxy, ports, volumes, environment files, backups, and current repository revision. Recommended deployment is a separate container behind the existing TLS reverse proxy, with an authenticated or network-restricted write path for Hermes and a least-privilege read endpoint for displays.
 
-### Pipeline
-Intake -> Triage -> Verify -> Synthesize -> Publish -> Archive.
+## Security and governance
 
-## Governance
-
-- OSINT only: public or commercially available sources.
+- Never hard-code credentials in firmware, Notion, or GitHub.
 - Preserve source provenance for every displayed claim.
-- Prefer primary sources.
-- Require two-source corroboration for high-impact claims when feasible.
-- Explicitly label low-confidence or speculative information.
-- Minimize PII and do not target private individuals.
-- Keep the display unclassified/shareable unless a separate approved workflow requires otherwise.
-
-## Engineering rules
-
-- The ESP32 and Notion surfaces are presentation clients, not independent sources of truth.
-- Display payload must be versioned and backward compatible.
-- Never hard-code credentials in firmware, Notion content or this repository.
-- Use authenticated read-only endpoints for the edge device.
-- Cache the last known good state locally for temporary network outages.
-- Show a visible stale-data indicator when the payload exceeds its freshness threshold.
-- Log collection/verification errors without storing secrets or sensitive data.
+- Prefer primary sources and corroborate high-impact claims when feasible.
+- Explicitly label low-confidence/speculative information.
+- Minimize PII; do not target private individuals.
+- Cache last-known-good state on edge devices and show stale state visibly.
 
 ## Acceptance criteria
 
-- ESP32 and Notion show the same top signal and threat state from one payload.
-- Last-sync timestamp is visible.
-- Stale data is clearly flagged.
-- P0 events can override the normal display state.
-- Each displayed signal can be traced to source provenance in the OSINT board.
+- ESP32 and Notion show the same top signal and threat state.
+- Both consume the same versioned payload.
+- Last-sync timestamp and stale status are visible.
+- P0 events can override normal display state.
+- Every displayed signal can be traced to provenance in the OSINT board.
 
-## Next implementation
+## Remaining deployment work
 
-1. Define `/api/v1/display-state` on the NURA/Hermes backend.
-2. Add schema validation and signed/authenticated read access.
-3. Build the ESP32 renderer.
-4. Build the Notion HTML/embed renderer or synced dashboard surface.
-5. Add source-health and staleness checks.
-6. Add a P0 alert mode and test offline behavior.
+1. Inspect the Hostinger Hermes runtime and choose an unused internal port/reverse-proxy route.
+2. Deploy `services/display_state` as a separate container.
+3. Connect Hermes verified-output workflow to atomically update the DisplayState store.
+4. Publish the HTTPS display URL.
+5. Embed that HTTPS URL in Notion.
+6. Configure the ESP32/Raspberry Pi client against the same endpoint.
