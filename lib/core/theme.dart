@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class BrawlerzColors {
   static const Color background = Color(0xFF121212);
   static const Color surface = Color(0xFF1E1E1E);
-  static const Color primary = Color(0xFFFF4500); // Red-orange accent
+  static const Color primary = Color(0xFFFF4500);
   static const Color textPrimary = Colors.white;
   static const Color textSecondary = Colors.grey;
 }
@@ -43,7 +43,7 @@ class BrawlerzTheme {
         elevation: 0,
         centerTitle: false,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: BrawlerzColors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
