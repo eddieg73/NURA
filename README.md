@@ -1,64 +1,103 @@
-# Brawlerz Box - AI Powered Fitness Ecosystem
+# NURA
 
-Brawlerz Box is a premium, AI-powered fitness, boxing, wellness, nutrition, and recovery ecosystem. This Flutter MVP demonstrates the core member experience and business dashboard with a high-performance, dark-athletic aesthetic.
+> AI-enabled healthcare software, clinical workflow orchestration, mobile applications, and edge operations.
 
-## 🚀 MVP Features
+**Status:** Active engineering / pre-production. See **[Repository Status](docs/REPOSITORY_STATUS.md)** for the evidence-based readiness matrix.
 
-### Member Experience
-- **Premium Dashboard:** Personalized readiness score (HRV, Sleep) and daily workout focus.
-- **QR Gym Access:** Seamless 24/7 facility entry via digital member ID.
-- **AI Coach:** Mock computer vision form analysis for squats and boxing drills.
-- **Workout Library:** Curated boxing, strength, and HIIT programs.
-- **Class Booking:** Real-time reservation system for studio classes.
-- **Nutrition & Macros:** Daily calorie tracking with meal breakdown and grocery integration placeholders.
-- **Supplements Store:** AI-driven personalized supplement recommendations.
-- **Progress Tracking:** Interactive charts for strength gains and body composition.
-- **Integrations:** Mock connection interfaces for Apple Health, WHOOP, Garmin, and delivery services.
+NURA is a multi-component platform under active development. This repository contains a Flutter application, backend services, display-state/edge software, engineering automation, and supporting product/research material.
 
-### Business/Admin View
-- **Executive Dashboard:** Real-time metrics for total members, check-ins, and revenue.
-- **Growth Analytics:** Visual representation of revenue and membership trends.
-- **Operations:** Class attendance monitoring and facility status.
+## Quick navigation
 
-## 🛠 Tech Stack
-- **Framework:** Flutter 3.x (Dart 3.x)
-- **State Management:** Riverpod
-- **Navigation:** GoRouter
-- **Charts:** fl_chart
-- **UI:** Custom Material 3 Dark Theme with Google Fonts (Oswald & Inter)
-- **Architecture:** Clean Architecture (Feature-based modular structure)
+| Destination | Use it for |
+| --- | --- |
+| [Repository Status](docs/REPOSITORY_STATUS.md) | What is implemented, tested, deployed, and still gated |
+| [Documentation Hub](docs/README.md) | Technical documentation entry point |
+| [Architecture](docs/ARCHITECTURE.md) | Repository and service boundaries |
+| [Deployment](docs/DEPLOYMENT.md) | Promotion and smoke-test gates |
+| [Operations](docs/OPERATIONS.md) | Runtime, recovery, monitoring and rollback standards |
+| [Security](SECURITY.md) | Vulnerability, secret and PHI handling |
+| [Contributing](CONTRIBUTING.md) | Engineering workflow |
+| [Changelog](CHANGELOG.md) | Notable repository changes |
+| [Support](SUPPORT.md) | Escalation and incident routing |
 
-## 📁 Project Structure
+## Architecture at a glance
+
+```text
+NURA
+├── Flutter application
+│   ├── lib/
+│   ├── ios/
+│   ├── android/
+│   ├── macos/
+│   └── linux/
+├── Backend services
+│   ├── services/app_backend/
+│   └── services/display_state/
+├── Documentation
+│   └── docs/
+├── Engineering automation
+│   └── .github/
+└── Product / research proposals
+    └── ARTIFICIAL_MEDIC_PROPOSAL.md
 ```
-lib/
-  app/          # Global configuration & routing
-  core/         # Theming, constants, and utilities
-  features/     # Feature-based modules (UI + logic)
-  shared/       # Reusable widgets, models, and repositories
+
+## Core components
+
+| Component | Location | Purpose | Readme/status |
+| --- | --- | --- | --- |
+| Flutter client | `lib/` | Cross-platform application UI and client logic | Repository status |
+| App backend | `services/app_backend/` | Application backend service | [Service README](services/app_backend/README.md) |
+| Display-state service | `services/display_state/` | State delivery for edge/display clients | [Service README](services/display_state/README.md) |
+| Edge display | `docs/edge-display/` | Hardware/display integration | [Documentation](docs/edge-display/) |
+| CI and automation | `.github/` | Automated validation and repository governance | [Contributing](CONTRIBUTING.md) |
+| Artificial Medic proposal | `ARTIFICIAL_MEDIC_PROPOSAL.md` | Product/research proposal | Not a production clinical specification |
+
+## Engineering principles
+
+- Human authorization remains required for patient-impacting clinical decisions and writes.
+- PHI stays within explicitly approved systems and infrastructure.
+- Secrets belong in environment variables or an approved secret manager, never source control.
+- Automated jobs must be observable, idempotent where practical, and auditable.
+- Every production service requires health/readiness checks, logs, restart verification, backup/recovery planning, and rollback.
+- Clinical AI components require evaluation and governance before promotion from development or shadow operation.
+- **Implemented**, **CI verified**, **deployed**, and **production verified** are separate states.
+
+## Getting started
+
+### Flutter application
+
+Prerequisites: Flutter 3.x, Dart 3.x, and platform tooling for the target environment.
+
+```bash
+flutter pub get
+flutter analyze
+flutter test
+flutter run
 ```
 
-## 🏗 Setup Instructions
-1. Ensure you have the [Flutter SDK](https://docs.flutter.dev/get-started/install) installed.
-2. Clone the repository.
-3. Run `flutter pub get` to install dependencies.
-4. Run `flutter run` (supports iOS, Android, and Web).
+### Backend services
 
-## 🗺 Future Roadmap & API Integration
+Each deployable service lives under `services/` and owns its runtime documentation. Read the service README before running or deploying it; do not assume services share configuration or data boundaries.
 
-### TODO: Wearable Integration
-- [ ] Implement `HealthKit` (iOS) and `Google Fit` (Android) services.
-- [ ] Connect `WHOOP` and `Garmin` Webhooks/APIs for real-time recovery data.
+## Definition of production completion
 
-### TODO: AI & Computer Vision
-- [ ] Replace mock AI overlay with `google_ml_kit` or custom TFLite models for pose estimation.
-- [ ] Implement backend analysis for complex boxing drill form feedback.
+A change is not production-ready merely because it compiles, passes a unit test, or has been merged. Where applicable, completion requires:
 
-### TODO: Commerce & Logistics
-- [ ] Integrate `Stripe` for supplement purchases and membership billing.
-- [ ] Connect `Instacart` and `Amazon` APIs for automated grocery ordering based on nutrition plans.
+1. automated validation passing;
+2. security and secret review;
+3. deployment configuration review;
+4. immutable/versioned deployment artifact;
+5. synthetic smoke test;
+6. health/readiness and log verification;
+7. persistence/restart verification;
+8. monitoring and alerting;
+9. backup/recovery verification; and
+10. documented rollback.
 
-### TODO: Facility Access
-- [ ] Connect QR system with physical access control hardware (IoT integration).
+## Clinical and regulatory notice
 
----
-*Disclaimer: This is an MVP prototype for investor demonstration purposes. Medical, supplement, and health claims are for UI/UX demonstration only.*
+NURA includes healthcare-oriented concepts and software. Repository content, prototypes, AI output, demonstrations, and research materials are **not substitutes for licensed clinical judgment** and are not automatically cleared, approved, or validated for patient care. Production clinical use requires applicable medical, privacy, security, quality, regulatory, and organizational approvals.
+
+## Ownership
+
+NURA is maintained by the repository owner and authorized collaborators. `CODEOWNERS` defines the current repository review owner.

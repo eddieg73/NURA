@@ -1,0 +1,40 @@
+name: Clinical safety concern
+description: Escalate a potential patient-impacting software or AI safety concern without PHI
+title: "safety: "
+body:
+  - type: markdown
+    attributes:
+      value: "STOP: Do not include PHI. If an automated action could create patient harm, disable or contain the unsafe action through the approved operational process and preserve evidence."
+  - type: textarea
+    id: concern
+    attributes:
+      label: Safety concern
+      description: Describe the failure mode without patient identifiers.
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Potential impact
+    validations:
+      required: true
+  - type: dropdown
+    id: automation
+    attributes:
+      label: Does this involve automated patient-impacting action?
+      options:
+        - "No"
+        - "Yes — contained/disabled"
+        - "Yes — containment requires authorized operator"
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitized evidence / version
+  - type: textarea
+    id: gate
+    attributes:
+      label: Required clinical/engineering review before re-enable
+    validations:
+      required: true

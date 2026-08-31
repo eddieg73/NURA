@@ -9,32 +9,69 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: app-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   backend:
+    name: Backend tests
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: services/app_backend
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: pip
           cache-dependency-path: services/app_backend/requirements.txt
-      - run: python -m pip install --upgrade pip
-      - run: pip install -r requirements.txt
-      - run: PYTHONPATH=. python -m pytest -q
+      - name: Install
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+      - name: Compile
+        run: python -m compileall -q app tests
+      - name: Test
+        run: PYTHONPATH=. python -m pytest -q
+      - name: Build container
+        run: docker build -t nura/app-backend:${{ github.sha }} .
+
+  display-state:
+    name: Display-state tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/display_state
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: services/display_state/requirements.txt
+      - name: Install
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+      - name: Compile
+        run: python -m compileall -q app.py test_app.py
+      - name: Test
+        run: python -m unittest -v test_app.py
+      - name: Build container
+        run: docker build -t nura/display-state:${{ github.sha }} .
 
   flutter:
+    name: Flutter analyze and test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
           cache: true
-      - run: flutter pub get
-      - run: dart format --output=none lib test
-      - run: flutter analyze --no-fatal-infos --no-fatal-warnings
-      - run: flutter test
+      - name: Dependencies
+        run: flutter pub get
+      - name: Format
+        run: dart format --output=none lib test
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+      - name: Test
+        run: flutter test

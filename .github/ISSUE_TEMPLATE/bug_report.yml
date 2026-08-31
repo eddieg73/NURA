@@ -1,0 +1,55 @@
+name: Bug report
+description: Report a reproducible software defect
+title: "bug: "
+body:
+  - type: markdown
+    attributes:
+      value: "Do not include PHI, credentials, tokens, private keys, or sensitive infrastructure data."
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What is broken?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Minimal deterministic reproduction steps.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version / commit SHA
+      placeholder: commit SHA, tag, or branch
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Impact
+      options:
+        - Development only
+        - Operations degraded
+        - Production unavailable
+        - Security/privacy concern
+        - Potential clinical/patient-safety concern
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitized evidence
+      description: Logs/screenshots with secrets and PHI removed.
