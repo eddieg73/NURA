@@ -2,7 +2,10 @@
 
 **Date:** 2026-09-02 (02:15 UTC) · **Owner:** Eddie (founder) · **Operator:** Hermes (CTO)
 **Scope:** Last 48h work review (08-31 → 09-02) across memory, Obsidian, Notion, GitHub, fleet.
-**Mirrored to Notion:** `NURA-Work-Update — the Master Board 🏥` (09-02 ledger).
+**Mirrored to Notion:** page `CTO Session Ledger — 2026-09-02` under the integration-accessible
+OSINT Board + Daily Briefs parent (`6524f4aa-...`). Note: the Master Board page is **not shared with
+the integration token** — it returns 404 `object_not_found`. To land future ledgers directly on the
+Master Board, that page must be shared with integration id `3afa9b14-e498-8122-8fc5-002767d7f4`.
 
 > This ledger is the consolidated status. It follows the existing `docs/CTO-Session-Ledger-2026-08-28.md`
 > format so the series is continuous, not duplicated. **Connects to canonical** doc locations — never duplicates.
