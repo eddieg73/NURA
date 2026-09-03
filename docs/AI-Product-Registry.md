@@ -27,10 +27,11 @@
 | Provider | Model | Scope | PHI? | Status |
 |---|---|---|---|---|
 | **deepseek** (primary/active) | `deepseek-v4-flash-vision-exp` | general | No | Implemented (active session default) |
+| **deepseek** | `deepseek-ai/deepseek-v4-flash-0731` | general | No | Implemented (registered 09-02 via reconciliation) |
 | **openrouter** | `poolside/laguna-s-2.1:free`, `nvidia/nemotron-3-super-120b:free`, `google/gemma-4-31b-it:free` | free tiers | **No** (never PHI) | Implemented |
 | **deepseek (OSS)** | `deepseek-ai/DeepSeek-V3.2`, `deepseek-reasoner` | reasoning | No | Implemented |
 | **Qwen OSS** | `Qwen/Qwen3.5-72B-Instruct` | reasoning | No | Implemented |
-| openai | `gpt-5-mini` etc | — | — | **Credits exhausted** (429) — use local/DeepSeek |
+| openai | `gpt-5.4-mini` | — | — | **CONFIG DRIFT (09-02):** credits exhausted (429) — config still references it; use local/DeepSeek. Either dead config or needs re-registration when credits return. |
 
 ## III. Memory & knowledge lanes
 | Lane | Store | Embedder | Status |
@@ -38,6 +39,10 @@
 | Kernel | MEMORY.md/USER.md | — | Implemented |
 | mem0 semantic | Qdrant server `mem0` | nomic-embed-text (768) | **Implemented 09-02** (server mode, no embedded lock, no credits) |
 | RAG nura-docs | Qdrant `nura-docs` | fastembed bge-small (384) | Implemented (weekly reindex) |
+| nura_agent_state | Qdrant `nura_agent_state` | — | Implemented (agent state store, registered 09-02) |
+| garrido-kb | Qdrant `garrido-kb` | — | Implemented (personal KB, registered 09-02) |
+| surface-ops | Qdrant `surface-ops` | — | Implemented (registered 09-02) |
+| mem0migrations | Qdrant `mem0migrations` | — | mem0 internal (registry-note; created by dim-change migration) |
 | Episodic | session DB + daily-notes + lessons | — | Implemented |
 | Vault | Obsidian (source of truth) | — | Implemented |
 
@@ -47,6 +52,13 @@
 | Multi-agent delegation | `delegate_task` (spawn/list/steer/stop) | **Verified 09-02** — depth 1 (nesting off) |
 | MoA (mixture of agents) | `moa.presets.default` (qwen3:8b + deepseek-r1:8b refs) | Configured |
 | NATS/pub-sub | event backbone | Implemented (per architecture constitution) |
+
+## IVb. Embodied-AI / robotics lanes (CTASO — registered 09-02)
+| Lane | Base | Status | Gate |
+|---|---|---|---|
+| **RATCHET** (NURA Humanoid v1) | NVIDIA Isaac GR00T N1.7 (open VLA) + NURA Agent OS brain + safety kernel | **Scoping (P0)** — research gate; DGX Spark inference spike next; sim-first | Sim-pass in Isaac Lab before ANY real-robot motion; safety kernel independent + non-overridable; EMS use provider/supervisor-gated |
+| GR00T policy layer | GR00T N1.7 (Apache-2.0 code, commercial-licensable weights) | Candidate (P0) | HF_TOKEN + gated-model access required; build-on (assimilate), never rebuild the base |
+| Isaac Lab / sim | Isaac Lab + Newton + COMPASS | Candidate (P0) | Zero-shot sim-to-real validation gate |
 
 ## V. Lifecycle gate — what each entry means
 - **Design**: spec drafted; not built.
