@@ -53,12 +53,20 @@
 | MoA (mixture of agents) | `moa.presets.default` (qwen3:8b + deepseek-r1:8b refs) | Configured |
 | NATS/pub-sub | event backbone | Implemented (per architecture constitution) |
 
-## IVb. Embodied-AI / robotics lanes (CTASO — registered 09-02)
+## IVb. Embodied-AI / robotics lanes (CTASO — registered 09-02, refined after GTC)
 | Lane | Base | Status | Gate |
 |---|---|---|---|
-| **RATCHET** (NURA Humanoid v1) | NVIDIA Isaac GR00T N1.7 (open VLA) + NURA Agent OS brain + safety kernel | **Scoping (P0)** — research gate; DGX Spark inference spike next; sim-first | Sim-pass in Isaac Lab before ANY real-robot motion; safety kernel independent + non-overridable; EMS use provider/supervisor-gated |
-| GR00T policy layer | GR00T N1.7 (Apache-2.0 code, commercial-licensable weights) | Candidate (P0) | HF_TOKEN + gated-model access required; build-on (assimilate), never rebuild the base |
-| Isaac Lab / sim | Isaac Lab + Newton + COMPASS | Candidate (P0) | Zero-shot sim-to-real validation gate |
+| **RATCHET** (NURA Humanoid v1) | NVIDIA Isaac GR00T N1.7→N2 (open VLA) + NURA Agent OS brain + safety kernel | **Scoping (P0)** — research gate; DGX Spark inference spike next; sim-first | Sim-pass in Isaac Lab before ANY real-robot motion; safety kernel independent + non-overridable; EMS use provider/supervisor-gated |
+| **Policy target (v2)** | Isaac GR00T **Reference Humanoid** — Unitree H2 (31-DoF) + Sharpa tactile hands (22-DoF) = 75-DoF, Jetson AGX Thor T5000; GEAR-SONIC whole-body control | Candidate (P3) | HF_TOKEN + gated-model access; **watch GR00T N2 (DreamZero, #1 RoboArena) — don't build on N1.7** |
+| **Data flywheel (v2)** | Cosmos 3 world model + Physical AI Data Factory Blueprint + Isaac Lab 3.0 (Newton physX) | Candidate (P2) | Generate synthetic long-tail data from limited real demos; sim-validate before real |
+| GR00T policy layer | GR00T N1.7/N2 (Apache-2.0 code, commercial-licensable weights) | Candidate (P0) | HF_TOKEN + gated access; build-on (assimilate), never rebuild the base |
+| Isaac Lab / sim | Isaac Lab 3.0 + Newton + COMPASS | Candidate (P0) | Zero-shot sim-to-real validation gate |
+| **Healthcare robotics (DIRECT NURA lane)** | GR00T-H (clinical VLA) · Cosmos-H (surgical video) · Rheo (hospital sim) · Open-H (surgical dataset) | Candidate (watch) | All open on GitHub/HF; NURA's clinical/EMS embodiment + data = the differentiator |
+
+## IVc. Tracing/audit lane (add — from Logging vs Tracing, AI Eng Fundamentals #6)
+| Item | Status | Gate |
+|---|---|---|
+| **Request tracing** — every model call→tool→retrieval→agent decision traced end-to-end; trace-id spans → audit store (Qdrant/Postgres) keyed by run/patient/decision | **To-build (P1, non-negotiable before clinical agents ship)** | Matches RadIntel 'event spine' + 'black-box logged'; clinical auditability |
 
 ## V. Lifecycle gate — what each entry means
 - **Design**: spec drafted; not built.
