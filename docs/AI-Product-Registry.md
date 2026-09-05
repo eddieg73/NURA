@@ -68,6 +68,14 @@
 |---|---|---|
 | **Request tracing** — every model call→tool→retrieval→agent decision traced end-to-end; trace-id spans → audit store (Qdrant/Postgres) keyed by run/patient/decision | **To-build (P1, non-negotiable before clinical agents ship)** | Matches RadIntel 'event spine' + 'black-box logged'; clinical auditability |
 
+## IVd. Adopted/evaluated capability modules (2026-09-05 — adopt-what-fills-a-gap, not accumulate)
+| Module | Source | Verdict | Use |
+|---|---|---|---|
+| **browser-use CLI + skill** | github/browser-use (MIT, 98K★) | **ADOPTED** | v0.13.10 installed `/opt/data/browser-use-venv`; CLI verified. Fixes browser flakiness (auto-launch, skill-driven). Prior FB reads were harness-flaky; this is the stable lane. |
+| **scientific-agent-skills (imaging/clinical)** | github/K-Dense-AI (163 skills) | **ADOPTED** (subset) | Sparse-cloned `pydicom`, `pathml`, `imaging-data-commons`, `clinical-decision-support` → Hermes skills dir. **The skill layer for the clinical pre-training ambition** (imaging corpus + validation + compliance). |
+| **agentmemory** | github/rohitg00 (Apache, 28K★) | **EVALUATED — upgrade candidate** | **Builds clean + runs end-to-end** on host (iii-engine auto-installed, :49134, zero-LLM BM25 + local embeddings, first-class Hermes MCP). Self-hosted, $0, no cloud; own benchmark R@5 95.2% beats mem0. **Recommend: replace our broken mem0 with agentmemory** (mem0 short-term-memory failure is the recurring pain; this is a verified fix). |
+| **diagram design (mermaid-skill)** | github/Agents365-ai | **SKIP / borrow pattern** | We already have excalidraw/architecture-diagram/MindMap. Borrow the validate-before-export + vision-self-check pattern into our existing diagram skill — don't add a 5th tool. |
+
 ## V. Lifecycle gate — what each entry means
 - **Design**: spec drafted; not built.
 - **Evaluation**: benchmarked/red-teamed against a gate (clinical models need Clinical Governance Board approval + second-clinician isolation test).
