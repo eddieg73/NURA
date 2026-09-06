@@ -68,6 +68,16 @@
 |---|---|---|
 | **Request tracing** — every model call→tool→retrieval→agent decision traced end-to-end; trace-id spans → audit store (Qdrant/Postgres) keyed by run/patient/decision | **To-build (P1, non-negotiable before clinical agents ship)** | Matches RadIntel 'event spine' + 'black-box logged'; clinical auditability |
 
+## IVe. CarePilot integration (wired 2026-09-06 — live read + daily refresh)
+| Lane | Status | Gate |
+|---|---|---|
+| **CarePilot live-metrics reader** (read-only login via sealed .env → structured JSON: 96 members, 66 RAF gaps, avg RAF 1.09, 9 cohort-gap counts) | **LIVE + verified** | Read + propose-only; **never write/change clinical/coding/billing**; human approves every action |
+| **CarePilot metrics refresh cron** (`b755c03557ee`, daily 07:00) → `/opt/data/carepilot-live-metrics.json` | WIRED | Silent on fail (no fabricated metrics); one-screen status |
+| **CarePilot full-stack build** (FastAPI 32 routes + Flutter 7 screens, 21/21 tests, 0 analyze issues) | P0 built | Backend/API contract; in-memory store (Postgres/FHIR = next layer) |
+| **CarePilot app access** (carepilot.nuratech.ai, external CDN, browser-RPA) | ✓ authenticated | Sealed creds; RBAC read across all lanes |
+
+The RAF/coding agent consumes `carepilot-live-metrics.json` (member count, RAF gap count, avg RAF, cohort-gap distribution) to drive `hcc_opportunities` / `provider_tasks` → MDFlow loop. All AI = proposal-only.
+
 ## IVd. Adopted/evaluated capability modules (2026-09-05 — adopt-what-fills-a-gap, not accumulate)
 | Module | Source | Verdict | Use |
 |---|---|---|---|
