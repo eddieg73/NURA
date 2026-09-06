@@ -1,0 +1,22 @@
+{
+  "source": "carepilot",
+  "fetched": "2026-09-06T04:13:07Z",
+  "metrics": {
+    "active_members": "96",
+    "raf_gaps": "66",
+    "no_follow_up": "8",
+    "current_avg_raf": "1.09"
+  },
+  "cohort_gaps": {
+    "SITE": 17,
+    "DM": 178,
+    "BH": 49,
+    "CHF": 44,
+    "CAD": 24,
+    "HIV": 10,
+    "NTIA": 55,
+    "CKD": 66,
+    "CRD": 48
+  },
+  "auth": "ok"
+}
