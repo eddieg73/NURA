@@ -1,0 +1,38 @@
+services:
+  app:
+    build: .
+    image: nura/nura-quant:latest
+    ports:
+      - "8085:8000"
+    env_file: .env
+    volumes:
+      - ./storage:/app/storage
+    depends_on:
+      - mysql
+      - redis
+    command: >
+      sh -c "php artisan migrate --force &&
+             php artisan schedule:work"
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: nura_quant
+      MYSQL_USER: nura_quant
+      MYSQL_PASSWORD: ${DB_PASSWORD:?}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?}
+    volumes:
+      - nura_quant_mysql:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    restart: unless-stopped
+
+volumes:
+  nura_quant_mysql:
