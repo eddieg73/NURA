@@ -22,7 +22,8 @@ def ok(cond): return "🟢" if cond else "🔴"
 
 # ---- live state collection -------------------------------------------------
 def cron_fleet():
-    """Return (total, ok, error, paused) from the live cron jobs DB (authoritative)."""
+    """Return (total, ok, error, paused) from the live cron jobs DB (authoritative).
+    error = enabled jobs whose LAST RUN was an error (paused jobs are QUARANTINED, not erroring)."""
     raw = sh("export PATH=/opt/data/profiles/nura/bin:/opt/data/profiles/nura/.local/bin:/opt/hermes/bin:/opt/hermes/.venv/bin:$PATH; timeout 60 hermes cron list --json 2>/dev/null")
     try:
         jobs = json.loads(raw) if raw.startswith("[") or raw.startswith("{") else []
@@ -39,9 +40,10 @@ def cron_fleet():
             except Exception:
                 pass
     total = len(jobs)
-    err = sum(1 for j in jobs if j.get("last_status") == "error")
     paused = sum(1 for j in jobs if j.get("paused_at"))
-    return (total, total - err, err, paused)
+    # erroring = enabled (not paused) jobs whose last run errored
+    err = sum(1 for j in jobs if j.get("last_status") == "error" and not j.get("paused_at"))
+    return (total, total - err - paused, err, paused)
 
 def fleet_state():
     """Disk / RAM / swap / load on this host."""

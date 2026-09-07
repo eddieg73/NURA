@@ -13,9 +13,16 @@ $PY "$P/command-center.py" --emit-json > "$P/../mission-control/state.json" 2>/d
 ALERT_JSON=$($PY "$P/command-center.py" --emit-json 2>/dev/null)
 ERR=$(echo "$ALERT_JSON" | $PY -c "import sys,json;d=json.load(sys.stdin);print(d['cron_err'])" 2>/dev/null || echo 0)
 
-# Is the NOC page serving? (it should be; if not, start it)
+# Is the NOC page serving? If not, start it (detached so it survives the cron shell)
 if ! curl -s -m 3 -o /dev/null http://127.0.0.1:4100/index.html 2>/dev/null; then
-  (cd /opt/data/profiles/nura/mission-control && nohup $PY -m http.server 4100 --bind 127.0.0.1 >> server.log 2>&1 &)
+  setsid /opt/hermes/.venv/bin/python3 -m http.server 4100 --bind 127.0.0.1 \
+    --directory /opt/data/profiles/nura/mission-control \
+    >/opt/data/profiles/nura/mission-control/server.log 2>&1 < /dev/null &
+  disown 2>/dev/null || true
+  sleep 2
+  # re-assert the Tailscale serve proxy (mapping survives; only needed if it was dropped)
+  export PATH="/opt/data/bin:$PATH"
+  /opt/data/bin/tailscale --socket=/tmp/tailscaled.sock serve --bg --http=4100 http://127.0.0.1:4100 >/dev/null 2>&1 || true
 fi
 
 # 3) If there are real problems, that's the ONLY time we speak (deliver a signal)
