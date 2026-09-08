@@ -140,6 +140,15 @@ def medisun_fleet():
         ("MIH-03-A", "North Miami Fire Rescue", "Miami-Dade", "ALS Non-Transport (paramedic)", "Stage 2"),
     ]
 
+def tcm_board():
+    """Read the live CarePilot TCM engine board (members-in-transition, one glance)."""
+    try:
+        import requests as _r
+        d = _r.get("http://127.0.0.1:8000/api/tcm/board", timeout=8).json()
+        return d.get("rows", []), d.get("members_in_transition", 0)
+    except Exception:
+        return [], 0
+
 # ---- render -----------------------------------------------------------------
 def render_html(state):
     now = datetime.datetime.now(ZoneInfo("America/New_York")).strftime("%Y-%m-%d %H:%M %Z")
@@ -152,6 +161,11 @@ def render_html(state):
     fleet = "".join(f"<tr><td>{html.escape(u)}</td><td>{html.escape(d)}</td><td>{html.escape(c)}</td><td>{html.escape(r)}</td><td>{html.escape(s)}</td></tr>"
                     for u, d, c, r, s in state.get("medisun_fleet", []))
     fleet_rows = fleet or "<tr><td colspan=5>no units</td></tr>"
+    tcm = "".join(f"<tr><td>{html.escape(x.get('patient',''))}</td><td>{html.escape(x.get('trigger',''))}</td><td>{html.escape(x.get('cohort',''))}</td>"
+                  f"<td>{html.escape(x.get('risk_band',''))}</td><td>{html.escape(x.get('placement',''))}</td>"
+                  f"<td>{html.escape(', '.join(x.get('care_team',[])))}</td><td>{x.get('sla_breaches',0)}</td><td>{x.get('pending_docs',0)}</td></tr>"
+                  for x in state.get("tcm_rows", []))
+    tcm_rows = tcm or "<tr><td colspan=8>CarePilot engine not reachable (start /api/tcm)</td></tr>"
     body = f"""<!doctype html><html><head><meta charset="utf-8"><title>NURA Command Center</title>
 <style>body{{font-family:ui-monospace,monospace;background:#0b0f14;color:#d7e0ea;padding:2rem;max-width:1100px;margin:auto}}
 h1{{color:#4fc3f7;font-size:1.4rem}}h2{{color:#8ab;font-size:1rem;margin-top:1.6rem}}
@@ -164,6 +178,7 @@ table{{width:100%;border-collapse:collapse}}td{{padding:.4rem;border-bottom:1px 
 <h2>🔥 Actionable Alerts</h2><ul>{al}</ul>
 <h2>⏳ NEEDS EDDIE</h2><ul>{ne}</ul>
 <h2>🚑 Medisun MIH Fleet (by fire-dept service area)</h2><table><tr><th>Unit</th><th>Fire-Department Service Area</th><th>County</th><th>Role</th><th>Status</th></tr>{fleet_rows}</table>
+<h2>🔄 CarePilot Transition-of-Care Board ({len(state.get('tcm_rows',[]))} in transition)</h2><table><tr><th>Patient</th><th>Trigger</th><th>Cohort</th><th>Risk</th><th>Placement</th><th>Care Team</th><th>SLA</th><th>Docs</th></tr>{tcm_rows}</table>
 <h2>🧪 Gateway / Surfaces</h2><table>{rows}</table>
 <h2>📦 Docker Services (this host)</h2><table>{svc}</table>
 <h2>🧠 MCP lanes ({state['mcp_count']})</h2><p>{html.escape(', '.join(state['mcp_lanes'][:40]))}</p>
@@ -231,6 +246,7 @@ def build():
         "alerts": alerts(),
         "needs_eddie": needs_eddie(),
         "medisun_fleet": medisun_fleet(),
+        "tcm_rows": tcm_board()[0],
     }
     st["mcp_lanes"] = [l.strip() for l in st["mcp_lanes"] if l.strip()]
     open(OUT_JSON, "w").write(json.dumps(st, default=str))
