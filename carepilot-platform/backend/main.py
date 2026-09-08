@@ -214,6 +214,53 @@ def integrations():
     """CarePilot connect topology: eMedical (EMR) / Ensure Data Solutions (Solis) / Mirth NextGen Connect (HL7)."""
     return {"integrations":E.integrations()}
 
+# ---------- TCM Lifecycle (CEO/HMO/IPA care-management engine) ----------
+@app.get("/api/tcm/events")
+def tcm_event_feed():
+    return {"events":E.event_feed()}
+
+@app.post("/api/tcm/ingest")
+def tcm_ingest(payload:dict):
+    """Admit/discharge trigger from Mirth ADT / eMedical / Ensure -> opens case + alert + checklist."""
+    return {"ok":True,"result":E.ingest_event(payload.get("event","admit"), payload.get("patient_ref",""),
+            payload.get("source",""), facility=payload.get("facility",""))}
+
+@app.get("/api/tcm/{pid}/stratify")
+def tcm_stratify(pid:str):
+    return E.risk_stratify(pid)
+
+@app.get("/api/tcm/{pid}/readmission-risk")
+def tcm_readm_risk(pid:str):
+    return E.readmission_risk(pid)
+
+@app.get("/api/tcm/{pid}/bh-sdoh")
+def tcm_bh_sdoh(pid:str):
+    return E.bh_sdoh(pid)
+
+@app.get("/api/tcm/{pid}/placement")
+def tcm_placement(pid:str):
+    return E.placement(pid)
+
+@app.get("/api/tcm/sla")
+def tcm_sla():
+    return {"breaches":E.sla_breaches()}
+
+@app.get("/api/tcm/{pid}/billing")
+def tcm_billing(pid:str):
+    return {"patient_id":pid,"billing":E.tcm_billing(pid)}
+
+@app.get("/api/tcm/cost-avoidance")
+def tcm_cost_avoidance():
+    return E.cost_avoidance()
+
+@app.get("/api/tcm/quality")
+def tcm_quality():
+    return E.tcm_quality()
+
+@app.get("/api/tcm/board")
+def tcm_board():
+    return E.tcm_board()
+
 import uvicorn
 #if __name__=="__main__":
 #    uvicorn.run(app, host="0.0.0.0", port=8000)

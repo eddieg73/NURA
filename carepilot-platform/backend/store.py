@@ -11,6 +11,7 @@ class Store:
         self.drugs=[]; self.case_plans=[]; self.provider_metrics=[]; self.contracts=[]
         self.audit=[]; self.rules=[]; self.rules_versions=[]; self.identity=[]
         self.cohorts=[]; self.tcm_cases=[]; self.tcm_steps=[]; self.care_team=[]
+        self.tcm_events=[]; self.placements=[]; self.readm_risks=[]; self.sdoh=[]; self.sla=[]; self.tcm_billing=[]
         self._seed()
 
     def _audit(self, actor, action, ref=None, phi=False):
@@ -112,5 +113,31 @@ class Store:
             {"name":"Ensure Data Solutions","vendor":"Solis Health Plans","kind":"portal/MA data","lane":"payer cohorts + eligibility","status":"connected"},
             {"name":"Mirth NextGen Connect","vendor":"Mirth/OIE","kind":"HL7 engine","lane":"HL7 ADT (admit/discharge) + orders/results","status":"connected"},
         ]
+
+        # ---- live event feed (the 3 lanes pushing admit/discharge) ----
+        self.tcm_events=[
+            M.TCMEvent(patient_id=p1.id,event="discharge",source="mirth_adt",facility="Broward General",
+                       admit_dt=_now(),discharge_dt=_now()),
+            M.TCMEvent(patient_id=p2.id,event="admit",source="emeditical",facility="Baptist MDC"),
+            M.TCMEvent(patient_id=p2.id,event="er_visit",source="ensure",facility="Broward General"),
+        ]
+        # post-acute placement (Cleo -> home health arranged on discharge)
+        self.placements=[M.PostAcutePlacement(patient_id=p1.id,kind="home_health",
+                           facility="Bay Area Home Health",rn_visit_before=True)]
+        # readmission risk (Cleo high, Damien medium)
+        self.readm_risks=[M.ReadmissionRisk(patient_id=p1.id,score=0.82,band="high",
+                            contributors=["HF","recent admission","polypharmacy","missed TCM visit"]),
+                          M.ReadmissionRisk(patient_id=p2.id,score=0.48,band="medium",
+                            contributors=["2 conditions","Solis dual-eligible"])]
+        # SDOH screen (Cleo has a transport barrier)
+        self.sdoh=[M.SDOHScreen(patient_id=p1.id,food="ok",transport="gap",housing="ok",isolation="ok",
+                    needs=["transport"],referral="Medisun MIH paramedic pickup / paratransit")]
+        # SLA breach (step 6 24h follow-up overdue on Cleo)
+        self.sla=[M.SLABreach(case_id=tcm1.id,step="Post-discharge follow-up visit (24h)",overdue_hours=6.5,severity="warning")]
+        # TCM billing (CPT codes — proposed, human approves submit)
+        self.tcm_billing=[M.TCMBilling(patient_id=p1.id,code="99495",desc="Transitional Care Mgmt (moderate)",
+                            status="proposed",value=240.0,evidence={"interactive_contact":"2-biz-days","mdm":"moderate"}),
+                          M.TCMBilling(patient_id=p1.id,code="99496",desc="Transitional Care Mgmt (high)",
+                            status="proposed",value=320.0,evidence={"interactive_contact":"2-biz-days","mdm":"high","readmission_risk":"high"})]
 
 STORE = Store()

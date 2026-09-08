@@ -119,3 +119,35 @@ class CareTeam(BaseModel):
     id: str = Field(default_factory=lambda: _uid("TEAM"))
     patient_id: str; role: str  # case_manager / community_paramedic_np / hospital_nurse
     name: str; active: bool = True
+
+class TCMEvent(BaseModel):
+    id: str = Field(default_factory=lambda: _uid("EVT"))
+    patient_id: str; event: Literal["admit","discharge","er_visit"]="admit"
+    source: str = ""  # mirth_adt / emedical / ensure
+    ts: str = Field(default_factory=_now)
+    facility: str = ""; admit_dt: Optional[str] = None; discharge_dt: Optional[str] = None
+
+class PostAcutePlacement(BaseModel):
+    id: str = Field(default_factory=lambda: _uid("PLACE"))
+    patient_id: str; kind: Literal["snf","alf","home_health","ihh","iop","dme","none"]="none"
+    facility: str = ""; arranged: str = Field(default_factory=_now); rn_visit_before: bool = False
+
+class ReadmissionRisk(BaseModel):
+    id: str = Field(default_factory=lambda: _uid("RR"))
+    patient_id: str; score: float; band: Literal["low","medium","high","very_high"]="medium"
+    contributors: List[str] = []; model: str = "v1"; ts: str = Field(default_factory=_now)
+
+class SDOHScreen(BaseModel):
+    id: str = Field(default_factory=lambda: _uid("SDOH"))
+    patient_id: str; food: str = "ok"; transport: str = "ok"; housing: str = "ok"; isolation: str = "ok"
+    needs: List[str] = []; referral: str = ""
+
+class SLABreach(BaseModel):
+    id: str = Field(default_factory=lambda: _uid("SLA"))
+    case_id: str; step: str; overdue_hours: float; severity: Literal["warning","critical"]="warning"
+    ts: str = Field(default_factory=_now)
+
+class TCMBilling(BaseModel):
+    id: str = Field(default_factory=lambda: _uid("BILL"))
+    patient_id: str; code: str; desc: str; status: Literal["proposed","validated","submitted","paid"]="proposed"
+    value: float = 0.0; evidence: dict = Field(default_factory=dict)
