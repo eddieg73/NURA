@@ -69,6 +69,14 @@ def run():
     p.append(ok("TCM cost-avoidance (assumption-anchored)", requests.get(BASE+"/api/tcm/cost-avoidance").json()["cost_avoidance_usd"]>0))
     p.append(ok("TCM quality metrics", requests.get(BASE+"/api/tcm/quality").json()["tcm_cases"]>=3))
     p.append(ok("TCM executive board", requests.get(BASE+"/api/tcm/board").json()["members_in_transition"]>=3))
+    # HL7 ADT -> TCM trigger (Mirth NextGen Connect)
+    import hl7 as H
+    a=H.parse_adt(H.adt_example("ADT^A01","MRN-001","Broward General"))
+    d=H.parse_adt(H.adt_example("ADT^A03","MRN-002","Baptist MDC"))
+    p.append(ok("HL7 ADT parser (A01=admit, A03=discharge, MRN extracted)", a["event"]=="admit" and a["patient_ref"]=="MRN-001" and d["event"]=="discharge" and d["patient_ref"]=="MRN-002"))
+    msg=H.adt_example("ADT^A01","MRN-004","Broward General")
+    h=requests.post(BASE+"/api/tcm/hl7",json={"message":msg})
+    p.append(ok("HL7 ADT -> TCM trigger (open case + alert + checklist)", h.status_code==200 and h.json().get("tcm",{}).get("fired")==["tcm_case_opened","care_team_alerted","checklist_seeded"]))
     print(f"\n{sum(p)}/{len(p)} passed")
     return 0 if all(p) else 1
 if __name__=="__main__": sys.exit(run())

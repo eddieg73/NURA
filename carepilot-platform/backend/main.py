@@ -225,6 +225,19 @@ def tcm_ingest(payload:dict):
     return {"ok":True,"result":E.ingest_event(payload.get("event","admit"), payload.get("patient_ref",""),
             payload.get("source",""), facility=payload.get("facility",""))}
 
+@app.post("/api/tcm/hl7")
+def tcm_hl7(payload:dict):
+    """Receive a raw HL7 ADT message (Mirth NextGen Connect) and trigger the TCM pipeline."""
+    import hl7 as H
+    msg = payload.get("message") or payload.get("hl7") or ""
+    parsed = H.parse_adt(msg)
+    if not parsed:
+        return {"ok":False,"error":"no valid HL7 ADT message"}
+    # fire the TCM intake (propose-only: opens case + alert + checklist; no clinical write)
+    result = E.ingest_event(parsed["event"], parsed["patient_ref"], parsed["source"],
+                            facility=parsed["facility"])
+    return {"ok":True,"parsed":parsed,"tcm":result}
+
 @app.get("/api/tcm/{pid}/stratify")
 def tcm_stratify(pid:str):
     return E.risk_stratify(pid)
