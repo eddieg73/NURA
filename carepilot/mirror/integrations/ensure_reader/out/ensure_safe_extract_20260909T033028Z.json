@@ -1,0 +1,37 @@
+{
+  "rows": [
+    {
+      "kind": "ensure_aggregate_probe",
+      "external_ref": "ensure-agg-78c6e067d2ce",
+      "summary": "Ensure aggregate read: nav=24 cards=8 links=16 (no PHI; propose-only)",
+      "lane": "A",
+      "signals": {
+        "page_title": "Home Page - Solis",
+        "url_path_hash": "bd1fbcf445e9afc7",
+        "nav_item_count": 24,
+        "metric_card_count": 8,
+        "link_count": 16,
+        "button_count": 2,
+        "nav_labels_safe": [
+          "Home",
+          "Membership",
+          "Hospitalization",
+          "Referrals",
+          "Coding",
+          "Rx",
+          "Claims",
+          "Revenue",
+          "Reports",
+          "Administration"
+        ],
+        "metric_labels_safe": [
+          "Loading...",
+          "Loading filters..."
+        ],
+        "phi_policy": "aggregates_only_no_patient_identifiers"
+      }
+    }
+  ],
+  "extracted_at": "2026-09-09T03:30:28.712646+00:00",
+  "auth": "OK"
+}
