@@ -1,0 +1,133 @@
+{
+  "_meta": {
+    "name": "NURA Executive Records Taxonomy",
+    "version": "1.0.0",
+    "author": "Hermes (CTO / Executive Records Manager)",
+    "created": "2026-09-10",
+    "doctrine": "Never delete. Never alter sharing. Low confidence -> INBOX. Suspected dup -> DUPLICATES. PHI never mixed with general docs."
+  },
+
+  "01 — COMPANIES": {
+    "_kind": "company",
+    "_companies": [
+      "Nuratech AI", "Medisun Health Group", "Medisun Medical Centers",
+      "Rescue Health Foundation", "Garrido Group", "Citrus Health Group",
+      "Other Companies / Ventures"
+    ],
+    "_standard_subfolders": [
+      "Executive & Strategy", "Corporate / Formation / Governance", "Operations",
+      "Finance & Accounting", "Banking", "Contracts & Agreements", "Legal & Compliance",
+      "Insurance", "HR & Personnel", "Vendors & Contractors", "Technology / IT",
+      "Projects", "Marketing & Branding", "Sales / Business Development",
+      "Policies / SOPs", "Regulatory / Licensing", "Clinical Operations",
+      "Billing / Reimbursement", "Reports / Analytics", "Meeting Notes",
+      "Presentations", "Templates", "Archive"
+    ],
+    "_per_company_extras": {
+      "Nuratech AI": [
+        "NURA Platform", "Care Pilot", "Hermes Agent", "Nura ERP", "AI / Machine Learning",
+        "Clinical AI", "Radiology AI", "OpenEMR", "Orthanc / PACS / OHIF",
+        "Mirth / HL7 / FHIR", "Infrastructure / Hosting", "Cybersecurity",
+        "Integrations / APIs", "Development Documentation"
+      ],
+      "Medisun Health Group": [
+        "Mobile Integrated Healthcare", "Community Paramedicine", "Population Health",
+        "HEDIS / Stars", "Risk Adjustment / RAF", "Medicare Advantage", "Solis Health Plans",
+        "Radiology / Imaging Center", "Procedure Suite", "Urgent Care",
+        "Hospital-at-Home", "Fleet / Vehicles", "Clinical Practice Guidelines",
+        "Medical Director Documents", "Provider Operations", "Payer Contracts", "Credentialing"
+      ],
+      "Medisun Medical Centers": [
+        "Mobile Integrated Healthcare", "Community Paramedicine", "Population Health",
+        "HEDIS / Stars", "Risk Adjustment / RAF", "Medicare Advantage", "Solis Health Plans",
+        "Radiology / Imaging Center", "Procedure Suite", "Urgent Care",
+        "Hospital-at-Home", "Fleet / Vehicles", "Clinical Practice Guidelines",
+        "Medical Director Documents", "Provider Operations", "Payer Contracts", "Credentialing"
+      ]
+    }
+  },
+
+  "02 — PERSONAL": [
+    "Personal Identification", "Family", "Education", "Professional Licenses",
+    "Certifications", "Aviation", "EMS / Paramedic", "Employment History",
+    "CV / Resume", "Personal Finance", "Taxes", "Banking", "Insurance", "Property",
+    "Vehicles", "Travel", "Purchases / Receipts", "Personal Correspondence",
+    "Photos / Media", "Archive"
+  ],
+
+  "03 — LEGAL": {
+    "_static": [
+      "Active Matters", "Closed Matters", "Corporate Legal", "Contracts", "Litigation",
+      "Credit / FCRA / FDCPA", "Regulatory", "Healthcare Law", "Employment Law",
+      "Real Estate", "Intellectual Property", "Trusts / Estate Planning",
+      "Government / Public Records", "Attorney Correspondence", "Evidence",
+      "Pleadings", "Discovery", "Research", "Demand Letters", "Settlement",
+      "Court Orders", "Archive"
+    ],
+    "_matter_template": [
+      "01 Correspondence", "02 Evidence", "03 Pleadings", "04 Discovery",
+      "05 Research", "06 Drafts", "07 Filed / Final", "08 Damages / Financial",
+      "09 Settlement", "10 Archive"
+    ],
+    "_matter_naming": "[Year] — [Client/Party] — [Matter Name]"
+  },
+
+  "04 — MEDICAL / CLINICAL": {
+    "_static": [
+      "Clinical Practice Guidelines", "Protocols", "Emergency Medicine", "Critical Care",
+      "EMS / Prehospital", "Mobile Integrated Healthcare", "Community Paramedicine",
+      "Primary Care", "Population Health", "Radiology", "Cardiology", "Pulmonology",
+      "Neurology", "Surgery", "Anesthesia", "Pharmacology", "Medical Education", "CME",
+      "Research / Literature", "Clinical AI", "Coding / Billing / Reimbursement",
+      "Medicare / CMS", "Regulatory / AHCA", "Templates / Forms", "Reference Material",
+      "Archive"
+    ],
+    "_restricted": "RESTRICTED — PHI / PATIENT RECORDS"
+  },
+
+  "05 — PEOPLE": {
+    "_categories": [
+      "Employees", "Contractors", "Executives", "Developers / Technology",
+      "Clinical Providers", "Attorneys / Legal", "Partners", "Vendors", "Candidates",
+      "Consultants", "Former Personnel"
+    ],
+    "_person_naming": "[LAST NAME], [First Name] — [Role / Organization]",
+    "_person_template": [
+      "Agreements", "Credentials", "Correspondence", "Performance / Reviews",
+      "Projects", "Compensation", "HR", "Legal", "Deliverables", "Meeting Notes", "Archive"
+    ]
+  },
+
+  "06 — PROJECTS": {
+    "_naming": "[STATUS] — [Project Name]",
+    "_statuses": ["ACTIVE", "PLANNING", "HOLD", "COMPLETED"],
+    "_seed_projects": [
+      "ACTIVE — Medisun MIH Program",
+      "ACTIVE — Care Pilot",
+      "ACTIVE — Radiology Center Launch",
+      "ACTIVE — Nura ERP",
+      "ACTIVE — Hermes",
+      "PLANNING — Hospital-at-Home"
+    ],
+    "_template": [
+      "Executive Summary", "Requirements", "Planning", "Technical", "Clinical",
+      "Legal / Regulatory", "Financial", "Vendors", "Meetings", "Deliverables",
+      "Final Documents", "Archive"
+    ]
+  },
+
+  "07 — FINANCE & TAX": [
+    "Personal", "Nuratech AI", "Medisun", "Rescue Health Foundation",
+    "Other Companies", "Taxes", "Banking", "Credit Cards", "Payroll",
+    "Accounts Payable", "Accounts Receivable", "Financial Statements", "Budgets",
+    "Pro Formas", "Investor Materials", "Receipts", "Audit", "Archive"
+  ],
+
+  "08 — INBOX — TO BE FILED": [],
+
+  "09 — DUPLICATES — REVIEW": [],
+
+  "10 — ARCHIVE": ["2026", "2025", "2024", "2023", "Earlier"],
+
+  "REVIEW": []
+}
