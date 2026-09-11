@@ -1,0 +1,15 @@
+sensor,measurement,estimator_input,state_estimate,controller,actuator,safety_limit,confidence_tag
+SpO2 (Masimo),Arterial oxygen saturation,Oxygenation state,Oxygenation,O2 controller (blood flow + FiO2 + sweep),Oxygenator sweep/blender + pump RPM,SpO2 low/high limits; rate limits,ENGINEERING ESTIMATE
+SpHb (Masimo rainbow),Noninvasive haemoglobin,Oxygen-carrying capacity,O2 delivery / anaemia,O2 controller (O2-transfer prediction) + resource model,Same as above,SUPPORTING TREND ONLY - no autonomous transfusion trigger,TARGET
+PVI (Masimo rainbow),Fluid responsiveness,Volume responsiveness,Preload state,Perfusion controller (fluid/blood policy),Blood/fluid pump + manifold,SUPPORTING INPUT ONLY - no autonomous fluid trigger,TARGET
+EtCO2 (capnography),End-tidal CO2,Ventilation + altitude-corrected,Ventilation state,CO2 controller (sweep) + vent settings,Sweep valve + vent parameters,EtCO2 limits; Dalton altitude correction via BEM,TARGET
+ECG,Rhythm + rate,Cardiac state,Rhythm / arrest,No direct controller (alarm + escalation),None (advisory only; defib is external),Arrhythmia alarm; escalation,TARGET
+NIBP / IBP,Arterial pressure,Perfusion pressure,MAP / shock trajectory,Perfusion controller,Vasopressor pump + fluid/blood + flow,MAP limits; frame on PERFUSION not cuff BP,TARGET
+Circuit flow (ultrasonic),Extracorporeal flow,ECLS state,Flow adequacy,O2 + perfusion controllers,Pump RPM,Flow low/high; suction protection,TARGET
+Circuit pressures (pre/post),Drain/return + DP,ECLS health,Clot / occlusion / collapse,Circuit-health monitor,Pump RPM; flow limits; alarm,DP and pressure limits,TARGET
+Gas analysis (sweep in/out),O2/CO2 transfer,Gas exchange,Oxygenator performance,O2 + CO2 controllers,Sweep + FiO2,Transfer floor alarms,TARGET
+Air/bubble detection,Gas bubbles in return,Embolic risk,Unsafe condition,No controller (safety interlock),Pump stop + clamp,HARD interlock in safety MCU,TARGET
+Temperature x2,Patient + circuit temperature,Thermal state,Thermal regulation,Thermal controller,Heater/cooler,Temp limits,TARGET
+Barometric (x2 dissimilar),Ambient pressure/altitude,Environmental state,Compensation + altitude limits,BEM (deterministic) then digital twin,Compensation coefficients; alarm thresholds,Divergence alarm; conservative default,TARGET
+Drug pump telemetry,Delivered dose,Exposure,Pharmacokinetics model,Medication policy (advisory),Drug pump rate,Cumulative exposure limits,TARGET
+Battery telemetry x2,SoC/SOH per pack,Power state,Resource projection,Resource optimizer,Conservation modes,Reserve floor; conservation trigger,TARGET

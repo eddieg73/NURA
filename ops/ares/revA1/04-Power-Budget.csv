@@ -1,0 +1,15 @@
+subsystem,standby_W,monitor_only_W,vent_only_W,ecls_only_W,full_nominal_W,full_high_W,peak_W,confidence_tag
+Shared compute backbone (AIME host),6,11,14,14,22,30,34,ENGINEERING ESTIMATE
+Independent safety MCU + watchdog,1.2,1.4,1.4,1.4,1.6,1.6,1.8,ENGINEERING ESTIMATE
+Display 9-10in,0,7,7,7,9,14,14,ENGINEERING ESTIMATE
+Comms (internal; SATCOM external),0.5,1.5,1.0,1.0,2.5,2.5,6.0,ENGINEERING ESTIMATE
+BEM sensors + conditioning,0.4,0.5,0.5,0.5,0.5,0.5,0.5,ENGINEERING ESTIMATE
+Ventilation engine (turbine + valves),0,0,50,0,38,62,95,ENGINEERING ESTIMATE
+Acquisition front-end,0,6,4,6,8,10,12,ENGINEERING ESTIMATE
+Masimo rainbow SET module,0,1.8,0,1.8,2.0,2.0,2.2,ENGINEERING ESTIMATE
+ECLS pump (2.5-3.5 L/min),0,0,0,24,30,38,48,ENGINEERING ESTIMATE
+Gas controls / blender / regulator,0,0,0,6,8,12,15,ENGINEERING ESTIMATE
+Heater/cooler thermal machinery,0,0,0,14,18,22,30,ENGINEERING ESTIMATE
+Drug pump array (4-6 channels),0,0,0,3,9,12,18,ENGINEERING ESTIMATE
+Losses / conversion / thermal,1,3,6,8,12,18,25,ENGINEERING ESTIMATE
+TOTAL_W,9.1,32.2,83.9,86.7,160.6,224.6,301.5,CALCULATED
