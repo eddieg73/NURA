@@ -19,7 +19,7 @@ Every value tagged: `VERIFIED` `PARTNER DATA` `CALCULATED` `ENGINEERING ESTIMATE
 | Dry durable core mass | 12.42 kg bottom-up (band 9.74–15.80) | ENGINEERING ESTIMATE |
 | Frozen baseline mass | 16–17 kg dry (includes margin + unallocated items) | TARGET |
 | CAD packing requirement | **≤80–85% usable internal volume at PDR** | TARGET |
-| Mounting | 2× NATO litter-rail QD clamps + secondary retention | TARGET |
+| Mounting | `MOUNT-01` — transport mounting interface — **TARGET / UNKNOWN** (see §4a: litter, rail, restraint, aircraft, ambulance standards not yet identified) | TARGET/UNKNOWN |
 | Environment target | 25,000 ft / 7,620 m · MIL-STD-810H · MIL-STD-461G · IP55 | TARGET |
 
 **Positioning (frozen — decision 15):** one medical system with one sensor architecture, one mission
@@ -74,13 +74,25 @@ devices in one enclosure.**
 | Exhaust CO₂ fraction (planning) | 6% | ENGINEERING ESTIMATE |
 | Reserve/inefficiency factor | 1.18 | ENGINEERING ESTIMATE |
 | **Sweep requirement @80 mL/min** | **1.573 L/min (STP)** | CALCULATED |
-| **Sweep exhaust** | **PRESSURE-REGULATED — not ambient-exhaust** | TARGET |
-| Altitude penalty if ambient-exhaust | ×2.69 at 25,000 ft | CALCULATED |
-| **Penalty with pressure regulation** | **×1.00 (eliminated)** | CALCULATED |
+| **Sweep exhaust** | **pressure-regulated candidate — TO BE PROVEN (test M4)** | TARGET |
+| SLPM→ALPM conversion at 25,000 ft | ×2.695 (actual-volume requirement) | CALCULATED |
+| **O₂ inventory multiplier at altitude** | **ARCHITECTURE-DEPENDENT — 1.0× to 2.69×** | **REQUIRES VALIDATION** |
 
-> **ICD-CRITICAL:** the sweep channel must be pressure-regulated. An ambient-exhaust design needs
-> **10,092 L of O₂ for 24 h at 25,000 ft vs 3,773 L at sea level** — a 2.69× penalty that destroys
-> the logistics case. The regulator mass and power are cheap; the oxygen is not.
+> ⚠️ **CORRECTED — see Artifact 05a.** The 2.69× figure is the **SLPM→ALPM conversion factor**, i.e.
+> an *actual-volume* requirement. It is **not** an O₂ inventory multiplier unless the gas-delivery
+> architecture is **volumetric-constrained**. Rev-A.1 specifies a **cylinder + regulator + gas
+> blender/controller** — a mass/molar-referenced architecture in which the penalty may be **1.0×**,
+> and in which partial-pressure bookkeeping on the CO₂ side pushes the *opposite* direction.
+>
+> Measured spread across candidate architectures for 24 h at 80 mL/min CO₂:
+> **1,487 L – 6,576 L (4.4×)**. **The gas-delivery design choice decides the logistics.**
+>
+> **The pressure-regulated sweep is strategically attractive but its benefit must be PROVEN on the
+> bench (test M4), not asserted.** Until then it is a *hypothesis to be tested in Phase II*, not an
+> ICD requirement. All oxygen figures retagged `CALCULATED / REQUIRES VALIDATION`.
+>
+> A **metrology register** is now mandatory (§3.4) defining SLPM, ALPM, mass flow, upstream/downstream
+> pressures, FiO₂ and mass-flow measurement for every quoted number.
 
 ### 3.3 Ventilation gas
 | Parameter | Spec | Tag |
@@ -88,6 +100,18 @@ devices in one enclosure.**
 | Air supply | **integrated turbine — no external compressed air** | VERIFIED (T1-class) |
 | O₂ connector | DISS (CGA 1240) or NIST | VERIFIED (T1) |
 | **Separation requirement** | **no single downstream component may disable both ventilation and ECLS gas exchange** | TARGET |
+
+### 3.4 METROLOGY REGISTER — mandatory for every flow number (added by Artifact 05a)
+| # | Item | Status |
+|---|---|---|
+| 1 | **Flow reference condition** stated for EVERY quoted flow (SLPM @ 0 °C/1 atm, or g/min) | REQUIRED |
+| 2 | Sweep supply: regulated **upstream pressure (bar)** + **control mode** (MFC \| orifice \| blower) | OPEN |
+| 3 | Membrane gas **inlet** pressure (absolute) and **outlet/exhaust** pressure (absolute) | OPEN |
+| 4 | **Exhaust pressure-regulated or ambient-referenced** ← **THE DECIDING PARAMETER** | OPEN |
+| 5 | FiO₂ at blender outlet and O₂ fraction entering the membrane | OPEN |
+| 6 | **Mass-flow measurement on the O₂ supply** — the only trustworthy inventory measurement | REQUIRED |
+| 7 | Temperature at each measurement point (SLPM↔ALPM conversion requires T) | REQUIRED |
+| 8 | Blood side: Hb, pre/post saturation, Q, temperature | REQUIRED |
 
 ---
 
@@ -123,6 +147,32 @@ interaction, and ARES must MODEL extracorporeal-circuit effects on drug exposure
 | P11 | Gas out (exhaust) | DRY (durable) |
 | P12 | Thermal fluid in/out (to durable machinery) | boundary |
 | P13 | O₂ source inlet | DRY (durable) |
+
+---
+
+## 4a. MOUNT INTERFACE — `MOUNT-01` **TARGET / UNKNOWN** (correction 3 applied)
+
+**Retired:** ~~"2× NATO litter-rail QD clamps"~~. A mechanical interface cannot become a
+specification merely because we call it NATO-compatible.
+
+**Required before the ICD may specify this interface:**
+
+| # | Input | Status |
+|---|---|---|
+| 1 | **Exact litter model(s)** and rail geometry | UNKNOWN |
+| 2 | Restraint / attachment standard(s) | UNKNOWN |
+| 3 | **Aircraft** interface standard(s) | UNKNOWN |
+| 4 | **Ambulance** interface standard(s) (EN 1789 and equivalent) | UNKNOWN |
+| 5 | **Load cases**: static, dynamic, crash | UNKNOWN |
+| 6 | **Crash loads** and occupant-adjacent equipment criteria | UNKNOWN |
+| 7 | **Vibration environment** (rotary + fixed wing) | UNKNOWN |
+| 8 | **Retention** requirements incl. secondary retention | UNKNOWN |
+| 9 | Approved **transport interfaces** register | UNKNOWN |
+| 10 | Compliant **mounting hardware** candidates | UNKNOWN |
+
+**Until resolved, `MOUNT-01` is excluded from any mass or interface commitment.**
+Candidate regimes to research: STANAG 2040 (litters) and the aeromedical equipment standards invoked
+by **JECETS** / USAF ATL / US Army USAARL.
 
 ---
 

@@ -27,7 +27,7 @@ SYS-17,Path to M9-backpack-compatible form,topic,MUST demonstrate potential,SWaP
 SYS-18,Address SWaP-C3,topic,MUST,Formal SWaP-C3 budget under configuration control,IN PROGRESS - Artifacts 03/04/05,NURA,DOC
 PERF-02,Phase-II O2 >=125 mL/min partial support,topic,threshold,Direct O2-transfer evidence,TARGET,Partners,PERF
 PERF-03,Mechanical-ventilator integration when present,topic,PREFERRED,Integrated vent architecture,DESIGNED - T1-class ventilation absorbed,NURA,PERF
-PERF-04,CO2 removal >=80 mL/min,topic,threshold,Direct measurement,MODELLED - 1.573 L/min sweep required (Artifact 05),Partners,PERF
+PERF-04,CO2 removal >=80 mL/min,topic,threshold,Direct measurement,MODELLED - 1.573 L/min sweep required (Artifact 05) | altitude multiplier REQUIRES VALIDATION (Artifact 05a),Partners,PERF
 PERF-05,Autonomous fluid resuscitation,topic,required,Closed-loop fluid/blood,TARGET,NURA,PERF
 PERF-06,Autonomous vasopressor titration,topic,required,Closed-loop vasopressor,TARGET,NURA,PERF
 PERF-07,"Maintain perfusion pressure, not cuff BP",topic,required,Perfusion surrogate across validation,TARGET - frame on perfusion,NURA,PERF
@@ -41,6 +41,7 @@ ADMIN-SPRS,NIST SP 800-171 DoD Assessment,DARPA SBIR/STTR P2 instructions,MUST,C
 ADMIN-DSIP,DSIP registration (login.gov),DARPA instructions,MUST,Account,OPEN,Eddie,ADMIN
 ADMIN-SBA,SBA Company Registry,DARPA instructions,MUST,Registration,OPEN,Eddie,ADMIN
 ADMIN-COST,DARPA Cost Proposal template,DARPA instructions,MUST (mandatory),Completed template,OPEN,NURA/Finance,ADMIN
-ADMIN-DCMA,Accounting system approval (DCMA),DARPA instructions,conditional,Determination letter if FAR cost-plus,UNKNOWN - contract type not selected,Eddie/Finance,ADMIN
+ADMIN-DCMA,Cost-reimbursement accounting-system adequacy determination / pre-award review as required by the contracting officer,DARPA instructions,conditional (contract-type dependent),Accounting-system adequacy evidence IF cost-reimbursement is contemplated,OPEN - exact review/approval route to be CONFIRMED from the current solicitation and contracting office,Eddie/Finance,ADMIN
 ADMIN-5050,>=50% work by proposing small business,SBIR Phase II rule,MUST,Work-share matrix,AT RISK - staffing gap (decision 12),Eddie,ADMIN
 ADMIN-ENTITY,Single qualifying proposing entity,SBIR rules,MUST,UEI + ownership/affiliation disclosure,OPEN - Wyoming recommended; counsel to confirm,Eddie/Legal,ADMIN
+MOUNT-01,Transport mounting interface (litter/rail/restraint/aircraft/ambulance),Artifact 01 sec 4a,TARGET/UNKNOWN,Exact litter model + rail geometry; restraint std; aircraft std; ambulance std (EN 1789); load cases; crash loads; vibration env; retention; approved interfaces register; compliant hardware candidates,OPEN - 10 inputs unidentified; excluded from mass and interface commitments,NURA/Engineering,MOUNT

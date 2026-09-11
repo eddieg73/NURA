@@ -118,9 +118,17 @@ Requires named or committed: **SBIR-eligible PI · extracorporeal/fluidics lead 
 
 ## 2. ARTIFACT INDEX
 
+> **REV-A.1 IS FROZEN.** Final corrections applied 2026-09-11 — see **`00b-Final-Corrections-and-Execution-Order.md`**.
+> Next milestone: **DP2 EVIDENCE READY** (not Rev-A.2). Freeze rule in force: any architecture change
+> requires one of four triggers — new DARPA requirement · verified partner constraint · bench/test
+> result · CAD/PDR finding — plus a configuration-control record covering mass, power, safety,
+> schedule, regulatory and DP2 impact.
+
 | # | Artifact | File | Status |
 |---|---|---|---|
 | 00 | Decisions record & index | `00-RevA1-Decisions-and-Index.md` | ✅ this document |
+| **00b** | **Final corrections & execution order** | `00b-Final-Corrections-and-Execution-Order.md` | ✅ **NEW** |
+| **00c** | **DP2 READINESS BOARD** | `00-DP2-READINESS-BOARD.png` + `00-DP2-READINESS-SCOREBOARD.csv` | ✅ **NEW** |
 | 01 | **Interface Control Document** | `01-Interface-Control-Document.md` | ✅ |
 | 02 | **Life Cartridge wet/dry architecture** | `02-Life-Cartridge-Wet-Dry.md` + `.png` | ✅ |
 | 03 | **Mass + volume roll-up w/ confidence bands** | `03-Mass-Volume-Rollup.csv` + `03b-Life-Cartridge-Mass.csv` | ✅ |
