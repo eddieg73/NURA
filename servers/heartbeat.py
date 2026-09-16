@@ -15,7 +15,11 @@ def sh(cmd, timeout=15):
 def main():
     issues = []
     # the brain-pulse
-    b = sh("curl -s -m 6 -o /dev/null -w '%{http_code}' http://72.61.71.211:7091/api/health")
+    # 2026-09-10 (incident-commander): retargeted from stale :7091 — no
+    # listener exists for :7091 anywhere on the ai node (verified 23:09Z:
+    # connection refused; no container/unit/config references it). The live
+    # brain endpoint is hermes-gateway :8642/health -> 200 OK.
+    b = sh("curl -s -m 6 -o /dev/null -w '%{http_code}' http://72.61.71.211:8642/health")
     if b != "200":
         issues.append(f"brain-{b}")
     # the gateway-pulse (the local hermes!)
@@ -28,8 +32,13 @@ def main():
         if "ok" not in r:
             issues.append(f"node-{ip}")
     # the tunnel-pulse
-    t = sh("ss -tln | grep -c ':11434 ' || true")
-    if t.strip() in ("", "0"):
+    # 2026-09-10 (incident-commander): the `ss` binary is NOT installed in this
+    # container, so `ss -tln | grep -c ':11434 '` always evaluated to 0 and
+    # produced a permanent FALSE "tunnel-down" (~96/day). Probe the ollama
+    # endpoint directly instead. Label kept as "tunnel-down" to preserve the
+    # existing alert taxonomy.
+    t = sh("curl -s -m 6 -o /dev/null -w '%{http_code}' http://127.0.0.1:11434/api/tags")
+    if t.strip() != "200":
         issues.append("tunnel-down")
     if not issues:
         with open(LOG, "a") as f:

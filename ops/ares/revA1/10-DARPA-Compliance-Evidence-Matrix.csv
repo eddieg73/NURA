@@ -1,0 +1,47 @@
+req_id,requirement,source,level,evidence_required,current_status,responsible,category
+DP2-G01,Direct-to-Phase-II only,darpa.mil topic page,MUST,Phase-I-equivalent feasibility package,OPEN - existential,Eddie/partners,GATE
+DP2-G02,Portable battery-operated extracorporeal prototype,topic,MUST,"Photos/designs, configuration, battery-mode test",OPEN - hardware partner required,Partners,GATE
+DP2-G03,Blood flow >=2 L/min,topic,MUST,Raw flow/pressure test data,OPEN - partner evidence required,Partners,GATE
+DP2-G04,O2 transfer >=75 mL/min,topic,MUST,Direct pre/post-membrane O2-transfer calculation,OPEN - partner evidence required,Partners,GATE
+DP2-G05,CO2 removal >=40 mL/min,topic,MUST,Direct pre/post-membrane CO2 measurement,OPEN - partner evidence required,Partners,GATE
+DP2-G06,At least one qualifying autonomy capability,topic,MUST,Closed-loop test logs/results,OPEN - no public partner evidence found; NURA wedge,NURA,GATE
+DP2-G07,Alt A: maintain SpO2/EtCO2 via flow/sweep/FiO2,topic,one of three,Closed-loop perturbation testing,SELECTED - cheapest bench proof (Artifact 08),NURA,GATE
+DP2-G10,Describe current O2 and CO2 performance,topic,MUST,Exact operating envelope and test conditions,OPEN,Partners,GATE
+DP2-G11,Direct interface to oxygen source,topic,MUST,Gas-source architecture/test,DESIGNED - source-agnostic common interface (decision 5),NURA,SYS
+DP2-G12,"Evidence of max support duration, ideally >72 h",topic,PROPOSE,"Endurance testing, failure modes, consumable swaps",OPEN,Partners,GATE
+DP2-G13,"Documentation package (reports, data, designs)",topic,MUST,Indexed technical-data appendix,TO BUILD,NURA,DOC
+SYS-01,Fully integrated portable device,topic,MUST,"One controlled platform, not bolted-together equipment",DESIGNED - shared substrate architecture,NURA,SYS
+SYS-02,System of systems out of scope,topic,MUST NOT,Shared UI over unrelated boxes is inadequate,"DESIGNED - one machine, explicitly positioned",NURA,SYS
+SYS-03,Single central venous cannula,topic,MUST,One access site; jugular or femoral,SPECIFIED,NURA,SYS
+SYS-04,Cannula preferably <=15 Fr / 5 mm,topic,PREFERRED,Treat 15 Fr as primary; deviations need justification,SPECIFIED - 15 Fr design objective,Partners,SYS
+SYS-06,Minimal patient contact points,topic,MUST,Consolidate sensors and lines,DESIGNED,NURA,SYS
+SYS-07,No arterial line preferred,topic,PREFERRED,Noninvasive perfusion-state fusion,DESIGNED - with explicit uncertainty + abstention (decision 11),NURA,SYS
+SYS-08,Sensors work in austere military conditions,topic,MUST,"Motion, vibration, temp, light, sweat, power/comms denial",TO VERIFY,NURA,V&V
+SYS-09,Circuit supports continuous drugs,topic,MUST,Design description,DESIGNED - return-limb manifold,NURA,SYS
+SYS-10,Circuit supports bolus blood/crystalloid,topic,MUST,Design description,DESIGNED,NURA,SYS
+SYS-11,Specify integrated safety parameters,topic,MUST,Formal safety envelope/hazard controls,DESIGNED - safety governor + FMEA (Artifact 06),NURA,SYS
+SYS-12,Remote monitoring/control,topic,ESSENTIAL,Remote expert can intervene on edge states,"DESIGNED - augmentation, not dependency",NURA,SYS
+SYS-14,Autonomous alarm handling / auto-engage expert,topic,MUST,Alarm autonomy is part of product,DESIGNED,NURA,SYS
+SYS-15,Display patient state and treatments,topic,MUST,Explainable treatment/audit timeline,DESIGNED - unified display,NURA,SYS
+SYS-17,Path to M9-backpack-compatible form,topic,MUST demonstrate potential,SWaP architecture and packaging study,PARTIAL - 2-4 h hop only (O2 mass limits),NURA,SYS
+SYS-18,Address SWaP-C3,topic,MUST,Formal SWaP-C3 budget under configuration control,IN PROGRESS - Artifacts 03/04/05,NURA,DOC
+PERF-02,Phase-II O2 >=125 mL/min partial support,topic,threshold,Direct O2-transfer evidence,TARGET,Partners,PERF
+PERF-03,Mechanical-ventilator integration when present,topic,PREFERRED,Integrated vent architecture,DESIGNED - T1-class ventilation absorbed,NURA,PERF
+PERF-04,CO2 removal >=80 mL/min,topic,threshold,Direct measurement,MODELLED - 1.573 L/min sweep required (Artifact 05) | altitude multiplier REQUIRES VALIDATION (Artifact 05a),Partners,PERF
+PERF-05,Autonomous fluid resuscitation,topic,required,Closed-loop fluid/blood,TARGET,NURA,PERF
+PERF-06,Autonomous vasopressor titration,topic,required,Closed-loop vasopressor,TARGET,NURA,PERF
+PERF-07,"Maintain perfusion pressure, not cuff BP",topic,required,Perfusion surrogate across validation,TARGET - frame on perfusion,NURA,PERF
+PERF-08,Hemorrhage model >=50% EBV over 6 h,topic,example,Large-animal protocol,OPEN - needs animal site,Partners,ANIMAL
+PERF-09,Integrated validation >=24 h,topic,context,24-h combined model,OPEN,Partners,ANIMAL
+PERF-11,Closed-loop O2 algorithm development/validation,topic,required,Algorithm + validation data,TARGET - DP2 Option A,NURA,PERF
+PERF-12,Closed-loop fluid-resuscitation algorithm,topic,required,Algorithm + validation data,TARGET,NURA,PERF
+PERF-13,Integrated gas-exchange + resuscitation autonomy,topic,required,Combined closed-loop evidence,TARGET,NURA,PERF
+ADMIN-SAM,Active SAM.gov registration + UEI,DARPA Proposer General Terms,MUST,Registration + UEI in proposal,OPEN - BLOCKER - confirm today,Eddie,ADMIN
+ADMIN-SPRS,NIST SP 800-171 DoD Assessment,DARPA SBIR/STTR P2 instructions,MUST,Current SPRS score,OPEN - requires live-system gap analysis + POA&M,NURA/Oussama,ADMIN
+ADMIN-DSIP,DSIP registration (login.gov),DARPA instructions,MUST,Account,OPEN,Eddie,ADMIN
+ADMIN-SBA,SBA Company Registry,DARPA instructions,MUST,Registration,OPEN,Eddie,ADMIN
+ADMIN-COST,DARPA Cost Proposal template,DARPA instructions,MUST (mandatory),Completed template,OPEN,NURA/Finance,ADMIN
+ADMIN-DCMA,Cost-reimbursement accounting-system adequacy determination / pre-award review as required by the contracting officer,DARPA instructions,conditional (contract-type dependent),Accounting-system adequacy evidence IF cost-reimbursement is contemplated,OPEN - exact review/approval route to be CONFIRMED from the current solicitation and contracting office,Eddie/Finance,ADMIN
+ADMIN-5050,>=50% work by proposing small business,SBIR Phase II rule,MUST,Work-share matrix,AT RISK - staffing gap (decision 12),Eddie,ADMIN
+ADMIN-ENTITY,Single qualifying proposing entity,SBIR rules,MUST,UEI + ownership/affiliation disclosure,OPEN - Wyoming recommended; counsel to confirm,Eddie/Legal,ADMIN
+MOUNT-01,Transport mounting interface (litter/rail/restraint/aircraft/ambulance),Artifact 01 sec 4a,TARGET/UNKNOWN,Exact litter model + rail geometry; restraint std; aircraft std; ambulance std (EN 1789); load cases; crash loads; vibration env; retention; approved interfaces register; compliant hardware candidates,OPEN - 10 inputs unidentified; excluded from mass and interface commitments,NURA/Engineering,MOUNT

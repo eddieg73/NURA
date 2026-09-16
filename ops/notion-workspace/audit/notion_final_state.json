@@ -1,0 +1,50 @@
+{
+ "nested_kept": [
+  [
+   "e90a9b14-e498-83f9-ae0b-810a94157b95",
+   "\u26d4 SUPERSEDED \u2014 Executive Projects (nested content)"
+  ],
+  [
+   "116b71cd-76a4-4eef-a1d0-81068e3c6cf4",
+   "\u26d4 SUPERSEDED \u2014 Organizations & Current Roles (nested content)"
+  ],
+  [
+   "44a69385-45ef-47ab-a787-aa6274472081",
+   "\u26d4 SUPERSEDED \u2014 Medisun Completed Work Register (nested content)"
+  ]
+ ],
+ "canonical": [
+  [
+   "9547910e-8975-44b8-b511-2108abfa0d11",
+   "Executive Projects",
+   18
+  ],
+  [
+   "d3ff0c00-c629-43dc-b82c-06a28866fcb1",
+   "Master Tasks & Commitments",
+   78
+  ],
+  [
+   "c20a9b14-e498-8333-b554-01413da172df",
+   "Organizations & Current Roles",
+   9
+  ],
+  [
+   "8aca9b14-e498-8200-8d00-0149672c0a5f",
+   "Medisun Completed Work Register",
+   27
+  ],
+  [
+   "c28d624e-b827-4065-b1fd-200cdf7dd561",
+   "Prehospital & Aeromedical Evidence",
+   6
+  ],
+  [
+   "a5dfe5bd-c416-4f4c-b3e9-d6119279ad88",
+   "\ud83e\udde0 Founder Evolution Diary",
+   10
+  ]
+ ],
+ "live_count": 28,
+ "all_canonical_ok": false
+}

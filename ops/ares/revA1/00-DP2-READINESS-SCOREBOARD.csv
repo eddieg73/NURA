@@ -1,0 +1,7 @@
+gate,requirement,state,basis,what_converts_it_to_PROPOSAL-READY
+G02,Portable battery-operated extracorporeal prototype,NO EVIDENCE,Hardware partner required. No prototype reviewed. Public claims only.,Partner bench access + configuration record + battery-mode test
+G03,Blood flow >=2 L/min,NO EVIDENCE,Public literature (PAS 2 L/min x 10 d ovine) is a CLAIM until raw data is supplied.,Raw flow-vs-RPM and flow-vs-pressure test data from the partner.
+G04,>=75 mL/min O2 transfer,NO EVIDENCE,PAS reports ~117 mL/min initial falling to ~90-92 as Hb fell - public summary only.,"Raw pre/post blood gas, Hb, flow, temperature, FiO2, sweep."
+G05,>=40 mL/min CO2 removal,NO EVIDENCE,No public qualifying CO2 figure found for any screened candidate.,Raw pre/post blood gas and calculated removal.
+G06/G07,Qualifying autonomy capability (Option A),NO EVIDENCE,No candidate found with public qualifying closed-loop evidence. THIS IS NURA'S WEDGE.,Closed-loop perturbation logs + results; Option-A bench rig (Artifact 08).
+,GREEN COUNT,0 of 5,,proposal writing is SECONDARY until all five are green

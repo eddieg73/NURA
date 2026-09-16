@@ -1,0 +1,21 @@
+# CarePilot backend — host :8100 -> container :8000
+# Propose-only FastAPI already coded in main.py. No SFTP. No secrets needed for /health.
+services:
+  carepilot-api:
+    build: .
+    image: carepilot-api:local
+    container_name: carepilot-api
+    ports:
+      - "8100:8000"
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+    # Read-only mount alternative (dev): uncomment and comment build COPY reliance
+    # volumes:
+    #   - ./:/app:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s

@@ -1,0 +1,9 @@
+Files deleted by this patch (content intentionally excluded from the diff to keep it small;
+these are the NonCommercial CC BY-NC-SA 3.0 TeleGeography assets plus the module that shipped them).
+
+src/data/local_data/telegeography_submarine_cables/README.md
+src/data/local_data/telegeography_submarine_cables/cable-geo.json
+src/data/local_data/telegeography_submarine_cables/landing-point-geo.json
+src/data/local_data/telegeography_submarine_cables/source.json
+src/data/telegeographySubmarineCables.js
+src/data/telegeographySubmarineCables.test.mjs

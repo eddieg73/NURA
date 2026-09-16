@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+ *{box-sizing:border-box;margin:0;padding:0}
+ body{background:#0d1117;color:#e6edf3;width:2200px;padding:32px 36px 26px;
+      font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+ h1{font-size:38px;letter-spacing:-.5px} h1 span{color:#ff8c42}
+ .sub{color:#8b949e;font-size:15.5px;margin-top:6px}
+ .flag{position:absolute;top:32px;right:36px;text-align:right}
+ .flag b{color:#f85149;font-size:17px}.flag i{display:block;color:#8b949e;font-size:12px;font-style:normal;margin-top:4px}
+ .wrap{position:relative}
+ .card{background:#11161d;border:1px solid #30363d;border-radius:12px;padding:16px 19px 15px;margin-top:20px}
+ .card h2{color:#ff8c42;font-size:19px;margin-bottom:3px}
+ .card .cap{color:#8b949e;font-size:12.5px;margin-bottom:12px}
+ .foot{color:#8b949e;font-size:12.5px;margin-top:18px;line-height:1.6;border-top:1px solid #30363d;padding-top:11px}
+ .k{color:#ff8c42;font-weight:700}.g{color:#3fb950}.b{color:#58a6ff}.r{color:#f85149}
+ .hero{display:flex;align-items:center;gap:24px;background:#1a0d0d;border:2px solid #f85149;
+       border-radius:13px;padding:18px 24px;margin-top:22px}
+ .hero .num{font-size:64px;font-weight:800;color:#f85149;line-height:1}
+ .hero .txt{font-size:15px;color:#8b949e;line-height:1.55}
+ .hero .txt b{color:#e6edf3}
+ table{width:100%;border-collapse:collapse;font-size:13.5px}
+ th{text-align:left;color:#8b949e;font-weight:600;padding:7px 6px;border-bottom:1px solid #30363d;font-size:12px}
+ td{padding:8px 6px;color:#8b949e;border-bottom:1px solid #161b22;vertical-align:top}
+ .track{display:flex;gap:5px}
+ .pip{height:22px;border-radius:4px;background:#1f2937;border:1px solid #30363d;flex:1;
+      display:flex;align-items:center;justify-content:center;font-size:9.5px;color:#6e7681}
+ .pip.on{background:#f85149;border-color:#f85149;color:#0d1117;font-weight:700}
+ .gate{color:#e6edf3;font-weight:700;font-size:13.5px}
+ .prio{display:flex;gap:11px;padding:6px 0;align-items:flex-start}
+ .pnum{width:24px;height:24px;border-radius:50%;background:#ff8c42;color:#0d1117;font-size:12.5px;
+       font-weight:800;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px}
+</style></head><body>
+<div class="wrap">
+<h1>DP2 <span>READINESS</span></h1>
+<div class="sub">NURA ARES · DARPA DPA26BZ06-DV029 · the one metric everyone watches · 2026-09-11</div>
+<div class="flag"><b>REV-A.1 FROZEN</b><i>next milestone is not Rev-A.2 — it is DP2 EVIDENCE READY</i></div>
+</div>
+
+<div class="hero">
+  <div class="num">0<span style="font-size:30px;color:#8b949e"> / 5</span></div>
+  <div class="txt">
+    <b>Until all five gates are PROPOSAL-READY EVIDENCE, proposal writing is SECONDARY.</b><br>
+    The main risk is no longer a weak idea. The main risk is failing to convert the design into
+    <b>admissible DP2 evidence</b> before the submission window closes.
+  </div>
+</div>
+
+<div class="card">
+  <h2>THE FIVE GATES — four states only</h2>
+  <div class="cap">NO EVIDENCE → PARTNER CLAIM → VERIFIED DATA → PROPOSAL-READY EVIDENCE</div>
+  <table>
+    <tr><th style="width:78px">Gate</th><th style="width:300px">Requirement</th><th style="width:320px">Progress</th><th>Basis &amp; what converts it</th></tr>
+    <tr>
+      <td class="gate">G02</td>
+      <td>Portable, battery-operated extracorporeal prototype</td>
+      <td><div class="track">
+        <div class="pip on">NO EVIDENCE</div><div class="pip">PARTNER CLAIM</div>
+        <div class="pip">VERIFIED DATA</div><div class="pip">PROPOSAL-READY</div></div></td>
+      <td>Hardware partner required. <b style="color:#e6edf3">No prototype reviewed.</b><br>
+          → partner bench access + configuration record + battery-mode test</td>
+    </tr>
+    <tr>
+      <td class="gate">G03</td>
+      <td>Blood flow ≥2 L/min</td>
+      <td><div class="track">
+        <div class="pip on">NO EVIDENCE</div><div class="pip">PARTNER CLAIM</div>
+        <div class="pip">VERIFIED DATA</div><div class="pip">PROPOSAL-READY</div></div></td>
+      <td>Public literature (PAS 2 L/min × 10 d ovine) is a <b style="color:#e6edf3">claim until raw data is supplied</b>.<br>
+          → raw flow-vs-RPM and flow-vs-pressure data</td>
+    </tr>
+    <tr>
+      <td class="gate">G04</td>
+      <td>≥75 mL/min O₂ transfer</td>
+      <td><div class="track">
+        <div class="pip on">NO EVIDENCE</div><div class="pip">PARTNER CLAIM</div>
+        <div class="pip">VERIFIED DATA</div><div class="pip">PROPOSAL-READY</div></div></td>
+      <td>PAS reports ~117 mL/min initial falling to ~90–92 as Hb fell — <b style="color:#e6edf3">public summary only</b>.<br>
+          → raw pre/post blood gas, Hb, flow, temperature, FiO₂, sweep</td>
+    </tr>
+    <tr>
+      <td class="gate">G05</td>
+      <td>≥40 mL/min CO₂ removal</td>
+      <td><div class="track">
+        <div class="pip on">NO EVIDENCE</div><div class="pip">PARTNER CLAIM</div>
+        <div class="pip">VERIFIED DATA</div><div class="pip">PROPOSAL-READY</div></div></td>
+      <td><b style="color:#f85149">No public qualifying CO₂ figure found for ANY screened candidate.</b><br>
+          → raw pre/post blood gas and calculated removal</td>
+    </tr>
+    <tr>
+      <td class="gate">G06/G07</td>
+      <td>Qualifying autonomy capability (Option A)</td>
+      <td><div class="track">
+        <div class="pip on">NO EVIDENCE</div><div class="pip">PARTNER CLAIM</div>
+        <div class="pip">VERIFIED DATA</div><div class="pip">PROPOSAL-READY</div></div></td>
+      <td>No candidate found with public qualifying closed-loop evidence. <b style="color:#3fb950">THIS IS NURA'S WEDGE.</b><br>
+          → closed-loop perturbation logs + results; Option-A bench rig (Artifact 08)</td>
+    </tr>
+  </table>
+  <div style="margin-top:13px;background:#161b22;border-left:3px solid #ff8c42;border-radius:6px;padding:11px 14px;color:#8b949e;font-size:12.5px;line-height:1.65">
+    <span class="k">Classification discipline:</span> literature claims not supplied as raw data by the
+    partner are <b style="color:#e6edf3">PARTNER CLAIM</b>, never <b style="color:#e6edf3">VERIFIED DATA</b>.
+    That is the difference between <i>"the paper says"</i> and <i>"we can submit it."</i>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1.1fr 1fr;gap:20px">
+  <div class="card">
+    <h2>EXECUTION PRIORITY</h2>
+    <div class="cap">in this order — each unblocks the next</div>
+    <div class="prio"><div class="pnum">1</div><div>Confirm <b style="color:#e6edf3">Wyoming proposing entity, UEI and SAM status</b></div></div>
+    <div class="prio"><div class="pnum">2</div><div>Submit the <b style="color:#e6edf3">DARPA interpretation questions</b> while direct clarification remains available</div></div>
+    <div class="prio"><div class="pnum">3</div><div>Lock the <b style="color:#e6edf3">SBIR-eligible PI and the seven missing roles</b></div></div>
+    <div class="prio"><div class="pnum">4</div><div>Contact the <b style="color:#e6edf3">A/A+ partners</b> — NDA + bench access (Artifact 09)</div></div>
+    <div class="prio"><div class="pnum">5</div><div>Determine whether <b style="color:#e6edf3">bench-generated pre-submission evidence satisfies DP2</b>; if yes, execute Option-A immediately</div></div>
+    <div class="prio"><div class="pnum">6</div><div>Complete the real <b style="color:#e6edf3">NIST 800-171 / SPRS</b> gap assessment and POA&amp;M</div></div>
+    <div class="prio"><div class="pnum">7</div><div>Resolve <b style="color:#e6edf3">cost ceiling, contract type and accounting-system</b> requirements</div></div>
+    <div class="prio"><div class="pnum">8</div><div>Run <b style="color:#e6edf3">PDR</b> with ICD, Life Cartridge, mass reconciliation, FMEA, traceability and verified partner data</div></div>
+  </div>
+
+  <div class="card">
+    <h2>FREEZE RULE</h2>
+    <div class="cap">any architecture change now requires ONE of four triggers</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+      <div style="background:#0b1a26;border:1.5px solid #58a6ff;border-radius:8px;padding:11px 13px;color:#58a6ff;font-size:13px">New DARPA requirement</div>
+      <div style="background:#0b1a26;border:1.5px solid #3fb950;border-radius:8px;padding:11px 13px;color:#3fb950;font-size:13px">Verified partner constraint</div>
+      <div style="background:#0b1a26;border:1.5px solid #ff8c42;border-radius:8px;padding:11px 13px;color:#ff8c42;font-size:13px">Bench / test result</div>
+      <div style="background:#0b1a26;border:1.5px solid #f85149;border-radius:8px;padding:11px 13px;color:#f85149;font-size:13px">CAD / PDR finding</div>
+    </div>
+    <div style="margin-top:12px;color:#8b949e;font-size:12.5px;line-height:1.65">
+      <b style="color:#e6edf3">Every change gets a configuration-control record</b> showing its impact on:
+      <span class="k">mass · power · safety · schedule · regulatory · DP2</span>.
+      No undocumented drift.
+    </div>
+    <div style="margin-top:13px;background:#1a1208;border-left:3px solid #ff8c42;border-radius:6px;padding:11px 13px;color:#8b949e;font-size:12.5px;line-height:1.65">
+      <b style="color:#ff8c42">POSTURE: no feature additions.</b> Rev-A.1 is accepted as configuration-controlled.
+      The next milestone is <b style="color:#e6edf3">DP2 Evidence Ready</b> — not Rev-A.2.
+    </div>
+  </div>
+</div>
+
+<div class="foot">
+<b style="color:#e6edf3">Corrections applied this round (Artifact 05a + ICD):</b>
+(1) the 2.69× altitude oxygen figure is <b style="color:#ff8c42">retagged CALCULATED / REQUIRES VALIDATION</b> — it is the SLPM→ALPM conversion factor, not an inventory multiplier, and does not apply to the mass/molar-referenced cylinder+regulator architecture Rev-A.1 specifies; spread across architectures is <b style="color:#e6edf3">4.4× (1,487–6,576 L / 24 h)</b>.
+(2) "DCMA accounting-system approval required" → <b style="color:#e6edf3">cost-reimbursement accounting-system adequacy determination / pre-award review as required by the contracting officer</b> — no false universal gate.
+(3) "NATO litter-rail QD" → <b style="color:#e6edf3">MOUNT-01, TARGET/UNKNOWN</b>, with 10 unidentified inputs (litter, rail, restraint, aircraft, ambulance, load cases, crash loads, vibration, retention, hardware).
+<span style="color:#e6edf3">NURA ARES · Hermes CTO · 2026-09-11 · Rev-A.1 frozen</span>
+</div>
+</body></html>

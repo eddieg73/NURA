@@ -1,0 +1,378 @@
+===HOST===
+srv1030183
+172.30.0.1 72.60.163.140 172.18.0.1 172.21.0.1 172.19.0.1 172.17.0.1 172.23.0.1 172.22.0.1 172.24.0.1 10.10.0.2 172.25.0.1 172.20.0.1 172.26.0.1 172.27.0.1 172.28.0.1 172.29.0.1 2a02:4780:2d:4ac6::1 
+6.8.0-136-generic
+up 6 weeks, 1 day, 12 hours, 23 minutes
+===OS===
+Ubuntu 24.04.3 LTS
+===DISK===
+/dev/sda1       387G  258G  130G  67% /
+===DOCKER_CONTAINERS===
+nuratechwebsite-nuratechapp-kndqsd.1.0dyn4o3rw52fljhzgeu7rfz0m|nuratechwebsite-nuratechapp-kndqsd:latest|Up 3 weeks|3000/tcp
+dokploy-redis.1.td9qp4ko5pj09wq2i9kwvwhdw|redis:7|Up 3 weeks|6379/tcp
+dokploy-postgres.1.hsd6i320z3ido9m70u0y4qabx|postgres:16|Up 3 weeks|5432/tcp
+rustfs|ghcr.io/rustfs/rustfs:latest|Up 3 weeks|0.0.0.0:9100->9000/tcp, [::]:9100->9000/tcp, 0.0.0.0:9101->9001/tcp, [::]:9101->9001/tcp
+ohif-viewer|ohif/viewer:latest|Up 4 weeks|443/tcp, 0.0.0.0:8083->80/tcp, [::]:8083->80/tcp
+akaunting|akaunting/akaunting:latest|Up 4 weeks|0.0.0.0:8082->80/tcp, [::]:8082->80/tcp
+akaunting-db|mariadb:10.6|Up 4 weeks|3306/tcp
+medplum-server|medplum/medplum-server:latest|Up 4 weeks|5000/tcp, 0.0.0.0:8103->8103/tcp, [::]:8103->8103/tcp
+medplum-redis-1|redis:7|Up 4 weeks|0.0.0.0:56379->6379/tcp, [::]:56379->6379/tcp
+medplum-postgres-1|postgres:16|Up 4 weeks|0.0.0.0:55432->5432/tcp, [::]:55432->5432/tcp
+docker-nginx-1|nginx:latest|Up 4 weeks|0.0.0.0:8081->80/tcp, [::]:8081->80/tcp, 0.0.0.0:8449->443/tcp, [::]:8449->443/tcp
+docker-api-1|langgenius/dify-api:1.16.1|Up 4 weeks (healthy)|5001/tcp
+docker-worker-1|langgenius/dify-api:1.16.1|Up 4 weeks|5001/tcp
+docker-agent_backend-1|langgenius/dify-agent-backend:1.16.1|Up 4 weeks|5050/tcp
+docker-sandbox-1|langgenius/dify-sandbox:0.2.15|Up 4 weeks (healthy)|
+docker-api_websocket-1|langgenius/dify-api:1.16.1|Up 4 weeks|5001/tcp
+docker-plugin_daemon-1|langgenius/dify-plugin-daemon:0.6.10-local|Up 4 weeks|0.0.0.0:5003->5003/tcp, [::]:5003->5003/tcp
+docker-worker_beat-1|langgenius/dify-api:1.16.1|Up 4 weeks|5001/tcp
+docker-web-1|langgenius/dify-web:1.16.1|Up 4 weeks|3000/tcp
+docker-redis-1|redis:6-alpine|Up 4 weeks (healthy)|6379/tcp
+docker-ssrf_proxy-1|ubuntu/squid:latest|Up 4 weeks|3128/tcp
+docker-weaviate-1|semitechnologies/weaviate:1.27.0|Up 4 weeks|
+docker-local_sandbox-1|langgenius/dify-agent-local-sandbox:1.16.1|Up 4 weeks (healthy)|
+docker-db_postgres-1|postgres:15-alpine|Up 4 weeks (healthy)|5432/tcp
+docker-agent_ssrf_proxy-1|ubuntu/squid:latest|Up 4 weeks|3128/tcp
+LibreChat|registry.librechat.ai/danny-avila/librechat-dev:latest|Up 5 weeks|0.0.0.0:3080->3080/tcp, [::]:3080->3080/tcp
+rag_api|registry.librechat.ai/danny-avila/librechat-rag-api-dev-lite:latest|Up 5 weeks|
+vectordb|pgvector/pgvector:0.8.0-pg15-trixie|Up 5 weeks|5432/tcp
+chat-meilisearch|getmeili/meilisearch:v1.35.1|Up 5 weeks|7700/tcp
+chat-mongodb|mongo:8.0.20|Up 5 weeks|27017/tcp
+langfuse-langfuse-web-1|langfuse/langfuse:4|Up 5 weeks|0.0.0.0:3020->3000/tcp, [::]:3020->3000/tcp
+langfuse-langfuse-worker-1|langfuse/langfuse-worker:4|Up 5 weeks|127.0.0.1:3030->3030/tcp
+langfuse-redis-1|redis:7|Up 6 weeks (healthy)|127.0.0.1:6380->6379/tcp
+langfuse-postgres-1|postgres:17|Up 6 weeks (healthy)|127.0.0.1:5432->5432/tcp
+langfuse-minio-1|cgr.dev/chainguard/minio|Up 6 weeks (healthy)|0.0.0.0:9090->9000/tcp, [::]:9090->9000/tcp, 127.0.0.1:9091->9001/tcp
+langfuse-clickhouse-1|clickhouse/clickhouse-server:25.12|Up 6 weeks (healthy)|127.0.0.1:8123->8123/tcp, 127.0.0.1:9000->9000/tcp, 9009/tcp
+langfuse-clickhouse|clickhouse/clickhouse-server:24.8|Up 6 weeks|8123/tcp, 9000/tcp, 9009/tcp
+langfuse-db|postgres:16|Up 6 weeks (healthy)|5432/tcp
+medisun-redis|redis:7-alpine|Up 6 weeks (healthy)|127.0.0.1:6379->6379/tcp
+medisun-redisinsight|redis/redisinsight:latest|Up 6 weeks|127.0.0.1:5540->5540/tcp
+medisun-emr-bot-selenium-1|selenium/standalone-chromium|Up 6 weeks|4442-4444/tcp, 5900/tcp, 9000/tcp
+medisun-emr-bot-laravel.test-1|emedbot-8.4/app|Up 6 weeks|80/tcp
+medisun-emr-bot-mysql-1|mysql:8.4|Up 6 weeks (healthy)|0.0.0.0:3306->3306/tcp, [::]:3306->3306/tcp, 33060/tcp
+paperclip-server|docker-server|Up 4 weeks|0.0.0.0:3100->3100/tcp, [::]:3100->3100/tcp
+paperclip-db|postgres:17-alpine|Up 6 weeks (healthy)|5432/tcp
+n8n-n8nwithpostgres-a9xuj2-n8n-1|n8nio/n8n:latest|Up 6 weeks|5678/tcp
+n8n-n8nwithpostgres-a9xuj2-postgres-1|postgres:17-alpine|Up 6 weeks (healthy)|5432/tcp
+dokploy-traefik|traefik:v3.5.0|Up 6 weeks|0.0.0.0:80->80/tcp, [::]:80->80/tcp, 0.0.0.0:443->443/tcp, [::]:443->443/tcp, 0.0.0.0:443->443/udp, [::]:443->443/udp
+===DOCKER_COMPOSE_PROJECTS===
+akaunting
+docker
+langfuse
+librechat
+medisun-emr-bot
+medisun-redis
+medplum
+n8n-n8nwithpostgres-a9xuj2
+ohif
+===DOCKER_VOLUMES===
+4baf074f3f433127132d8368ef529c9077676487ec910d8dd0d56313bdcfd955
+6c55998522c080103131e951db5ff4386f2537ce6b27849971d4882845e54256
+32d23ef4c4765794c11869a412d8479c8459f2eeaea93a0cb4602c46ea76752e
+2379c4ec9bc6b1e130c03df9a8a182711b45f7e5be98e4ee87db89a8e19b479d
+a659a4fcbbe166095febe13bc3e9e16e3e0bf642fc2e5a30a3b03fd274de5f30
+akaunting_akaunting-data
+akaunting_akaunting-db-data
+bf2b1931b17e6eb3234529e7edf09cbee27b30359865c571002bdd4afe68a9b1
+docker_paperclip-data
+docker_pgdata
+dokploy-docker-config
+dokploy-postgres-database
+farmer-irrigation_farmer_iao_mariadb_data
+langfuse_langfuse-clickhouse-data
+langfuse_langfuse-db-data
+langfuse_langfuse_clickhouse_data
+langfuse_langfuse_clickhouse_logs
+langfuse_langfuse_minio_data
+langfuse_langfuse_postgres_data
+langfuse_langfuse_redis_data
+librechat_pgdata2
+medisun-emr-bot_sail-mysql
+medisun-redis_medisun-redis-data
+medisun-redis_medisun-redis-insight
+medplum_medplum-postgres-data
+n8n-n8nwithpostgres-a9xuj2_n8n_data
+n8n-n8nwithpostgres-a9xuj2_postgres_data
+redis-data-volume
+rustfs-data
+===DOCKER_NETWORKS===
+akaunting_default|bridge
+bridge|bridge
+docker_agent_sandbox_network|bridge
+docker_default|bridge
+docker_gwbridge|bridge
+docker_local_sandbox_proxy_network|bridge
+docker_ssrf_proxy_network|bridge
+dokploy-network|overlay
+host|host
+ingress|overlay
+langfuse_default|bridge
+librechat_default|bridge
+medisun-emr-bot_sail|bridge
+medisun-net|bridge
+medplum_default|bridge
+n8n-n8nwithpostgres-a9xuj2|bridge
+none|null
+ohif_default|bridge
+===DOCKER_IMAGES===
+medplum/medplum-server:latest|703MB
+mariadb:10.6|309MB
+postgres:15-alpine|292MB
+langgenius/dify-plugin-daemon:0.6.10-local|1.59GB
+registry.librechat.ai/danny-avila/librechat-dev:latest|2.34GB
+nginx:latest|161MB
+langfuse/langfuse:4|1.31GB
+langfuse/langfuse-worker:4|1.39GB
+cgr.dev/chainguard/minio:latest|170MB
+registry.librechat.ai/danny-avila/librechat-rag-api-dev-lite:latest|1.63GB
+ghcr.io/rustfs/rustfs:latest|226MB
+langgenius/dify-api:1.16.1|3.01GB
+langgenius/dify-web:1.16.1|631MB
+langgenius/dify-agent-backend:1.16.1|1.05GB
+langgenius/dify-agent-local-sandbox:1.16.1|547MB
+redis:7|113MB
+redis:6-alpine|27.9MB
+postgres:16|451MB
+postgres:17|454MB
+redis/redisinsight:latest|369MB
+emedbot-8.4/app:latest|763MB
+mysql:8.4|812MB
+docker-server:latest|3.39GB
+redis:7-alpine|39.1MB
+clickhouse/clickhouse-server:25.12|867MB
+langgenius/dify-sandbox:0.2.15|585MB
+mongo:8.0.20|953MB
+nuratechwebsite-nuratechapp-kndqsd:latest|547MB
+selenium/standalone-chromium:latest|2.17GB
+akaunting/akaunting:latest|972MB
+n8nio/n8n:latest|1.17GB
+getmeili/meilisearch:v1.35.1|157MB
+ubuntu/squid:latest|205MB
+postgres:<none>|451MB
+postgres:17-alpine|284MB
+pgvector/pgvector:0.8.0-pg15-trixie|448MB
+traefik:v3.5.0|226MB
+redis:<none>|117MB
+clickhouse/clickhouse-server:24.8|612MB
+semitechnologies/weaviate:1.27.0|161MB
+ohif/viewer:latest|39.4MB
+===COMPOSE_FILES===
+/opt/dify/docker/tidb/docker-compose.yaml
+/opt/dify/docker/docker-compose.yaml
+/opt/medplum/docker-compose.yml
+/opt/colibri/docker/docker-compose.yml
+/opt/ohif/docker-compose.yml
+/opt/medisun/docker-compose.yml
+/opt/paperclip-ai/paperclip/docker/docker-compose.yml
+/opt/medisun-emr-bot/compose.yaml
+/opt/akaunting/docker-compose.yml
+/opt/medisun-redis/docker-compose.yml
+/root/Farmer-irrigation/docker-compose.yml
+/docker/librechat/.devcontainer/docker-compose.yml
+/docker/librechat/docker-compose.yml
+/docker/librechat/.do/gitnexus/docker-compose.yml
+/docker/langfuse/docker-compose.yml
+===SYSTEMD_RUNNING===
+colibri-nura.service
+containerd.service
+cron.service
+dbus.service
+docker.service
+fwupd.service
+getty@tty1.service
+ModemManager.service
+multipathd.service
+ollama.service
+polkit.service
+qemu-guest-agent.service
+rsyslog.service
+serial-getty@ttyS0.service
+ssh.service
+systemd-journald.service
+systemd-logind.service
+systemd-networkd.service
+systemd-resolved.service
+systemd-timesyncd.service
+systemd-udevd.service
+tailscaled.service
+udisks2.service
+unattended-upgrades.service
+user@0.service
+===SYSTEMD_ENABLED===
+===LISTENING_PORTS===
+0.0.0.0:8449 users:(("docker-proxy",pid=2648550,fd=7))
+0.0.0.0:9101 users:(("docker-proxy",pid=911821,fd=7))
+0.0.0.0:9100 users:(("docker-proxy",pid=911807,fd=7))
+0.0.0.0:9090 users:(("docker-proxy",pid=852239,fd=7))
+127.0.0.1:9000 users:(("docker-proxy",pid=852194,fd=7))
+127.0.0.1:9091 users:(("docker-proxy",pid=852258,fd=7))
+127.0.0.1:8642 users:(("sshd",pid=1378295,fd=7))
+127.0.0.54:53 users:(("systemd-resolve",pid=374189,fd=17))
+127.0.0.53%lo:53 users:(("systemd-resolve",pid=374189,fd=15))
+0.0.0.0:80 users:(("docker-proxy",pid=2676,fd=7))
+0.0.0.0:22 users:(("sshd",pid=374011,fd=3),("systemd",pid=1,fd=149))
+127.0.0.1:3030 users:(("docker-proxy",pid=3191349,fd=7))
+0.0.0.0:443 users:(("docker-proxy",pid=2704,fd=7))
+0.0.0.0:3080 users:(("docker-proxy",pid=4141387,fd=7))
+0.0.0.0:3100 users:(("docker-proxy",pid=3384624,fd=7))
+0.0.0.0:3306 users:(("docker-proxy",pid=1885,fd=7))
+0.0.0.0:3020 users:(("docker-proxy",pid=3200056,fd=7))
+127.0.0.1:8000 users:(("coli",pid=374215,fd=3))
+127.0.0.1:8123 users:(("docker-proxy",pid=852187,fd=7))
+0.0.0.0:5003 users:(("docker-proxy",pid=2647885,fd=7))
+127.0.0.1:6379 users:(("docker-proxy",pid=2203,fd=7))
+127.0.0.1:6380 users:(("docker-proxy",pid=856329,fd=7))
+0.0.0.0:56379 users:(("docker-proxy",pid=38114,fd=7))
+127.0.0.1:5432 users:(("docker-proxy",pid=852122,fd=7))
+127.0.0.1:5540 users:(("docker-proxy",pid=2006,fd=7))
+0.0.0.0:8103 users:(("docker-proxy",pid=53796,fd=7))
+0.0.0.0:8081 users:(("docker-proxy",pid=2648534,fd=7))
+0.0.0.0:8083 users:(("docker-proxy",pid=963944,fd=7))
+0.0.0.0:8082 users:(("docker-proxy",pid=671812,fd=7))
+0.0.0.0:55432 users:(("docker-proxy",pid=36657,fd=7))
+[::]:8449 users:(("docker-proxy",pid=2648558,fd=7))
+[::]:9101 users:(("docker-proxy",pid=911828,fd=7))
+[::]:9100 users:(("docker-proxy",pid=911814,fd=7))
+[::]:9090 users:(("docker-proxy",pid=852248,fd=7))
+*:11434 users:(("ollama",pid=373961,fd=4))
+[::]:80 users:(("docker-proxy",pid=2686,fd=7))
+[::]:22 users:(("sshd",pid=374011,fd=4),("systemd",pid=1,fd=150))
+[::]:443 users:(("docker-proxy",pid=2713,fd=7))
+[::]:3080 users:(("docker-proxy",pid=4141394,fd=7))
+[::]:3100 users:(("docker-proxy",pid=3384632,fd=7))
+[::]:3306 users:(("docker-proxy",pid=1895,fd=7))
+*:2377 users:(("dockerd",pid=929,fd=71))
+[::]:3020 users:(("docker-proxy",pid=3200063,fd=7))
+[::1]:8642 users:(("sshd",pid=1378295,fd=5))
+[::]:5003 users:(("docker-proxy",pid=2647891,fd=7))
+[::]:56379 users:(("docker-proxy",pid=38120,fd=7))
+*:7946 users:(("dockerd",pid=929,fd=130))
+[::]:8103 users:(("docker-proxy",pid=53807,fd=7))
+[::]:8081 users:(("docker-proxy",pid=2648542,fd=7))
+[::]:8083 users:(("docker-proxy",pid=963951,fd=7))
+[::]:8082 users:(("docker-proxy",pid=671819,fd=7))
+[::]:55432 users:(("docker-proxy",pid=36671,fd=7))
+===NGINX_SITES===
+===NGINX_SERVER_NAMES===
+===NGINX_PROXY_PASS===
+===APACHE_VHOSTS===
+===TLS_CERTS===
+===CRON_ROOT===
+===CRON_D===
+certbot
+docker-builder-prune
+docker-image-prune
+e2scrub_all
+sysstat
+---
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+0 */12 * * * root test -x /usr/bin/certbot -a \! -d /run/systemd/system && perl -e 'sleep int(rand(43200))' && certbot -q renew --no-random-sleep-on-renew
+43 3 * * 0 root docker builder prune -f > /dev/null 2>&1
+7 0 * * * root docker image prune -af --filter "until=24h" > /dev/null 2>&1
+30 3 * * 0 root test -e /run/systemd/system || SERVICE_MODE=1 /usr/lib/x86_64-linux-gnu/e2fsprogs/e2scrub_all_cron
+10 3 * * * root test -e /run/systemd/system || SERVICE_MODE=1 /sbin/e2scrub_all -A -r
+PATH=/usr/lib/sysstat:/usr/sbin:/usr/sbin:/usr/bin:/sbin:/bin
+5-55/10 * * * * root command -v debian-sa1 > /dev/null && debian-sa1 1 1
+59 23 * * * root command -v debian-sa1 > /dev/null && debian-sa1 60 2
+===USER_CRONS===
+===DATABASES===
+dokploy-redis.1.td9qp4ko5pj09wq2i9kwvwhdw|redis:7
+dokploy-postgres.1.hsd6i320z3ido9m70u0y4qabx|postgres:16
+akaunting-db|mariadb:10.6
+medplum-redis-1|redis:7
+medplum-postgres-1|postgres:16
+docker-redis-1|redis:6-alpine
+docker-db_postgres-1|postgres:15-alpine
+chat-mongodb|mongo:8.0.20
+langfuse-redis-1|redis:7
+langfuse-postgres-1|postgres:17
+langfuse-db|postgres:16
+medisun-redis|redis:7-alpine
+medisun-redisinsight|redis/redisinsight:latest
+medisun-emr-bot-mysql-1|mysql:8.4
+paperclip-db|postgres:17-alpine
+n8n-n8nwithpostgres-a9xuj2-n8n-1|n8nio/n8n:latest
+n8n-n8nwithpostgres-a9xuj2-postgres-1|postgres:17-alpine
+/var/lib/fwupd/pending.db
+/var/lib/command-not-found/commands.db
+/var/lib/PackageKit/transactions.db
+/var/cache/snapd/commands.db
+/var/cache/man/index.db
+/opt/medisun-emr-bot/database/database.sqlite
+===WEB_ROOTS_APPS===
+/opt/dify/api/app.py
+/opt/colibri/web/index.html
+/opt/colibri/site/index.html
+/opt/medisun/app/index.php
+/opt/medisun-emr-bot/public/index.php
+/root/nuratech-website/client/index.html
+===APP_DIRS===
+/opt/ag.sql
+/opt/ag2.sql
+/opt/akaunting
+/opt/c1.sql
+/opt/colibri
+/opt/containerd
+/opt/cred.sql
+/opt/dify
+/opt/docsgpt-issues.sql
+/opt/g4-notthink.modelfile
+/opt/gr.sql
+/opt/gs.sql
+/opt/hp.sql
+/opt/i6a.sql
+/opt/issue6.sql
+/opt/librechat-pack.tgz
+/opt/litellm
+/opt/m1.sql
+/opt/med-weights
+/opt/medisun
+/opt/medisun-emr-bot
+/opt/medisun-redis
+/opt/medplum
+/opt/mig001.sql
+/opt/mkt.sql
+/opt/nura-corpora
+/opt/ohif
+/opt/paperclip-20-questions.sql
+/opt/paperclip-ai
+/opt/paperclip-fitness-hire.sql
+/opt/paperclip-hire-engineer.sql
+/opt/paperclip-products-34.sql
+/opt/paperclip-sales-team-train.sql
+/opt/paperclip-sales-team.sql
+/opt/paperless
+/opt/phoneintel-venv
+/opt/pp-agents.sql
+/opt/pp-issues.sql
+/opt/radiology-models
+/opt/radiology-venv
+===PM2===
+none
+===LANG_RUNTIMES===
+php: absent
+python3: Python 3.12.3
+node: absent
+npm: absent
+java: absent
+go: absent
+ruby: absent
+===FIREWALL_LOCAL===
+-P INPUT ACCEPT
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-N DOCKER
+-N DOCKER-BRIDGE
+-N DOCKER-CT
+-N DOCKER-FORWARD
+-N DOCKER-ISOLATION-STAGE-1
+-N DOCKER-ISOLATION-STAGE-2
+-N DOCKER-USER
+-A FORWARD -j DOCKER-USER
+-A FORWARD -j DOCKER-FORWARD
+-A DOCKER -d 172.17.0.3/32 ! -i docker0 -o docker0 -p tcp -m tcp --dport 9001 -j ACCEPT
+-A DOCKER -d 172.17.0.3/32 ! -i docker0 -o docker0 -p tcp -m tcp --dport 9000 -j ACCEPT
+-A DOCKER -d 172.30.0.2/32 ! -i br-fa6e6e1c0fb6 -o br-fa6e6e1c0fb6 -p tcp -m tcp --dport 80 -j ACCEPT
+===END===

@@ -1,0 +1,538 @@
+===HOST===
+srv1441409
+72.61.71.211 100.88.16.54 10.10.0.1 192.168.96.1 172.28.0.1 192.168.48.1 172.31.0.1 172.18.0.1 192.168.80.1 192.168.240.1 192.168.0.1 172.27.0.1 172.17.0.1 172.30.0.1 192.168.112.1 192.168.192.1 172.25.0.1 172.23.0.1 172.21.0.1 192.168.176.1 192.168.64.1 172.24.0.1 192.168.144.1 172.19.0.1 172.22.0.1 172.26.0.1 192.168.32.1 172.29.0.1 192.168.160.1 192.168.128.1 172.20.0.1 2a02:4780:4:7de5::1 fd7a:115c:a1e0::1a3a:1037 
+6.8.0-138-generic
+up 2 weeks, 6 days, 12 hours, 49 minutes
+===OS===
+Ubuntu 24.04.4 LTS
+===DISK===
+/dev/sda1       387G  261G  127G  68% /
+===DOCKER_CONTAINERS===
+carepilot-api|carepilot-api:local|Up 13 hours (healthy)|0.0.0.0:8100->8000/tcp, [::]:8100->8000/tcp
+nura-openemr-mcp|nura-openemr-mcp:0.2.1|Up 46 hours|
+hermes-gateway|nousresearch/hermes-agent:latest|Up 26 hours (healthy)|0.0.0.0:8642->8642/tcp, [::]:8642->8642/tcp
+hermes-dashboard|7aea57bcbb6d|Up 8 days|0.0.0.0:9119->9119/tcp, [::]:9119->9119/tcp
+mirth-oie46-mirth-engine-1|nuratech/connect:4.6.0-nura.1|Up 6 days|0.0.0.0:6669->6669/tcp, [::]:6669->6669/tcp, 0.0.0.0:6663->6661/tcp, [::]:6663->6661/tcp, 0.0.0.0:8086->8080/tcp, [::]:8086->8080/tcp, 0.0.0.0:8445->8443/tcp, [::]:8445->8443/tcp
+chatwoot-sidekiq-1|chatwoot/chatwoot:latest|Up 2 weeks|3000/tcp
+chatwoot-rails-1|chatwoot/chatwoot:latest|Up 2 weeks|0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp
+chatwoot-redis-1|redis:alpine|Up 2 weeks (healthy)|6379/tcp
+nura-radai-registry|postgres:15|Up 2 weeks|5432/tcp
+nura-radai-orchestrator|deploy-orchestrator|Up 2 weeks|0.0.0.0:8090->8090/tcp, [::]:8090->8090/tcp
+radris-stack-radris-1|radris/radris-app:latest|Up 2 weeks|
+radris-stack-orthanc-1|orthancteam/orthanc:latest-full|Up 2 weeks|0.0.0.0:4242->4242/tcp, [::]:4242->4242/tcp, 0.0.0.0:8042->8042/tcp, [::]:8042->8042/tcp
+nura-ris-web|nuratech/nura-ris:1.8|Up 2 weeks (healthy)|0.0.0.0:32790->80/tcp, [::]:32790->80/tcp
+nura-ris-db|mariadb:10.11|Up 2 weeks (healthy)|3306/tcp
+nura-coding-coding-agent-1|nuratech/nura-coding:0.1.0|Up 8 days (healthy)|0.0.0.0:8001->8000/tcp, [::]:8001->8000/tcp
+mirth-oie46-postgres-db-1|postgres:16|Up 2 weeks (healthy)|5432/tcp
+radris-stack-nginx-1|nginx:latest|Up 2 weeks|0.0.0.0:80->80/tcp, [::]:80->80/tcp, 0.0.0.0:443->443/tcp, [::]:443->443/tcp
+ohif-viewer|ohif/viewer:latest|Up 2 weeks|443/tcp, 0.0.0.0:32791->80/tcp, [::]:32791->80/tcp
+radris-stack-db-1|postgres:15|Up 2 weeks|5432/tcp
+obd-bridge|obd-bridge-obd-bridge|Up 2 weeks|
+openclaw|ghcr.io/openclaw/openclaw:latest|Up 2 weeks (healthy)|0.0.0.0:18789->18789/tcp, [::]:18789->18789/tcp
+obsidian-livesync-couchdb|couchdb:3.3|Up 2 weeks|4369/tcp, 9100/tcp, 0.0.0.0:5984->5984/tcp, [::]:5984->5984/tcp
+chatwoot-postgres-1|pgvector/pgvector:pg16|Up 2 weeks (healthy)|5432/tcp
+mcp-omophub|omophub/omophub-mcp:latest|Up 2 weeks|0.0.0.0:3100->3100/tcp, [::]:3100->3100/tcp
+mattermost-r2wm-mattermost-1|mattermost/mattermost-team-edition:latest|Up 2 weeks (healthy)|8067/tcp, 8074-8075/tcp, 0.0.0.0:32772->8065/tcp, [::]:32772->8065/tcp
+mattermost-r2wm-postgres-1|postgres:16|Up 2 weeks|5432/tcp
+home-assistant-ftgt-home-assistant-1|ghcr.io/home-assistant/home-assistant:stable|Up 2 weeks|0.0.0.0:32771->8123/tcp, [::]:32771->8123/tcp
+tandoor-recipes-1kuo-tandoor-1|vabene1111/recipes:latest|Up 2 weeks|8080/tcp, 0.0.0.0:32768->80/tcp, [::]:32768->80/tcp
+tandoor-recipes-1kuo-db-1|57c72fd2a128|Up 2 weeks (healthy)|5432/tcp
+openemr-zklo-openemr-1|openemr/openemr:latest|Up 2 weeks (healthy)|443/tcp, 0.0.0.0:32777->80/tcp, [::]:32777->80/tcp
+openemr-zklo-mariadb-1|mariadb:latest|Up 2 weeks (healthy)|3306/tcp
+postiz-kif1-postiz-1|ghcr.io/gitroomhq/postiz-app:latest|Up 2 weeks|0.0.0.0:32778->5000/tcp, [::]:32778->5000/tcp
+postiz-kif1-temporal-admin-tools-1|temporalio/admin-tools:1.28.1-tctl-1.18.4-cli-1.4.1|Up 2 weeks|
+postiz-kif1-temporal-ui-1|temporalio/ui:2.34.0|Up 2 weeks|8080/tcp
+postiz-kif1-temporal-1|temporalio/auto-setup:1.28.1|Up 2 weeks|6933-6935/tcp, 6939/tcp, 7233-7235/tcp, 7239/tcp
+postiz-kif1-temporal-postgresql-1|postgres:16|Up 2 weeks (healthy)|5432/tcp
+postiz-kif1-postiz-postgres-1|postgres:17-alpine|Up 2 weeks (healthy)|5432/tcp
+postiz-kif1-postiz-redis-1|6ab0b6e73817|Up 2 weeks (healthy)|6379/tcp
+postiz-kif1-temporal-elasticsearch-1|elasticsearch:7.17.27|Up 8 days (healthy)|9200/tcp, 9300/tcp
+qdrant-fytk-qdrant-1|qdrant/qdrant:latest|Up 2 weeks|6334/tcp, 0.0.0.0:32776->6333/tcp, [::]:32776->6333/tcp
+redis-gc8b-redis-1|9d317178ecea|Up 2 weeks|0.0.0.0:32770->6379/tcp, [::]:32770->6379/tcp
+nginx-proxy-manager-app-1|jc21/nginx-proxy-manager:latest|Up 2 weeks|0.0.0.0:8080->80/tcp, [::]:8080->80/tcp, 0.0.0.0:8181->81/tcp, [::]:8181->81/tcp, 0.0.0.0:8443->443/tcp, [::]:8443->443/tcp
+nginx-proxy-manager-db-1|mariadb:10.11|Up 2 weeks|3306/tcp
+meshcentral-8atq-meshcentral-1|ghcr.io/ylianst/meshcentral:1.1.59|Up 2 weeks|80/tcp, 0.0.0.0:32775->443/tcp, [::]:32775->443/tcp
+agentmemory-ss1j-agentmemory-1|node:22-slim|Up 2 weeks|0.0.0.0:32774->3111/tcp, [::]:32774->3111/tcp
+nuratech-mcp-server|nuratech-mcp-server|Up 2 weeks|0.0.0.0:8088->8088/tcp, [::]:8088->8088/tcp
+===DOCKER_COMPOSE_PROJECTS===
+agentmemory-ss1j
+backend
+chatwoot
+deploy
+home-assistant-ftgt
+mattermost-r2wm
+mcp-medical
+meshcentral-8atq
+mirth-oie46
+nginx-proxy-manager
+nura-coding
+nura-nuratech-mapping
+nura-ris
+obd-bridge
+obsidian-livesync
+ohif
+openclaw
+openemr-zklo
+postiz-kif1
+qdrant-fytk
+radris-stack
+redis-gc8b
+tandoor-recipes-1kuo
+===DOCKER_VOLUMES===
+3f2eb7b0c4d958b784ff1c7b76d8cd813cd3befd16e944bfe3a34ffa7e17d3d0
+7ea220b805d0728bbaa42ff86da68b27f75e9cb2ea24306001e38156f599b2d5
+7eaefbddf52e69642c756a3aae34acd27f8696d6ac48f95900c6acaff770ad71
+5958cb8036cfba5b795d1321ea939fe65e6b11271b0d62fe8d7761204bad1740
+a2223f00ab17f677c4e12dbe00943d32da38951aaba0da6e6ad4544ee296d580
+agentmemory-ss1j_agentmemory-data
+agentmemory-ss1j_agentmemory-runtime
+cb1685c833e376199142c8c6aac2e634a977b283ed9192bd0af20ec307c783b0
+chatwoot_postgres_data
+chatwoot_redis_data
+chatwoot_storage_data
+de9590f798c1048e6823f69fcbf5f5babb468ff5386f01b16f42b6708e809186
+deploy_registry-pgdata
+deployment_postgres_data
+docsgpt-oss_postgres_data
+docsgpt_postgres_data
+e3422d9a305d5a331a006999d7ceb8aa1e5919cc14a24996e4b09619ddbbd506
+home-assistant-ftgt_home-assistant-config
+mattermost-r2wm_mattermost_client_plugins
+mattermost-r2wm_mattermost_config
+mattermost-r2wm_mattermost_data
+mattermost-r2wm_mattermost_logs
+mattermost-r2wm_mattermost_plugins
+mattermost-r2wm_postgres_data
+meshcentral-8atq_meshcentral-backups
+meshcentral-8atq_meshcentral-data
+meshcentral-8atq_meshcentral-files
+meshcentral-8atq_meshcentral-web
+mirth-connect_mirth_appdata
+mirth-oie46_oie46-appdata
+mirth-oie46_oie46-pg
+mirth-oie_appdata
+mirth-oie_pgdata
+nginx-proxy-manager_npm_data
+nginx-proxy-manager_npm_db
+nginx-proxy-manager_npm_letsencrypt
+obsidian-livesync_couchdb-data
+oie46_oie46-appdata
+oie46_oie46-pg
+openemr-zklo_openemr_db
+openemr-zklo_openemr_logs
+openemr-zklo_openemr_sites
+orthanc_orthanc-db
+postiz-kif1_postgres-data
+postiz-kif1_postiz-config
+postiz-kif1_postiz-uploads
+postiz-kif1_redis-data
+postiz-kif1_temporal-es-data
+postiz-kif1_temporal-postgres-data
+qdrant-fytk_qdrant-storage
+redis-gc8b_redis_data
+tandoor-recipes-1kuo_db-data
+tandoor-recipes-1kuo_mediafiles
+tandoor-recipes-1kuo_staticfiles
+===DOCKER_NETWORKS===
+agentmemory-ss1j_default|bridge
+backend_default|bridge
+bridge|bridge
+chatwoot_default|bridge
+hermes-stack|bridge
+home-assistant-ftgt_default|bridge
+host|host
+mattermost-r2wm_default|bridge
+medical-jarvis-net|bridge
+meshcentral-8atq_default|bridge
+mirth-connect_default|bridge
+mirth-oie46_default|bridge
+nginx-proxy-manager_default|bridge
+none|null
+nura-coding_default|bridge
+nura-nuratech-mapping_default|bridge
+nura-nuratech-mapping_hermes-net|bridge
+nura-ris_default|bridge
+obd-bridge_default|bridge
+obsidian-livesync_default|bridge
+ohif_default|bridge
+openclaw_default|bridge
+openemr-zklo_default|bridge
+paperclip-kaqe_default|bridge
+postiz-kif1_postiz-network|bridge
+postiz-kif1_temporal-network|bridge
+qdrant-fytk_default|bridge
+radris-stack_default|bridge
+redis-gc8b_default|bridge
+tandoor-recipes-1kuo_default|bridge
+===DOCKER_IMAGES===
+carepilot-api:local|255MB
+nura-openemr-mcp:0.2.1|265MB
+nousresearch/hermes-agent:latest|3.89GB
+nousresearch/hermes-agent:v2026.8.31|3.89GB
+deploy-orchestrator:latest|8.13GB
+nuratech/nura-ris:1.8|708MB
+nuratech/nura-coding:0.1.0|10.7GB
+nuratech/connect:4.6.0-nura.1|982MB
+radris-local:0.7.0|2.24GB
+radris/radris-app:latest|2.24GB
+postgres:16-alpine|420MB
+postgres:15|633MB
+docsgpt-frontend:latest|1.23GB
+docsgpt-oss-backend:latest|12.2GB
+docsgpt-oss-worker:latest|12.2GB
+docsgpt-oss-frontend:latest|1.22GB
+deployment-frontend:latest|1.22GB
+obd-bridge-obd-bridge:latest|204MB
+nginx:latest|241MB
+alpine/socat:latest|15MB
+php:8.2-apache|714MB
+chatwoot/chatwoot:latest|2.85GB
+redis:8-alpine|155MB
+redis:alpine|155MB
+redis:6-alpine|41.8MB
+orthancteam/orthanc:latest-full|2.95GB
+orthancteam/orthanc:latest|2.27GB
+openemr/openemr:latest|4.14GB
+zenika/alpine-chrome:latest|958MB
+ghcr.io/home-assistant/home-assistant:stable|3.42GB
+rustdesk/rustdesk-server:1.1.16|19MB
+qdrant/qdrant:latest|270MB
+norishapp/norish:latest|1.93GB
+postgres:16|642MB
+nginx:alpine|93.6MB
+xhofe/alist:latest|189MB
+node:22-slim|329MB
+ghcr.io/openclaw/openclaw:latest|1.73GB
+pgvector/pgvector:pg16|621MB
+mattermost/mattermost-team-edition:latest|1.13GB
+postgres:17-alpine|424MB
+vabene1111/recipes:latest|1.33GB
+mariadb:10.11|458MB
+mariadb:latest|476MB
+ghcr.io/hostinger/hvps-paperclip:latest|4.71GB
+ghcr.io/gitroomhq/postiz-app:latest|5.66GB
+nuratech-mcp-server:latest|210MB
+jc21/nginx-proxy-manager:latest|1.79GB
+omophub/omophub-mcp:latest|234MB
+ghcr.io/ylianst/meshcentral:1.1.59|1.23GB
+ghcr.io/activepieces/activepieces:latest|2.93GB
+jodogne/orthanc:latest|362MB
+openintegrationengine/engine:latest|833MB
+openintegrationengine/engine:latest-ubuntu-jdk|1.1GB
+temporalio/admin-tools:1.28.1-tctl-1.18.4-cli-1.4.1|749MB
+temporalio/auto-setup:1.28.1|745MB
+couchdb:3.3|340MB
+elasticsearch:7.17.27|1.01GB
+temporalio/ui:2.34.0|163MB
+nextgenhealthcare/connect:latest-zulu-alpine-jdk|1.52GB
+===COMPOSE_FILES===
+/docker/obsidian-livesync/docker-compose.yml
+/docker/rustdesk-server/docker-compose.yml
+/docker/openclaw/docker-compose.yml
+/docker/openemr-zklo/docker-compose.yml
+/docker/nura-ris/docker-compose.yml
+/docker/home-assistant-ftgt/docker-compose.yml
+/docker/openpilot-sim/docker-compose.yml
+/docker/nura-coding-agent/docker-compose.yml
+/docker/postiz-kif1/docker-compose.yml
+/docker/obd-bridge/docker-compose.yml
+/docker/radris-stack/docker-compose.yml
+/docker/qdrant-fytk/docker-compose.yml
+/docker/mattermost-r2wm/docker-compose.yml
+/docker/docsgpt/deployment/docker-compose.yaml
+/docker/docsgpt/docker-compose.yml
+/docker/thairis/docker-compose.yml
+/docker/mirth-connect/docker-compose.yml
+/docker/chatwoot/docker-compose.yml
+/docker/nginx-proxy-manager/docker-compose.yml
+/docker/agentmemory-ss1j/docker-compose.yml
+/docker/meshcentral-8atq/docker-compose.yml
+/docker/nura-nuratech-mapping/docker-compose.yml
+/docker/tandoor-recipes-1kuo/docker-compose.yml
+/docker/oie46/docker-compose.yml
+/docker/ohif/docker-compose.yml
+/docker/paperclip-kaqe/docker-compose.yml
+/docker/redis-gc8b/docker-compose.yml
+/opt/nura-radiology-ai/deploy/docker-compose.yml
+/opt/thairis/docker-compose.yml
+/usr/local/lib/hermes-agent/docker-compose.yml
+/root/.hermes/rustdesk-server/docker-compose.yml
+/root/.hermes/carepilot/backend.bak.med5.20260914T150801Z/docker-compose.yml
+/root/.hermes/carepilot/backend.bak.presign9.20260914T154229Z/docker-compose.yml
+/root/.hermes/carepilot/backend.bak.stop7.20260914T152509Z/docker-compose.yml
+/root/.hermes/carepilot/backend/docker-compose.yml
+/root/.hermes/carepilot/backend.bak.mcp10.20260914T155403Z/docker-compose.yml
+/root/.hermes/carepilot/backend.bak.safetyharden.20260914T151322Z/docker-compose.yml
+/root/.hermes/carepilot/backend.bak.ccm4.20260914T150204Z/docker-compose.yml
+/root/.hermes/carepilot/backend.bak.econ6.20260914T151657Z/docker-compose.yml
+/root/.hermes/carepilot/backend.bak.20260909T034609Z/docker-compose.yml
+===SYSTEMD_RUNNING===
+containerd.service
+cron.service
+dbus.service
+docker.service
+fwupd.service
+getty@tty1.service
+gw-relay.service
+ModemManager.service
+polkit.service
+qemu-guest-agent.service
+rsyslog.service
+serial-getty@ttyS0.service
+ssh.service
+systemd-journald.service
+systemd-logind.service
+systemd-networkd.service
+systemd-resolved.service
+systemd-timesyncd.service
+systemd-udevd.service
+tailscaled.service
+udisks2.service
+unattended-upgrades.service
+upower.service
+user@0.service
+===SYSTEMD_ENABLED===
+apparmor.service
+apport.service
+blk-availability.service
+cloud-config.service
+cloud-final.service
+cloud-init-local.service
+cloud-init.service
+console-setup.service
+containerd.service
+cron.service
+dmesg.service
+docker.service
+e2scrub_reap.service
+finalrd.service
+getty@.service
+grub-common.service
+grub-initrd-fallback.service
+gw-relay.service
+keyboard-setup.service
+lvm2-monitor.service
+ModemManager.service
+netfilter-persistent.service
+networkd-dispatcher.service
+open-iscsi.service
+open-vm-tools.service
+pollinate.service
+rsyslog.service
+secureboot-db.service
+setvtrgb.service
+snapd.apparmor.service
+snapd.autoimport.service
+snapd.core-fixup.service
+snapd.recovery-chooser-trigger.service
+snapd.seeded.service
+snapd.service
+snapd.system-shutdown.service
+sysstat.service
+systemd-networkd-wait-online.service
+systemd-networkd.service
+systemd-pstore.service
+systemd-resolved.service
+systemd-timesyncd.service
+tailscaled.service
+thermald.service
+ua-reboot-cmds.service
+ubuntu-advantage.service
+udisks2.service
+unattended-upgrades.service
+vgauth.service
+===LISTENING_PORTS===
+0.0.0.0:8642 users:(("docker-proxy",pid=1385597,fd=8))
+0.0.0.0:8443 users:(("docker-proxy",pid=7218,fd=8))
+0.0.0.0:8445 users:(("docker-proxy",pid=3079212,fd=8))
+0.0.0.0:9119 users:(("docker-proxy",pid=1290845,fd=8))
+172.17.0.1:8787 users:(("node",pid=2657611,fd=18))
+127.0.0.53%lo:53 users:(("systemd-resolve",pid=2051978,fd=15))
+0.0.0.0:4242 users:(("docker-proxy",pid=7380,fd=8))
+0.0.0.0:5984 users:(("docker-proxy",pid=6595,fd=8))
+0.0.0.0:6663 users:(("docker-proxy",pid=3079145,fd=8))
+0.0.0.0:6669 users:(("docker-proxy",pid=3079166,fd=8))
+127.0.0.54:53 users:(("systemd-resolve",pid=2051978,fd=17))
+0.0.0.0:8042 users:(("docker-proxy",pid=7437,fd=8))
+0.0.0.0:8001 users:(("docker-proxy",pid=1287625,fd=8))
+0.0.0.0:8100 users:(("docker-proxy",pid=3472890,fd=8))
+0.0.0.0:8111 users:(("python3",pid=3089635,fd=3))
+0.0.0.0:8080 users:(("docker-proxy",pid=7126,fd=8))
+0.0.0.0:8086 users:(("docker-proxy",pid=3079189,fd=8))
+0.0.0.0:8088 users:(("docker-proxy",pid=5274,fd=8))
+0.0.0.0:8090 users:(("docker-proxy",pid=7023,fd=8))
+0.0.0.0:8181 users:(("docker-proxy",pid=7164,fd=8))
+0.0.0.0:8160 users:(("python3",pid=3342169,fd=3))
+0.0.0.0:443 users:(("docker-proxy",pid=8812,fd=8))
+0.0.0.0:22 users:(("sshd",pid=2051959,fd=3),("systemd",pid=1,fd=292))
+0.0.0.0:32790 users:(("docker-proxy",pid=6730,fd=8))
+0.0.0.0:32791 users:(("docker-proxy",pid=5076,fd=8))
+0.0.0.0:32768 users:(("docker-proxy",pid=3971,fd=8))
+0.0.0.0:32770 users:(("docker-proxy",pid=5472,fd=8))
+0.0.0.0:32771 users:(("docker-proxy",pid=5518,fd=8))
+0.0.0.0:32772 users:(("docker-proxy",pid=6402,fd=8))
+0.0.0.0:32774 users:(("docker-proxy",pid=6642,fd=8))
+0.0.0.0:32775 users:(("docker-proxy",pid=6681,fd=8))
+0.0.0.0:32776 users:(("docker-proxy",pid=6791,fd=8))
+0.0.0.0:32777 users:(("docker-proxy",pid=7079,fd=8))
+0.0.0.0:32778 users:(("docker-proxy",pid=7658,fd=8))
+0.0.0.0:80 users:(("docker-proxy",pid=8754,fd=8))
+0.0.0.0:18789 users:(("docker-proxy",pid=6856,fd=8))
+100.88.16.54:41426 users:(("tailscaled",pid=805,fd=26))
+0.0.0.0:3000 users:(("docker-proxy",pid=7308,fd=8))
+0.0.0.0:3100 users:(("docker-proxy",pid=6321,fd=8))
+[fd7a:115c:a1e0::1a3a:1037]:36362 users:(("tailscaled",pid=805,fd=27))
+[::]:8642 users:(("docker-proxy",pid=1385603,fd=8))
+[::]:8443 users:(("docker-proxy",pid=7226,fd=8))
+[::]:8445 users:(("docker-proxy",pid=3079219,fd=8))
+[::]:9119 users:(("docker-proxy",pid=1290851,fd=8))
+[::]:4242 users:(("docker-proxy",pid=7403,fd=8))
+[::]:5984 users:(("docker-proxy",pid=6603,fd=8))
+[::]:6663 users:(("docker-proxy",pid=3079150,fd=8))
+[::]:6669 users:(("docker-proxy",pid=3079172,fd=8))
+[::]:8042 users:(("docker-proxy",pid=7450,fd=8))
+[::]:8001 users:(("docker-proxy",pid=1287637,fd=8))
+[::]:8100 users:(("docker-proxy",pid=3472896,fd=8))
+[::]:8080 users:(("docker-proxy",pid=7136,fd=8))
+[::]:8086 users:(("docker-proxy",pid=3079197,fd=8))
+[::]:8088 users:(("docker-proxy",pid=5293,fd=8))
+[::]:8090 users:(("docker-proxy",pid=7029,fd=8))
+[::]:8181 users:(("docker-proxy",pid=7175,fd=8))
+[::]:443 users:(("docker-proxy",pid=8817,fd=8))
+[::]:22 users:(("sshd",pid=2051959,fd=4),("systemd",pid=1,fd=294))
+[::]:32790 users:(("docker-proxy",pid=6740,fd=8))
+[::]:32791 users:(("docker-proxy",pid=5110,fd=8))
+[::]:32768 users:(("docker-proxy",pid=3995,fd=8))
+[::]:32770 users:(("docker-proxy",pid=5482,fd=8))
+[::]:32771 users:(("docker-proxy",pid=5529,fd=8))
+[::]:32772 users:(("docker-proxy",pid=6409,fd=8))
+[::]:32774 users:(("docker-proxy",pid=6653,fd=8))
+[::]:32775 users:(("docker-proxy",pid=6689,fd=8))
+[::]:32776 users:(("docker-proxy",pid=6801,fd=8))
+[::]:32777 users:(("docker-proxy",pid=7084,fd=8))
+[::]:32778 users:(("docker-proxy",pid=7677,fd=8))
+[::]:80 users:(("docker-proxy",pid=8764,fd=8))
+[::]:18789 users:(("docker-proxy",pid=6865,fd=8))
+*:18642 users:(("socat",pid=2051932,fd=5))
+[::]:3000 users:(("docker-proxy",pid=7316,fd=8))
+[::]:3100 users:(("docker-proxy",pid=6337,fd=8))
+===NGINX_SITES===
+--- /etc/nginx/sites-enabled
+default
+mcp.nuratech.ai
+pacs.nuratech.ai
+--- /etc/nginx/conf.d
+--- /etc/nginx/sites-available
+default
+mcp.nuratech.ai
+pacs.nuratech.ai
+===NGINX_SERVER_NAMES===
+ _
+ example.com
+ mcp.nuratech.ai
+ pacs.nuratech.ai
+===NGINX_PROXY_PASS===
+proxy_pass http://127.0.0.1:8042;
+proxy_pass http://127.0.0.1:8088;
+===APACHE_VHOSTS===
+===TLS_CERTS===
+mcp.nuratech.ai|Dec 13 06:12:09 2026 GMT|DNS:mcp.nuratech.ai
+===CRON_ROOT===
+0 2 * * * /usr/local/bin/nura-vps-restic-backup.sh >> /var/log/restic/cron.log 2>&1
+===CRON_D===
+certbot
+docker-builder-prune
+e2scrub_all
+sysstat
+---
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+0 */12 * * * root test -x /usr/bin/certbot -a \! -d /run/systemd/system && perl -e 'sleep int(rand(43200))' && certbot -q renew --no-random-sleep-on-renew
+29 5 * * 4 root docker builder prune -f > /dev/null 2>&1
+30 3 * * 0 root test -e /run/systemd/system || SERVICE_MODE=1 /usr/lib/x86_64-linux-gnu/e2fsprogs/e2scrub_all_cron
+10 3 * * * root test -e /run/systemd/system || SERVICE_MODE=1 /sbin/e2scrub_all -A -r
+PATH=/usr/lib/sysstat:/usr/sbin:/usr/sbin:/usr/bin:/sbin:/bin
+5-55/10 * * * * root command -v debian-sa1 > /dev/null && debian-sa1 1 1
+59 23 * * * root command -v debian-sa1 > /dev/null && debian-sa1 60 2
+===USER_CRONS===
+[root] 0 2 * * * /usr/local/bin/nura-vps-restic-backup.sh >> /var/log/restic/cron.log 2>&1
+===DATABASES===
+chatwoot-redis-1|redis:alpine
+nura-radai-registry|postgres:15
+nura-ris-db|mariadb:10.11
+mirth-oie46-postgres-db-1|postgres:16
+radris-stack-db-1|postgres:15
+chatwoot-postgres-1|pgvector/pgvector:pg16
+mattermost-r2wm-postgres-1|postgres:16
+openemr-zklo-mariadb-1|mariadb:latest
+postiz-kif1-temporal-postgresql-1|postgres:16
+postiz-kif1-postiz-postgres-1|postgres:17-alpine
+postiz-kif1-postiz-redis-1|6ab0b6e73817
+qdrant-fytk-qdrant-1|qdrant/qdrant:latest
+redis-gc8b-redis-1|9d317178ecea
+nginx-proxy-manager-db-1|mariadb:10.11
+/run/containerd/io.containerd.mount-manager.v1.bolt/mounts.db
+/var/lib/fwupd/pending.db
+/var/lib/PackageKit/transactions.db
+/var/lib/command-not-found/commands.db
+/var/cache/snapd/commands.db
+/var/cache/fwupd/quirks.db
+/var/cache/man/index.db
+/opt/data/state.db
+/opt/data/kanban.db
+/opt/data/cron/executions.db
+/opt/hermes/data/state.db
+/opt/hermes/data/kanban.db
+/usr/lib/firmware/regulatory.db
+/root/.hermes/projects.db
+/root/.hermes/state.db
+/root/.hermes/memory_store.db
+/root/.hermes/.mem0/history.db
+/root/.hermes/response_store.db
+/root/.hermes/face-identity.db
+/root/.hermes/.hermes/state.db
+===WEB_ROOTS_APPS===
+/opt/nura-radiology-ai/orchestrator/main.py
+/opt/thairis/www/index.html
+/root/.hermes/nura-coding-agent/app.py
+/root/.hermes/meshtastic-monitor/app.py
+/root/.hermes/cop-globe/index.html
+/root/.hermes/emh/index.html
+/root/.hermes/nura-radiology-intelligence/app.py
+===APP_DIRS===
+/opt/containerd
+/opt/data
+/opt/flutter
+/opt/hermes
+/opt/nura-radiology-ai
+/opt/nuratech
+/opt/radis-src
+/opt/radis-src.tgz
+/opt/thairis
+===PM2===
+none
+===LANG_RUNTIMES===
+php: absent
+python3: Python 3.12.3
+node: v26.7.0
+npm: 11.19.0
+java: absent
+go: absent
+ruby: absent
+===FIREWALL_LOCAL===
+-P INPUT ACCEPT
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-N DOCKER
+-N DOCKER-BRIDGE
+-N DOCKER-CT
+-N DOCKER-FORWARD
+-N DOCKER-INTERNAL
+-N DOCKER-USER
+-N ts-forward
+-N ts-input
+-A INPUT -j ts-input
+-A INPUT -p tcp -m tcp --dport 9119 -j ACCEPT
+-A FORWARD -j ts-forward
+-A FORWARD -j DOCKER-USER
+===END===

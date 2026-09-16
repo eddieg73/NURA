@@ -1,0 +1,13 @@
+# Flutter build artifacts
+.dart_tool/
+build/
+.idea/
+*.iml
+.packages
+pubspec.lock
+frontend/lib/generated_plugin_registrant.dart
+
+# Dart/Python
+__pycache__/
+*.pyc
+.venv/

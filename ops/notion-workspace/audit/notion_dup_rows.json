@@ -1,0 +1,64 @@
+{
+ "Executive Projects": {
+  "A": 18,
+  "B": 17,
+  "both": 16,
+  "only_A": [
+   "Medisun Health Group \u2014 Nura ERP",
+   "NURA ARES \u2014 DARPA ICU-in-a-Box Program"
+  ],
+  "only_B": [
+   "Medisun Digital Operations & NURA ERP Integration"
+  ]
+ },
+ "Master Tasks & Commitments": {
+  "A": 78,
+  "B": 57,
+  "both": 57,
+  "only_A": [
+   "ARES \u2014 Build hardware-partner shortlist and NDA outreach",
+   "ARES \u2014 Confirm DSIP and SBA registry readiness",
+   "ARES \u2014 Confirm NIST 800-171 / SPRS status",
+   "ARES \u2014 Confirm SAM.gov / UEI status",
+   "ARES \u2014 Confirm proposing legal entity and affiliation with counsel",
+   "ARES \u2014 Decide NURA-prime vs hardware-prime posture",
+   "ARES \u2014 Decide partner-evidence non-answer stance before outreach",
+   "ARES \u2014 Define blood-product and cold-chain architecture",
+   "ARES \u2014 Define termination / withdrawal authority",
+   "ARES \u2014 Establish DoD/FDA accountability model",
+   "ARES \u2014 Establish triage and allocation authority boundary",
+   "ARES \u2014 Execute O2 metrology validation (tests M1\u2013M6)",
+   "ARES \u2014 Freeze three-mode mission architecture",
+   "ARES \u2014 Fund rapid Option-A autonomy bench proof",
+   "ARES \u2014 Make AIME uncertainty safeguards mandatory",
+   "ARES \u2014 Open FTO review for MELS and adjacent patents",
+   "ARES \u2014 Reconcile mass-estimation divergence before PDR",
+   "ARES \u2014 Reconcile task list against delivered artifacts",
+   "ARES \u2014 Resolve topic cost ceiling and proposal package",
+   "ARES \u2014 Select oxygen architecture prototype path",
+   "ARES \u2014 Send DARPA interpretation questions"
+  ],
+  "only_B": []
+ },
+ "Medisun Completed Work Register": {
+  "A": 27,
+  "B": 27,
+  "both": 27,
+  "only_A": [],
+  "only_B": []
+ },
+ "Organizations & Current Roles": {
+  "A": 9,
+  "B": 9,
+  "both": 9,
+  "only_A": [],
+  "only_B": []
+ },
+ "Prehospital & Aeromedical Evidence Board": {
+  "A": 6,
+  "B": 6,
+  "both": 6,
+  "only_A": [],
+  "only_B": []
+ }
+}

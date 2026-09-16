@@ -1,0 +1,353 @@
+{
+ "uncovered": [
+  "gateway process",
+  "qdrant",
+  "redis",
+  "cron roster",
+  "Notion",
+  "n8n",
+  "external endpoints"
+ ],
+ "dupes": {
+  "email-inbox-triage": [
+   "/opt/data/profiles/nura/skills/email/email-inbox-triage/SKILL.md",
+   "/opt/data/skills/email/email-inbox-triage/SKILL.md"
+  ],
+  "himalaya": [
+   "/opt/data/profiles/nura/skills/email/himalaya/SKILL.md",
+   "/opt/data/skills/email/himalaya/SKILL.md"
+  ],
+  "humanizer": [
+   "/opt/data/profiles/nura/skills/creative/humanizer/SKILL.md",
+   "/opt/data/skills/creative/humanizer/SKILL.md"
+  ],
+  "claude-design": [
+   "/opt/data/profiles/nura/skills/creative/claude-design/SKILL.md",
+   "/opt/data/skills/creative/claude-design/SKILL.md"
+  ],
+  "touchdesigner-mcp": [
+   "/opt/data/profiles/nura/skills/creative/touchdesigner-mcp/SKILL.md",
+   "/opt/data/skills/creative/touchdesigner-mcp/SKILL.md"
+  ],
+  "p5js": [
+   "/opt/data/profiles/nura/skills/creative/p5js/SKILL.md",
+   "/opt/data/skills/creative/p5js/SKILL.md"
+  ],
+  "manim-video": [
+   "/opt/data/profiles/nura/skills/creative/manim-video/SKILL.md",
+   "/opt/data/skills/creative/manim-video/SKILL.md"
+  ],
+  "sketch": [
+   "/opt/data/profiles/nura/skills/creative/sketch/SKILL.md",
+   "/opt/data/skills/creative/sketch/SKILL.md"
+  ],
+  "comfyui": [
+   "/opt/data/profiles/nura/skills/creative/comfyui/SKILL.md",
+   "/opt/data/skills/creative/comfyui/SKILL.md"
+  ],
+  "architecture-diagram": [
+   "/opt/data/profiles/nura/skills/creative/architecture-diagram/SKILL.md",
+   "/opt/data/skills/creative/architecture-diagram/SKILL.md"
+  ],
+  "ascii-video": [
+   "/opt/data/profiles/nura/skills/creative/ascii-video/SKILL.md",
+   "/opt/data/skills/creative/ascii-video/SKILL.md"
+  ],
+  "pretext": [
+   "/opt/data/profiles/nura/skills/creative/pretext/SKILL.md",
+   "/opt/data/skills/creative/pretext/SKILL.md"
+  ],
+  "popular-web-designs": [
+   "/opt/data/profiles/nura/skills/creative/popular-web-designs/SKILL.md",
+   "/opt/data/skills/creative/popular-web-designs/SKILL.md"
+  ],
+  "design-md": [
+   "/opt/data/profiles/nura/skills/creative/design-md/SKILL.md",
+   "/opt/data/skills/creative/design-md/SKILL.md"
+  ],
+  "excalidraw": [
+   "/opt/data/profiles/nura/skills/creative/excalidraw/SKILL.md",
+   "/opt/data/skills/creative/excalidraw/SKILL.md"
+  ],
+  "songwriting-and-ai-music": [
+   "/opt/data/profiles/nura/skills/creative/songwriting-and-ai-music/SKILL.md",
+   "/opt/data/skills/creative/songwriting-and-ai-music/SKILL.md"
+  ],
+  "baoyu-infographic": [
+   "/opt/data/profiles/nura/skills/creative/baoyu-infographic/SKILL.md",
+   "/opt/data/skills/creative/baoyu-infographic/SKILL.md"
+  ],
+  "ascii-art": [
+   "/opt/data/profiles/nura/skills/creative/ascii-art/SKILL.md",
+   "/opt/data/skills/creative/ascii-art/SKILL.md"
+  ],
+  "simplify-code": [
+   "/opt/data/profiles/nura/skills/software-development/simplify-code/SKILL.md",
+   "/opt/data/skills/software-development/simplify-code/SKILL.md"
+  ],
+  "node-inspect-debugger": [
+   "/opt/data/profiles/nura/skills/software-development/node-inspect-debugger/SKILL.md",
+   "/opt/data/skills/software-development/node-inspect-debugger/SKILL.md"
+  ],
+  "systematic-debugging": [
+   "/opt/data/profiles/nura/skills/software-development/systematic-debugging/SKILL.md",
+   "/opt/data/skills/software-development/systematic-debugging/SKILL.md"
+  ],
+  "inspecting-hermes-desktop-dom": [
+   "/opt/data/profiles/nura/skills/software-development/inspecting-hermes-desktop-dom/SKILL.md",
+   "/opt/data/skills/software-development/inspecting-hermes-desktop-dom/SKILL.md"
+  ],
+  "requesting-code-review": [
+   "/opt/data/profiles/nura/skills/software-development/requesting-code-review/SKILL.md",
+   "/opt/data/skills/software-development/requesting-code-review/SKILL.md"
+  ],
+  "test-driven-development": [
+   "/opt/data/profiles/nura/skills/software-development/test-driven-development/SKILL.md",
+   "/opt/data/skills/software-development/test-driven-development/SKILL.md"
+  ],
+  "python-debugpy": [
+   "/opt/data/profiles/nura/skills/software-development/python-debugpy/SKILL.md",
+   "/opt/data/skills/software-development/python-debugpy/SKILL.md"
+  ],
+  "github": [
+   "/opt/data/profiles/nura/skills/software-development/github/SKILL.md",
+   "/opt/data/skills/software-development/github/SKILL.md"
+  ],
+  "codebase-inspection": [
+   "/opt/data/profiles/nura/skills/software-development/codebase-inspection/SKILL.md",
+   "/opt/data/skills/github/codebase-inspection/SKILL.md"
+  ],
+  "plan": [
+   "/opt/data/profiles/nura/skills/software-development/plan/SKILL.md",
+   "/opt/data/skills/software-development/plan/SKILL.md"
+  ],
+  "hermes-agent-skill-authoring": [
+   "/opt/data/profiles/nura/skills/software-development/hermes-agent-skill-authoring/SKILL.md",
+   "/opt/data/skills/software-development/hermes-agent-skill-authoring/SKILL.md"
+  ],
+  "dogfood": [
+   "/opt/data/profiles/nura/skills/software-development/dogfood/SKILL.md",
+   "/opt/data/skills/software-development/dogfood/SKILL.md"
+  ],
+  "spike": [
+   "/opt/data/profiles/nura/skills/software-development/spike/SKILL.md",
+   "/opt/data/skills/software-development/spike/SKILL.md"
+  ],
+  "computer-use": [
+   "/opt/data/profiles/nura/skills/autonomous-ai-agents/computer-use/SKILL.md",
+   "/opt/data/skills/autonomous-ai-agents/computer-use/SKILL.md"
+  ],
+  "opencode": [
+   "/opt/data/profiles/nura/skills/autonomous-ai-agents/opencode/SKILL.md",
+   "/opt/data/skills/autonomous-ai-agents/opencode/SKILL.md"
+  ],
+  "merge-reconciler": [
+   "/opt/data/profiles/nura/skills/autonomous-ai-agents/merge-reconciler/SKILL.md",
+   "/opt/data/skills/autonomous-ai-agents/merge-reconciler/SKILL.md"
+  ],
+  "hermes-agent": [
+   "/opt/data/profiles/nura/skills/autonomous-ai-agents/hermes-agent/SKILL.md",
+   "/opt/data/skills/autonomous-ai-agents/hermes-agent/SKILL.md"
+  ],
+  "claude-code": [
+   "/opt/data/profiles/nura/skills/autonomous-ai-agents/claude-code/SKILL.md",
+   "/opt/data/skills/autonomous-ai-agents/claude-code/SKILL.md"
+  ],
+  "codex": [
+   "/opt/data/profiles/nura/skills/autonomous-ai-agents/codex/SKILL.md",
+   "/opt/data/skills/autonomous-ai-agents/codex/SKILL.md"
+  ],
+  "meeting-action-items": [
+   "/opt/data/profiles/nura/skills/productivity/meeting-action-items/SKILL.md",
+   "/opt/data/skills/productivity/meeting-action-items/SKILL.md"
+  ],
+  "nano-pdf": [
+   "/opt/data/profiles/nura/skills/productivity/nano-pdf/SKILL.md",
+   "/opt/data/skills/productivity/nano-pdf/SKILL.md"
+  ],
+  "xlsx": [
+   "/opt/data/profiles/nura/skills/productivity/xlsx/SKILL.md",
+   "/opt/data/skills/productivity/xlsx/SKILL.md"
+  ],
+  "docx": [
+   "/opt/data/profiles/nura/skills/productivity/docx/SKILL.md",
+   "/opt/data/skills/productivity/docx/SKILL.md"
+  ],
+  "document-to-action-items": [
+   "/opt/data/profiles/nura/skills/productivity/document-to-action-items/SKILL.md",
+   "/opt/data/skills/productivity/document-to-action-items/SKILL.md"
+  ],
+  "maps": [
+   "/opt/data/profiles/nura/skills/productivity/maps/SKILL.md",
+   "/opt/data/skills/productivity/maps/SKILL.md"
+  ],
+  "powerpoint": [
+   "/opt/data/profiles/nura/skills/productivity/powerpoint/SKILL.md",
+   "/opt/data/skills/productivity/powerpoint/SKILL.md"
+  ],
+  "ocr-and-documents": [
+   "/opt/data/profiles/nura/skills/productivity/ocr-and-documents/SKILL.md",
+   "/opt/data/skills/productivity/ocr-and-documents/SKILL.md"
+  ],
+  "pdf": [
+   "/opt/data/profiles/nura/skills/productivity/pdf/SKILL.md",
+   "/opt/data/skills/productivity/pdf/SKILL.md"
+  ],
+  "session-librarian": [
+   "/opt/data/profiles/nura/skills/productivity/session-librarian/SKILL.md",
+   "/opt/data/skills/productivity/session-librarian/SKILL.md"
+  ],
+  "clinical-decision-support": [
+   "/opt/data/profiles/nura/skills/productivity/clinical-decision-support/SKILL.md",
+   "/opt/data/profiles/nura/skills/research/scientific-agent-skills/clinical-decision-support/SKILL.md"
+  ],
+  "teams-meeting-pipeline": [
+   "/opt/data/profiles/nura/skills/productivity/teams-meeting-pipeline/SKILL.md",
+   "/opt/data/skills/productivity/teams-meeting-pipeline/SKILL.md"
+  ],
+  "google-workspace": [
+   "/opt/data/profiles/nura/skills/productivity/google-workspace/SKILL.md",
+   "/opt/data/skills/productivity/google-workspace/SKILL.md"
+  ],
+  "product-price-monitor": [
+   "/opt/data/profiles/nura/skills/productivity/product-price-monitor/SKILL.md",
+   "/opt/data/skills/productivity/product-price-monitor/SKILL.md"
+  ],
+  "airtable": [
+   "/opt/data/profiles/nura/skills/productivity/airtable/SKILL.md",
+   "/opt/data/skills/productivity/airtable/SKILL.md"
+  ],
+  "box": [
+   "/opt/data/profiles/nura/skills/productivity/box/SKILL.md",
+   "/opt/data/skills/productivity/box/SKILL.md"
+  ],
+  "weekly-review-planning": [
+   "/opt/data/profiles/nura/skills/productivity/weekly-review-planning/SKILL.md",
+   "/opt/data/skills/productivity/weekly-review-planning/SKILL.md"
+  ],
+  "sdlc-review": [
+   "/opt/data/profiles/nura/skills/devops/sdlc-review/SKILL.md",
+   "/opt/data/skills/devops/sdlc-review/SKILL.md"
+  ],
+  "competitor-news-monitor": [
+   "/opt/data/profiles/nura/skills/research/competitor-news-monitor/SKILL.md",
+   "/opt/data/skills/research/competitor-news-monitor/SKILL.md"
+  ],
+  "research-paper-writing": [
+   "/opt/data/profiles/nura/skills/research/research-paper-writing/SKILL.md",
+   "/opt/data/skills/research/research-paper-writing/SKILL.md"
+  ],
+  "grounded-citations": [
+   "/opt/data/profiles/nura/skills/research/grounded-citations/SKILL.md",
+   "/opt/data/skills/research/grounded-citations/SKILL.md"
+  ],
+  "research": [
+   "/opt/data/profiles/nura/skills/research/research/SKILL.md",
+   "/opt/data/profiles/nura/skills/obsidian-second-brain/skills/research/research/SKILL.md"
+  ],
+  "polymarket": [
+   "/opt/data/profiles/nura/skills/research/polymarket/SKILL.md",
+   "/opt/data/skills/research/polymarket/SKILL.md"
+  ],
+  "blogwatcher": [
+   "/opt/data/profiles/nura/skills/research/blogwatcher/SKILL.md",
+   "/opt/data/skills/research/blogwatcher/SKILL.md"
+  ],
+  "arxiv": [
+   "/opt/data/profiles/nura/skills/research/arxiv/SKILL.md",
+   "/opt/data/skills/research/arxiv/SKILL.md"
+  ],
+  "llm-wiki": [
+   "/opt/data/profiles/nura/skills/research/llm-wiki/SKILL.md",
+   "/opt/data/skills/research/llm-wiki/SKILL.md"
+  ],
+  "llama-cpp": [
+   "/opt/data/profiles/nura/skills/mlops/inference/llama-cpp/SKILL.md",
+   "/opt/data/skills/mlops/inference/llama-cpp/SKILL.md"
+  ],
+  "serving-llms-vllm": [
+   "/opt/data/profiles/nura/skills/mlops/inference/serving-llms-vllm/SKILL.md",
+   "/opt/data/skills/mlops/inference/serving-llms-vllm/SKILL.md"
+  ],
+  "huggingface-hub": [
+   "/opt/data/profiles/nura/skills/mlops/huggingface-hub/SKILL.md",
+   "/opt/data/skills/mlops/huggingface-hub/SKILL.md"
+  ],
+  "evaluating-llms-harness": [
+   "/opt/data/profiles/nura/skills/mlops/evaluation/evaluating-llms-harness/SKILL.md",
+   "/opt/data/skills/mlops/evaluation/evaluating-llms-harness/SKILL.md"
+  ],
+  "weights-and-biases": [
+   "/opt/data/profiles/nura/skills/mlops/evaluation/weights-and-biases/SKILL.md",
+   "/opt/data/skills/mlops/evaluation/weights-and-biases/SKILL.md"
+  ],
+  "blocked-page-recovery": [
+   "/opt/data/profiles/nura/skills/web/blocked-page-recovery/SKILL.md",
+   "/opt/data/skills/research/blocked-page-recovery/SKILL.md"
+  ],
+  "imessage": [
+   "/opt/data/profiles/nura/skills/apple/imessage/SKILL.md",
+   "/opt/data/skills/apple/imessage/SKILL.md"
+  ],
+  "apple-notes": [
+   "/opt/data/profiles/nura/skills/apple/apple-notes/SKILL.md",
+   "/opt/data/skills/apple/apple-notes/SKILL.md"
+  ],
+  "findmy": [
+   "/opt/data/profiles/nura/skills/apple/findmy/SKILL.md",
+   "/opt/data/skills/apple/findmy/SKILL.md"
+  ],
+  "apple-reminders": [
+   "/opt/data/profiles/nura/skills/apple/apple-reminders/SKILL.md",
+   "/opt/data/skills/apple/apple-reminders/SKILL.md"
+  ],
+  "obsidian": [
+   "/opt/data/profiles/nura/skills/note-taking/obsidian/SKILL.md",
+   "/opt/data/skills/note-taking/obsidian/SKILL.md"
+  ],
+  "openhue": [
+   "/opt/data/profiles/nura/skills/smart-home/openhue/SKILL.md",
+   "/opt/data/skills/smart-home/openhue/SKILL.md"
+  ],
+  "github-issues": [
+   "/opt/data/profiles/nura/skills/github/github-issues/SKILL.md",
+   "/opt/data/skills/github/github-issues/SKILL.md"
+  ],
+  "github-auth": [
+   "/opt/data/profiles/nura/skills/github/github-auth/SKILL.md",
+   "/opt/data/skills/github/github-auth/SKILL.md"
+  ],
+  "github-pr-workflow": [
+   "/opt/data/profiles/nura/skills/github/github-pr-workflow/SKILL.md",
+   "/opt/data/skills/github/github-pr-workflow/SKILL.md"
+  ],
+  "github-issue-to-pr": [
+   "/opt/data/profiles/nura/skills/github/github-issue-to-pr/SKILL.md",
+   "/opt/data/skills/github/github-issue-to-pr/SKILL.md"
+  ],
+  "github-code-review": [
+   "/opt/data/profiles/nura/skills/github/github-code-review/SKILL.md",
+   "/opt/data/skills/github/github-code-review/SKILL.md"
+  ],
+  "github-repo-management": [
+   "/opt/data/profiles/nura/skills/github/github-repo-management/SKILL.md",
+   "/opt/data/skills/github/github-repo-management/SKILL.md"
+  ],
+  "xurl": [
+   "/opt/data/profiles/nura/skills/social-media/xurl/SKILL.md",
+   "/opt/data/skills/social-media/xurl/SKILL.md"
+  ],
+  "gif-search": [
+   "/opt/data/profiles/nura/skills/media/gif-search/SKILL.md",
+   "/opt/data/skills/media/gif-search/SKILL.md"
+  ],
+  "youtube-content": [
+   "/opt/data/profiles/nura/skills/media/youtube-content/SKILL.md",
+   "/opt/data/skills/media/youtube-content/SKILL.md"
+  ],
+  "songsee": [
+   "/opt/data/profiles/nura/skills/media/songsee/SKILL.md",
+   "/opt/data/skills/media/songsee/SKILL.md"
+  ]
+ }
+}

@@ -1,0 +1,3151 @@
+diff --git a/src/data/aircraftSource.js b/src/data/aircraftSource.js
+new file mode 100644
+index 0000000..95c07b0
+--- /dev/null
++++ b/src/data/aircraftSource.js
+@@ -0,0 +1,66 @@
++/**
++ * Aircraft source selection — the single place that decides where live
++ * aircraft data comes from.
++ *
++ * Upstream defaulted to the OpenSky Network, whose terms restrict commercial
++ * use. NURA ships with a source-agnostic endpoint so the feed can be swapped
++ * by configuration rather than code, and so we can eventually own the data
++ * outright from a local receiver (no third party can revoke it).
++ *
++ * Modes:
++ *   own       — a self-hosted dump1090/readsb `aircraft.json` feed (default target).
++ *   adsb_lol  — the community adsb.lol aggregator. Default mode until a receiver exists.
++ *   opensky   — OpenSky Network. Non-commercial / development only.
++ */
++
++/** Client-facing endpoint that resolves the configured source server-side. */
++export const AIRCRAFT_ENDPOINT = '/api/aircraft';
++
++export const AIRCRAFT_SOURCE_MODES = Object.freeze(['own', 'adsb_lol', 'opensky']);
++
++/** Default mode. adsb.lol carries no commercial restriction. */
++export const DEFAULT_AIRCRAFT_SOURCE_MODE = 'adsb_lol';
++
++/** Free, community-run ADS-B aggregator used until we own a receiver. */
++export const ADSB_LOL_ENDPOINT = 'https://api.adsb.lol/v2';
++
++/** Default local dump1090/readsb HTTP feed. */
++export const DEFAULT_OWN_RECEIVER_URL = 'http://127.0.0.1:8080/data/aircraft.json';
++
++/**
++ * Resolve the aircraft source mode from an environment bag, failing safe.
++ * An unrecognised value falls back to the default rather than to OpenSky:
++ * defaulting a commercial deployment onto a restricted source is the exact
++ * failure this module exists to prevent.
++ *
++ * @param {Record<string, string|undefined>} [env]
++ * @returns {'own'|'adsb_lol'|'opensky'}
++ */
++export function resolveAircraftSourceMode(env = {}) {
++  const raw = String(env.NURA_ADSB_MODE || '').trim().toLowerCase();
++  return AIRCRAFT_SOURCE_MODES.includes(raw) ? raw : DEFAULT_AIRCRAFT_SOURCE_MODE;
++}
++
++/**
++ * Resolve the own-receiver URL, rejecting anything that is not http(s).
++ *
++ * @param {Record<string, string|undefined>} [env]
++ * @returns {string}
++ */
++export function resolveOwnReceiverUrl(env = {}) {
++  const raw = String(env.NURA_ADSB_OWN_URL || '').trim();
++  if (!raw) return DEFAULT_OWN_RECEIVER_URL;
++  if (!/^https?:\/\//i.test(raw)) return DEFAULT_OWN_RECEIVER_URL;
++  return raw;
++}
++
++/**
++ * Whether the resolved mode may be served in a commercial deployment.
++ * OpenSky is explicitly not cleared for commercial use.
++ *
++ * @param {string} mode
++ * @returns {boolean}
++ */
++export function isCommerciallyCleared(mode) {
++  return resolveAircraftSourceMode({ NURA_ADSB_MODE: mode }) !== 'opensky';
++}
+diff --git a/src/data/aircraftSource.test.mjs b/src/data/aircraftSource.test.mjs
+new file mode 100644
+index 0000000..6d35eb6
+--- /dev/null
++++ b/src/data/aircraftSource.test.mjs
+@@ -0,0 +1,65 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++
++import {
++  AIRCRAFT_ENDPOINT,
++  DEFAULT_AIRCRAFT_SOURCE_MODE,
++  DEFAULT_OWN_RECEIVER_URL,
++  isCommerciallyCleared,
++  resolveAircraftSourceMode,
++  resolveOwnReceiverUrl,
++} from './aircraftSource.js';
++
++test('aircraft source defaults to a commercially cleared mode', () => {
++  const mode = resolveAircraftSourceMode({});
++  assert.equal(mode, DEFAULT_AIRCRAFT_SOURCE_MODE);
++  // The regression this guards: defaulting a commercial build onto OpenSky.
++  assert.notEqual(mode, 'opensky');
++  assert.equal(isCommerciallyCleared(mode), true);
++});
++
++test('aircraft source accepts every supported mode', () => {
++  for (const mode of ['own', 'adsb_lol', 'opensky']) {
++    assert.equal(resolveAircraftSourceMode({ NURA_ADSB_MODE: mode }), mode);
++  }
++});
++
++test('aircraft source normalises case and whitespace', () => {
++  assert.equal(resolveAircraftSourceMode({ NURA_ADSB_MODE: '  ADS_B_LOL  ' }), DEFAULT_AIRCRAFT_SOURCE_MODE);
++  assert.equal(resolveAircraftSourceMode({ NURA_ADSB_MODE: ' ADSB_LOL ' }), 'adsb_lol');
++  assert.equal(resolveAircraftSourceMode({ NURA_ADSB_MODE: ' Own ' }), 'own');
++});
++
++test('an unrecognised mode fails safe to the default, never to OpenSky', () => {
++  for (const bad of ['', 'nonsense', 'opensky-network', 'null', 'undefined']) {
++    const mode = resolveAircraftSourceMode({ NURA_ADSB_MODE: bad });
++    assert.equal(mode, DEFAULT_AIRCRAFT_SOURCE_MODE);
++    assert.notEqual(mode, 'opensky');
++  }
++});
++
++test('OpenSky is reported as not commercially cleared', () => {
++  assert.equal(isCommerciallyCleared('opensky'), false);
++  assert.equal(isCommerciallyCleared('adsb_lol'), true);
++  assert.equal(isCommerciallyCleared('own'), true);
++});
++
++test('own receiver URL defaults and validates scheme', () => {
++  assert.equal(resolveOwnReceiverUrl({}), DEFAULT_OWN_RECEIVER_URL);
++  assert.equal(
++    resolveOwnReceiverUrl({ NURA_ADSB_OWN_URL: 'http://10.0.0.5:8080/data/aircraft.json' }),
++    'http://10.0.0.5:8080/data/aircraft.json',
++  );
++  assert.equal(
++    resolveOwnReceiverUrl({ NURA_ADSB_OWN_URL: 'https://receiver.nura.local/aircraft.json' }),
++    'https://receiver.nura.local/aircraft.json',
++  );
++  // A non-http(s) value must not become a fetch target.
++  assert.equal(resolveOwnReceiverUrl({ NURA_ADSB_OWN_URL: 'file:///etc/passwd' }), DEFAULT_OWN_RECEIVER_URL);
++  assert.equal(resolveOwnReceiverUrl({ NURA_ADSB_OWN_URL: '   ' }), DEFAULT_OWN_RECEIVER_URL);
++});
++
++test('the client endpoint is the source-agnostic path, not OpenSky', () => {
++  assert.equal(AIRCRAFT_ENDPOINT, '/api/aircraft');
++  assert.ok(!AIRCRAFT_ENDPOINT.includes('opensky'));
++});
+diff --git a/src/data/dataCredits.js b/src/data/dataCredits.js
+index b35da9e..3aaaa53 100644
+--- a/src/data/dataCredits.js
++++ b/src/data/dataCredits.js
+@@ -6,7 +6,7 @@ import * as Cesium from 'cesium';
+  * Legal requirement (see DATA_SOURCES.md, findings H10/H11 in
+  * docs/pre-ship-audit-2026-07-01.md): every third-party data layer this app can
+  * display carries its own license and required attribution — ODbL (OSM
+- * datacenters/dams, adsb.lol, Overpass roads), CC BY-NC-SA (TeleGeography
++ * datacenters/dams, adsb.lol, Overpass roads), CC BY-NC-SA (removed from this fork
+  * cables), NASA FIRMS, CelesTrak, USGS, City of Austin, GBFS operators, OpenSky.
+  * The MIT code license does NOT cover this data.
+  *
+@@ -168,13 +168,6 @@ export const DATA_CREDITS = [
+       '(<a href="https://earthdata.nasa.gov/firms" target="_blank" rel="noopener">earthdata.nasa.gov/firms</a>), ' +
+       'part of NASA’s Earth Observing System Data and Information System (EOSDIS)',
+   },
+-  {
+-    key: 'telegeography',
+-    html:
+-      'Submarine cables: © TeleGeography — ' +
+-      '<a href="https://www.submarinecablemap.com" target="_blank" rel="noopener">submarinecablemap.com</a> ' +
+-      '(CC BY-NC-SA 3.0 — NonCommercial)',
+-  },
+ ];
+ 
+ /**
+diff --git a/src/data/flights.js b/src/data/flights.js
+index d3c25b8..91b517c 100644
+--- a/src/data/flights.js
++++ b/src/data/flights.js
+@@ -1,7 +1,8 @@
+ /**
+  * @module flights
+  * @description Real-time flight tracking layer powered by the OpenSky Network API
+- * (authenticated via Vite dev-server proxy at /api/opensky).
++ * (served by the source-agnostic Vite dev-server proxy at /api/aircraft,
++ * which resolves to a self-hosted receiver or adsb.lol).
+  *
+  * Rendering strategy: all aircraft are drawn as billboards in a single
+  * BillboardCollection for GPU-efficient batching (handles 5000+ aircraft).
+@@ -20,6 +21,7 @@
+  * looking at (owner decision 2026-07-02).
+  */
+ import * as Cesium from 'cesium';
++import { AIRCRAFT_ENDPOINT } from './aircraftSource.js';
+ import { aircraftIncludedInNearby } from './aircraftNearbyPolicy.js';
+ import { registerPickOwner, unregisterPickOwner, isOwnedByOtherLayer, resolvePickId } from './pickRegistry.js';
+ import {
+@@ -270,7 +272,7 @@ const _scratchModelBS = new Cesium.BoundingSphere(new Cesium.Cartesian3(), 1.0);
+ const _billboardLimbScale = new WeakMap();
+ 
+ /** @constant {string} API_URL - Vite proxy endpoint for OpenSky /states/all */
+-const API_URL = '/api/opensky';
++const API_URL = AIRCRAFT_ENDPOINT;
+ const SOURCE_STALE_MS = 120_000;
+ /** @constant {number} BACKOFF_INTERVAL - Cooldown (ms) after 429 / auth errors */
+ const BACKOFF_INTERVAL = 45000; // 45s on rate limit
+diff --git a/src/data/flights.test.mjs b/src/data/flights.test.mjs
+index 2834e88..f32a354 100644
+--- a/src/data/flights.test.mjs
++++ b/src/data/flights.test.mjs
+@@ -203,7 +203,7 @@ test('flights poll refreshes tracked callsign/FL/kts and marks a missed poll STA
+   const nowSec = Math.floor(Date.now() / 1000);
+   let openskyPoll = 0;
+   globalThis.fetch = async (url) => {
+-    if (!String(url).startsWith('/api/opensky')) {
++    if (!String(url).startsWith('/api/aircraft')) {
+       return { ok: true, status: 200, json: async () => ({ ac: [] }) };
+     }
+     const states = openskyPoll++ === 0
+diff --git a/src/data/layerState.js b/src/data/layerState.js
+index eb68c14..e231384 100644
+--- a/src/data/layerState.js
++++ b/src/data/layerState.js
+@@ -289,7 +289,6 @@ export const LAYER_STATE_REGISTRY = Object.freeze([
+   Object.freeze({ id: 'radio', token: 'r', disposition: 'enabled+options', optionOwner: 'radio' }),
+   Object.freeze({ id: 'rocket-launches', token: 'x', disposition: 'enabled-only' }),
+   Object.freeze({ id: 'satellites', token: 's', disposition: 'enabled+options', optionOwner: 'satellites' }),
+-  Object.freeze({ id: 'telegeography-submarine-cables', token: 'u', disposition: 'enabled-only' }),
+   Object.freeze({ id: 'traffic', token: 't', disposition: 'enabled-only' }),
+ ]);
+ 
+diff --git a/src/data/layerState.test.mjs b/src/data/layerState.test.mjs
+index 2c282e7..115397a 100644
+--- a/src/data/layerState.test.mjs
++++ b/src/data/layerState.test.mjs
+@@ -155,8 +155,8 @@ function encode(state) {
+ 
+ test('production registry is exact, canonical, and rejects incomplete contracts', async () => {
+   assert.equal(validateLayerStateRegistry(), true);
+-  assert.equal(REGISTERED_LAYER_IDS.length, 16);
+-  assert.equal(new Set(REGISTERED_LAYER_IDS).size, 16);
++  assert.equal(REGISTERED_LAYER_IDS.length, 15);
++  assert.equal(new Set(REGISTERED_LAYER_IDS).size, 15);
+   assert.deepEqual(REGISTERED_LAYER_IDS, [...REGISTERED_LAYER_IDS].sort());
+   assert.throws(
+     () => validateLayerStateRegistry([...LAYER_STATE_REGISTRY, LAYER_STATE_REGISTRY[0]]),
+diff --git a/src/data/localLayers.js b/src/data/localLayers.js
+index 3128c0d..b43c377 100644
+--- a/src/data/localLayers.js
++++ b/src/data/localLayers.js
+@@ -1,6 +1,5 @@
+ import { createLocalGeoJsonLayer } from './localGeojson.js';
+ import { createFirmsHeatmapLayer } from './firmsHeatmap.js';
+-import submarineCablesLayer from './telegeographySubmarineCables.js';
+ 
+ // Use Vite's ?url import to properly resolve these assets in dev and build
+ import datacentersUrl from './local_data/datacenters/datacenters.geojsonl?url';
+@@ -47,6 +46,5 @@ const fires = createFirmsHeatmapLayer({
+ export default [
+   datacenters,
+   dams,
+-  submarineCablesLayer,
+   fires,
+ ];
+diff --git a/src/data/telegeographySubmarineCables.js b/src/data/telegeographySubmarineCables.js
+deleted file mode 100644
+index 53d1a66..0000000
+--- a/src/data/telegeographySubmarineCables.js
++++ /dev/null
+@@ -1,1177 +0,0 @@
+-import * as Cesium from 'cesium';
+-import {
+-  clearOverlaySource,
+-  setOverlayEntries,
+-  setOverlaySourceVisible,
+-} from '../overlays/worldOverlay.js';
+-
+-// TeleGeography submarine-cable data is bundled for an out-of-the-box
+-// experience. IMPORTANT: it is CC BY-NC-SA 3.0 (NonCommercial + ShareAlike),
+-// NOT covered by this project's MIT license — see DATA_SOURCES.md. Commercial
+-// users must remove this dataset or obtain a license from TeleGeography.
+-const cableUrl = new URL(
+-  './local_data/telegeography_submarine_cables/cable-geo.json',
+-  import.meta.url,
+-).href;
+-const landingPointUrl = new URL(
+-  './local_data/telegeography_submarine_cables/landing-point-geo.json',
+-  import.meta.url,
+-).href;
+-
+-const BASE_CABLE_COLOR = '#39d5ff';
+-const BASE_LANDING_COLOR = '#8fffd2';
+-const STEM_TARGET_PX = 66;
+-const CABLE_REFERENCE_LABEL_MAX_DISTANCE_M = 9000000;
+-/** Bounded nearest-visible cohort the layer offers the shared host. */
+-export const CABLE_REFERENCE_LABEL_WINNER_CAP = 160;
+-/** Shared world-overlay source id (matches the layer id). */
+-export const CABLE_OVERLAY_SOURCE_ID = 'telegeography-submarine-cables';
+-/** Shared ambient-label paint budget, matching the infrastructure sources. */
+-export const CABLE_OVERLAY_COLLISION_CAPACITY = 96;
+-/** Ignore sub-metre camera-derived stem-tip noise at camera settle. */
+-export const CABLE_STEM_TIP_EPSILON_M = 0.5;
+-const CABLE_STEM_TIP_EPSILON_SQ = CABLE_STEM_TIP_EPSILON_M ** 2;
+-/**
+- * Motion-fallback probe window. Cameras that never emit `moveEnd` (tracked
+- * entities, orbits) would otherwise starve the dirty-only sweep forever, so
+- * the gate samples camera motion at most this often while frames render.
+- */
+-export const CABLE_SWEEP_MOTION_PROBE_INTERVAL_MS = 2000;
+-/**
+- * Camera displacement that counts as meaningful motion for that probe. Stem
+- * tip height is ~8.5% of camera distance at the shipped 66 px target, so
+- * 250 m of camera travel moves a tip ~21 m; below that the frozen sweep is
+- * visually indistinguishable and `moveEnd` settles it exactly.
+- */
+-export const CABLE_SWEEP_MOTION_EPSILON_M = 250;
+-/**
+- * Phase-5 depth decision, REVISED 2026-08-18: Option 2. Cable reference text
+- * now renders in the shared world-overlay host (horizon-cull + keyhole fade,
+- * no per-label tile depth test), superseding the 2026-08-02 Option-1 native
+- * `LabelGraphics` exception. The native path evaluated 2 `CallbackProperty`
+- * channels per reference entity per frame (5,258 across the 2,629-reference
+- * dataset) and re-batched a 160-label `LabelCollection` on every sweep — the
+- * layer alone cost ~9.5 ms/frame during camera motion. The depth cue this
+- * trades away (photoreal tiles occluding label TEXT at low, city-level
+- * cameras) matches the sibling dams/datacenters sources, which shipped
+- * host-composited under the same ruling; the anchor points/stems remain
+- * Cesium-native and depth-tested. See
+- * the world-overlay consolidation design notes ("Depth-testing
+- * decision") for both dated decisions.
+- */
+-export const CABLE_LABEL_DEPTH_DECISION = Object.freeze({
+-  option: 2,
+-  decidedAt: '2026-08-18',
+-  supersedes: '2026-08-02',
+-  depthTested: false,
+-});
+-
+-const DEFAULT_OVERLAY_HOST = Object.freeze({
+-  clearSource: clearOverlaySource,
+-  setEntries: setOverlayEntries,
+-  setVisible: setOverlaySourceVisible,
+-});
+-
+-export default createTeleGeographySubmarineCableLayer();
+-
+-/**
+- * Select the nearest visible cable references without exceeding the bounded
+- * cohort cap the shared host is offered.
+- * @param {object[]} records Records annotated with `visible` and `distanceM`.
+- * @param {number} [limit]
+- * @returns {object[]}
+- */
+-export function selectCableReferenceLabelWinners(
+-  records,
+-  limit = CABLE_REFERENCE_LABEL_WINNER_CAP,
+-) {
+-  const cap = Math.max(0, Math.min(
+-    CABLE_REFERENCE_LABEL_WINNER_CAP,
+-    Math.floor(Number(limit) || 0),
+-  ));
+-  if (!Array.isArray(records) || cap === 0) return [];
+-  return records
+-    .filter((record) => record?.visible === true
+-      && record.label
+-      && Number.isFinite(record.distanceM)
+-      && record.distanceM <= CABLE_REFERENCE_LABEL_MAX_DISTANCE_M)
+-    .sort((a, b) => a.distanceM - b.distanceM
+-      || String(a.entity?.id || '').localeCompare(String(b.entity?.id || '')))
+-    .slice(0, cap);
+-}
+-
+-/**
+- * Distance-derived arbiter priority. Quantized to 50 km buckets so a slowly
+- * moving camera does not reshuffle equal-rank labels on every sweep; nearer
+- * references still win collisions, matching the shipped nearest-first feel.
+- * @param {number} distanceM
+- * @returns {number}
+- */
+-export function cableReferencePriority(distanceM) {
+-  const distance = Number.isFinite(distanceM) ? Math.max(0, distanceM) : CABLE_REFERENCE_LABEL_MAX_DISTANCE_M;
+-  return 1000 - Math.round(distance / 50000);
+-}
+-
+-/**
+- * Build one shared-host ambient label for a cable or landing-point reference.
+- * The entry stays attached to the record's mutable stem-tip Cartesian and is
+- * created once per record; only `priority` is refreshed per sweep.
+- * `interactive: false` follows the infrastructure precedent — the depth-tested
+- * native point/stem/line remains the click surface, and a non-interactive
+- * label keeps the host's per-frame accessibility/hit sync allocation-free.
+- * @param {object} record Reference record ({ id, kind, label, tip }).
+- * @returns {object}
+- */
+-export function createCableOverlayEntry(record) {
+-  const kind = record?.kind === 'landing-point' ? 'landing-point' : 'cable';
+-  return {
+-    id: String(record?.id || ''),
+-    position: record?.tip,
+-    variant: 'label',
+-    title: String(record?.label || ''),
+-    accent: kind === 'cable' ? BASE_CABLE_COLOR : BASE_LANDING_COLOR,
+-    priority: cableReferencePriority(record?.distanceM),
+-    collisionGroup: 'ambient-label',
+-    paintLane: 'ambient-label',
+-    interactive: false,
+-    minDistance: 0,
+-    maxDistance: CABLE_REFERENCE_LABEL_MAX_DISTANCE_M,
+-    distanceFadeStartRatio: 0.7,
+-    // Former native scaleByDistance curve, unchanged: 1.0× at 250 km → 0.62×
+-    // at 9,000 km.
+-    distanceScale: {
+-      near: 250000,
+-      nearValue: 1,
+-      far: 9000000,
+-      farValue: 0.62,
+-    },
+-    edgeFade: 'keyhole',
+-    horizonCull: true,
+-    terrainOcclusion: false,
+-    gapPx: 14,
+-    verticalOnly: true,
+-    placement: 'above',
+-  };
+-}
+-
+-/**
+- * Bind the cable layer's host visibility and entry lifecycle to the shared
+- * world overlay (same contract as the infrastructure publisher). The layer
+- * supports re-init after destroy (legacy contract), so its teardown path is
+- * hide() — clear the published source and go invisible while staying
+- * reusable. There is deliberately no permanent-destroy method: a hidden
+- * publisher already drops late publishes until the next show().
+- * @param {object} [options]
+- * @param {string} [options.sourceId]
+- * @param {object} [options.host] Test seam for the three host lifecycle calls.
+- * @returns {{show:function():void,publish:function(object[]):void,hide:function():void}}
+- */
+-export function createCableOverlayPublisher({
+-  sourceId = CABLE_OVERLAY_SOURCE_ID,
+-  host = DEFAULT_OVERLAY_HOST,
+-} = {}) {
+-  let visible = false;
+-  let published = false;
+-  const sourceOptions = {
+-    cohortLimit: CABLE_REFERENCE_LABEL_WINNER_CAP,
+-    collisionCapacity: CABLE_OVERLAY_COLLISION_CAPACITY,
+-    moving: false,
+-  };
+-
+-  return {
+-    show() {
+-      if (visible) return;
+-      visible = true;
+-      host.setVisible(sourceId, true);
+-    },
+-    publish(entries) {
+-      if (!visible) return;
+-      host.setEntries(sourceId, entries, sourceOptions);
+-      published = entries.length > 0;
+-    },
+-    hide() {
+-      if (published) host.clearSource(sourceId);
+-      if (visible) host.setVisible(sourceId, false);
+-      visible = false;
+-      published = false;
+-    },
+-  };
+-}
+-
+-/**
+- * `MAP_STACKS` ids that render imagery on the SHOWN Cesium globe (the ion
+- * Bing stacks + OSM). Deliberately an explicit allowlist, not "anything that
+- * is not photoreal": an id this module has never heard of is UNKNOWN, and
+- * unknown must reach the documented BOTH fallback rather than being asserted
+- * onto the terrain surface. A stack added to `MAP_STACKS` without being added
+- * here therefore degrades to the safe pre-optimization behavior (visible on
+- * every surface) instead of vanishing — and the per-stack unit test walks the
+- * real `MAP_STACKS` so the omission is caught loudly.
+- */
+-const CABLE_GLOBE_STACK_IDS = Object.freeze(
+-  new Set(['bing-aerial', 'bing-labels', 'esri-imagery', 'osm']),
+-);
+-
+-/**
+- * Ground-line classification for one map stack. The photoreal stack renders
+- * Google 3D tiles with the Cesium globe HIDDEN, so cable ground lines only
+- * need the 3D-tile classification pass there; every other known stack (the
+- * bing stacks and osm) renders imagery on the shown globe, so only the
+- * terrain pass applies.
+- * Classifying against just the active surface halves the batched
+- * GroundPolylinePrimitive's emitted command sets. BOTH is the safe fallback
+- * for an unknown stack — it renders on every surface, exactly the shipped
+- * pre-optimization behavior.
+- * @param {string|null|undefined} activeId MapStackController stack id.
+- * @returns {Cesium.ClassificationType}
+- */
+-export function cableClassificationTypeForStack(activeId) {
+-  if (activeId === 'photoreal') return Cesium.ClassificationType.CESIUM_3D_TILE;
+-  if (CABLE_GLOBE_STACK_IDS.has(activeId)) return Cesium.ClassificationType.TERRAIN;
+-  return Cesium.ClassificationType.BOTH;
+-}
+-
+-/**
+- * Derive the active surface from live scene state. The boot-time
+- * `setStack(..., { silent: true })` fires no 'gev:map-stack-changed' event,
+- * so the initial classification reads the scene the way the height-datum
+- * listeners do: the photoreal regime is exactly "globe hidden".
+- * @param {Cesium.Scene|null|undefined} scene
+- * @returns {Cesium.ClassificationType}
+- */
+-export function cableClassificationTypeForScene(scene) {
+-  if (!scene?.globe) return Cesium.ClassificationType.BOTH;
+-  return scene.globe.show === false
+-    ? Cesium.ClassificationType.CESIUM_3D_TILE
+-    : Cesium.ClassificationType.TERRAIN;
+-}
+-
+-/** EntityCluster's private marker collections and their required types. */
+-const MARKER_COLLECTION_EXPECTATIONS = Object.freeze([
+-  Object.freeze({ key: '_billboardCollection', type: Cesium.BillboardCollection }),
+-  Object.freeze({ key: '_pointCollection', type: Cesium.PointPrimitiveCollection }),
+-]);
+-
+-/**
+- * Validate one data source's marker collections WITHOUT mutating anything.
+- * Splitting validation from mutation is what makes the fallback honest: a
+- * shape failure on the SECOND collection (or the second data source) must
+- * not leave the first one already forced to TRANSLUCENT.
+- * @param {Cesium.DataSource|null|undefined} dataSource
+- * @returns {{ready:object[],pending:number,invariantFailed:boolean}}
+- */
+-function probeTranslucentMarkerBlend(dataSource) {
+-  const cluster = dataSource?.clustering;
+-  if (!cluster) return { ready: [], pending: 0, invariantFailed: true };
+-  const ready = [];
+-  let pending = 0;
+-  let invariantFailed = false;
+-  for (const { key, type } of MARKER_COLLECTION_EXPECTATIONS) {
+-    if (!(key in cluster)) {
+-      invariantFailed = true;
+-      continue;
+-    }
+-    const collection = cluster[key];
+-    if (collection === undefined || collection === null) {
+-      pending++;
+-      continue;
+-    }
+-    if (!(collection instanceof type) || !('blendOption' in collection)) {
+-      invariantFailed = true;
+-      continue;
+-    }
+-    ready.push(collection);
+-  }
+-  // Any failure discards every collected target: nothing is mutated at all.
+-  if (invariantFailed) return { ready: [], pending: 0, invariantFailed: true };
+-  return { ready, pending, invariantFailed: false };
+-}
+-
+-/**
+- * Commit a clean probe. Only ever called once every probe in the batch has
+- * passed, so this cannot land a partial application.
+- * @param {{ready:object[],pending:number}} probe
+- * @returns {{applied:number,pending:number,invariantFailed:boolean}}
+- */
+-function commitTranslucentMarkerBlend(probe) {
+-  for (const collection of probe.ready) {
+-    if (collection.blendOption !== Cesium.BlendOption.TRANSLUCENT) {
+-      collection.blendOption = Cesium.BlendOption.TRANSLUCENT;
+-    }
+-  }
+-  return { applied: probe.ready.length, pending: probe.pending, invariantFailed: false };
+-}
+-
+-/**
+- * Force one translucent draw pass for a data source's marker collections.
+- * The default `OPAQUE_AND_TRANSLUCENT` blend emits two draw commands per
+- * collection, and every cable marker is translucent (alpha < 1), so the
+- * opaque pass is pure overhead across 1,917 landing billboards + 2,629
+- * reference points. Cesium has no public accessor for the entity-backed
+- * collections, so this reaches through EntityCluster's private fields under
+- * a SHAPE INVARIANT the caller must honor loudly: the constructor
+- * pre-assigns `_billboardCollection`/`_pointCollection` (= undefined until a
+- * visualizer lazily creates them), so a missing PROPERTY means Cesium's
+- * shape changed — report `invariantFailed` and never touch anything —
+- * while a present-but-undefined value only means "not created yet"
+- * (`pending`). Wrong instance types also fail the invariant. The cables
+- * sources never enable clustering, so created collections persist.
+- * VALIDATE-ALL-THEN-MUTATE-ALL: every field/type check runs before the first
+- * assignment, so a failure anywhere leaves BOTH collections on Cesium's
+- * default blend — the fallback this helper promises.
+- * @param {Cesium.DataSource|null|undefined} dataSource
+- * @returns {{applied:number,pending:number,invariantFailed:boolean}}
+- */
+-export function applyTranslucentMarkerBlend(dataSource) {
+-  const probe = probeTranslucentMarkerBlend(dataSource);
+-  if (probe.invariantFailed) return { applied: 0, pending: 0, invariantFailed: true };
+-  return commitTranslucentMarkerBlend(probe);
+-}
+-
+-/**
+- * Monotonic clock for the sweep gate's motion probe. A hoisted declaration:
+- * the module's `export default createTeleGeographySubmarineCableLayer()`
+- * runs before this point in source order.
+- * @returns {number}
+- */
+-function defaultSweepClock() {
+-  return (typeof performance === 'object' && typeof performance.now === 'function')
+-    ? performance.now()
+-    : Date.now();
+-}
+-
+-/**
+- * Dirty gate for the reference sweep. TWO dirty conditions, no timer:
+- *
+- * 1. EVENT (primary): the sweep runs on the first frame after a camera
+- *    `moveEnd`, layer enable, or load completion. The former 500 ms timer
+- *    path re-sized stems while frames were flowing, and every re-size
+- *    rebuilt the 2,629-instance batched translucent stem primitive
+- *    (measured: 12 rebuilds in 6 s with the replacement primitive unready
+- *    for 46/360 frames — the felt hitch). Stem lengths are therefore
+- *    deliberately stale mid-drag/mid-flight and settle on release;
+- *    reference visibility and label winners go stale the same way, and the
+- *    shared host keeps reprojecting the published positions per frame.
+- * 2. MOTION FALLBACK: `moveEnd` covers drags, one-shot `setView`, and voice
+- *    `flyTo`, but a TRACKED-entity follow camera or an orbit never emits it,
+- *    so condition 1 alone starves those sessions forever (frozen horizon
+- *    visibility, frozen stems, stale label winners for as long as tracking
+- *    lasts). While frames render, the gate therefore samples the camera at
+- *    most once per `CABLE_SWEEP_MOTION_PROBE_INTERVAL_MS` and re-arms itself
+- *    only when the camera has actually travelled past
+- *    `CABLE_SWEEP_MOTION_EPSILON_M` since the last sweep.
+- *
+- * A PARKED camera still costs exactly zero sweeps: the probe compares against
+- * the last swept position (never the previous frame), so neither a frozen
+- * camera nor sub-epsilon numeric jitter ever accumulates into a sweep, and
+- * the per-frame cost of the fallback is one clock read plus one subtraction.
+- * Position is the only motion channel because it is the only camera input the
+- * sweep consumes — the horizon occluder, the reference distances, the stem
+- * sizing, and the winner ranks all derive from `positionWC` alone, so a
+- * heading-only rotation cannot change a single sweep output and deliberately
+- * does not spend one.
+- * @param {object} [options]
+- * @param {function():number} [options.now] Monotonic clock (test seam).
+- * @param {number} [options.probeIntervalMs]
+- * @param {number} [options.motionEpsilonM]
+- */
+-export function createCableReferenceSweepGate({
+-  now = defaultSweepClock,
+-  probeIntervalMs = CABLE_SWEEP_MOTION_PROBE_INTERVAL_MS,
+-  motionEpsilonM = CABLE_SWEEP_MOTION_EPSILON_M,
+-} = {}) {
+-  const motionEpsilonSq = motionEpsilonM ** 2;
+-  // Preallocated: the probe clones into it, so a moving camera allocates
+-  // nothing per frame.
+-  const lastSweptPosition = new Cesium.Cartesian3();
+-  let hasSweptPosition = false;
+-  let dirty = true;
+-  let lastProbeAt = -Infinity;
+-
+-  /** Arm the next probe window and adopt the camera position being swept. */
+-  function accept(camera, time) {
+-    lastProbeAt = time;
+-    const position = camera?.positionWC;
+-    hasSweptPosition = Boolean(position);
+-    if (position) Cesium.Cartesian3.clone(position, lastSweptPosition);
+-    return true;
+-  }
+-
+-  return {
+-    markDirty() { dirty = true; },
+-    /**
+-     * @param {Cesium.Camera} [camera] Live camera; omit to disable the motion
+-     *   fallback entirely (pure dirty-only gate).
+-     * @returns {boolean}
+-     */
+-    shouldRun(camera) {
+-      if (dirty) {
+-        dirty = false;
+-        return accept(camera, now());
+-      }
+-      if (!camera) return false;
+-      // Cheapest possible per-frame path: a clock read and a subtraction. The
+-      // camera getter is only touched once the probe window has actually
+-      // opened, and the window re-arms whether or not the probe sweeps.
+-      const time = now();
+-      if (time - lastProbeAt < probeIntervalMs) return false;
+-      lastProbeAt = time;
+-      const position = camera.positionWC;
+-      if (!position) return false;
+-      if (hasSweptPosition
+-        && Cesium.Cartesian3.distanceSquared(position, lastSweptPosition) <= motionEpsilonSq) {
+-        return false;
+-      }
+-      return accept(camera, time);
+-    },
+-    reset() {
+-      dirty = true;
+-      lastProbeAt = -Infinity;
+-      hasSweptPosition = false;
+-    },
+-  };
+-}
+-
+-/**
+- * Recompute one staticized stem on the sweep cadence. Replaces the former
+- * per-frame `CallbackProperty` pair: constant properties are redefined only
+- * when the camera-scaled tip moved beyond the settle epsilon, and the two
+- * preallocated position buffers alternate so each real change raises exactly
+- * one geometry notification (the localGeojson double-buffer pattern).
+- * @param {object} record Reference record with entity/base/tip/nextTip/buffers.
+- * @param {Cesium.Cartesian3} cameraPositionWC
+- * @param {number} canvasHeight CSS-pixel canvas height.
+- * @param {number} fov Camera frustum field of view (radians).
+- * @returns {boolean} True when the stem geometry was redefined.
+- */
+-export function updateCableReferenceStem(record, cameraPositionWC, canvasHeight, fov) {
+-  const distance = Cesium.Cartesian3.distance(cameraPositionWC, record.base);
+-  const effectiveDistance = Math.max(distance, 5000);
+-  const height = canvasHeight || 1080;
+-  const fieldOfView = fov || (Math.PI / 3);
+-  const metersPerPixelFactor = 2 * Math.tan(fieldOfView / 2) / height;
+-  const tipHeight = Math.max(
+-    700,
+-    Math.min(85000, effectiveDistance * metersPerPixelFactor * STEM_TARGET_PX),
+-  );
+-  Cesium.Cartesian3.fromDegrees(
+-    record.reference.lon,
+-    record.reference.lat,
+-    tipHeight,
+-    Cesium.Ellipsoid.WGS84,
+-    record.nextTip,
+-  );
+-  if (Cesium.Cartesian3.distanceSquared(record.tip, record.nextTip) <= CABLE_STEM_TIP_EPSILON_SQ) {
+-    return false;
+-  }
+-  Cesium.Cartesian3.clone(record.nextTip, record.tip);
+-  record.stemPositionBufferIndex = 1 - record.stemPositionBufferIndex;
+-  const stemPositions = record.stemPositionBuffers[record.stemPositionBufferIndex];
+-  stemPositions[0] = record.base;
+-  stemPositions[1] = record.tip;
+-  record.entity.position.setValue(record.tip);
+-  record.entity.polyline.positions.setValue(stemPositions);
+-  return true;
+-}
+-
+-export function createTeleGeographySubmarineCableLayer({
+-  overlayHost = DEFAULT_OVERLAY_HOST,
+-  screenSpaceEventHandlerFactory = (canvas) => new Cesium.ScreenSpaceEventHandler(canvas),
+-  mapStackEventTarget = typeof window !== 'undefined' ? window : null,
+-  // Test seam: the sweep gate's motion-fallback clock. Tests freeze it so the
+-  // fallback window is driven explicitly instead of by wall-clock timing.
+-  sweepClock = defaultSweepClock,
+-} = {}) {
+-  let _viewer = null;
+-  let _enabled = false;
+-  let _loading = false;
+-  let _loaded = false;
+-  let _count = 0;
+-  let _error = null;
+-  let _lastUpdate = null;
+-  let _loadingLabel = '';
+-  let _abort = null;
+-  /** Monotonic load-ownership token; every load() start claims a new one. */
+-  let _loadGeneration = 0;
+-  let _cableDataSource = null;
+-  let _landingDataSource = null;
+-  let _referenceDataSource = null;
+-  let _referenceRecords = [];
+-  let _surfaceRecords = [];
+-  let _clickHandler = null;
+-  let _preRenderRemover = null;
+-  let _moveEndRemover = null;
+-  let _mapStackListener = null;
+-  /** Active ground-line classification; refined from live scene state at init. */
+-  let _classificationType = Cesium.ClassificationType.BOTH;
+-  /** True once both marker collections blend translucent (or the shape probe failed). */
+-  let _markerBlendDone = false;
+-  let _markerBlendInvariantWarned = false;
+-  let _pickByEntity = new WeakMap();
+-  let _referenceLabelCount = 0;
+-  const _referenceSweepGate = createCableReferenceSweepGate({ now: sweepClock });
+-  const _overlayPublisher = createCableOverlayPublisher({ host: overlayHost });
+-  /** Reused winner→entry scratch so a 2 Hz sweep allocates no arrays. */
+-  const _publishScratch = [];
+-  /**
+-   * Last published cohort signature (ids + quantized priorities). A parked
+-   * camera reproduces the same winners every sweep; skipping the identical
+-   * republish keeps the host from requesting a render per publish, so the
+-   * layer stays render-governor idle exactly like its native predecessor.
+-   * Tip positions need no republish either: the host reprojects the same
+-   * mutable Cartesians on every painted frame.
+-   */
+-  const _lastPublishedIds = [];
+-  const _lastPublishedPriorities = [];
+-  let _lastPublishedCount = -1;
+-
+-  function resetPublishSignature() {
+-    _lastPublishedIds.length = 0;
+-    _lastPublishedPriorities.length = 0;
+-    _lastPublishedCount = -1;
+-  }
+-
+-  const cableColor = Cesium.Color.fromCssColorString(BASE_CABLE_COLOR);
+-  const cableOutline = Cesium.Color.BLACK.withAlpha(0.45);
+-  const landingColor = Cesium.Color.fromCssColorString(BASE_LANDING_COLOR);
+-
+-  async function load(viewer) {
+-    if (_loading || _loaded) return;
+-
+-    _loading = true;
+-    _error = null;
+-    _loadingLabel = 'loading...';
+-    // Ownership token (the militaryAwareness activationId pattern): a
+-    // disable/abort followed by a fresh enable starts a NEWER load while this
+-    // one is still settling. The stale load must bail after every await and
+-    // must never touch shared lifecycle state or the viewer it no longer
+-    // owns — clearing `_loading`/`_abort` for the successor is how duplicate
+-    // or post-destroy data sources got added.
+-    const generation = ++_loadGeneration;
+-    const abort = new AbortController();
+-    _abort = abort;
+-    const owns = () => generation === _loadGeneration && !abort.signal.aborted;
+-
+-    try {
+-      const [cableJson, landingJson] = await Promise.all([
+-        fetchJson(cableUrl, abort.signal),
+-        fetchJson(landingPointUrl, abort.signal),
+-      ]);
+-      if (!owns()) return;
+-
+-      const cableFeatures = normalizeFeatures(cableJson, 'cable');
+-      const landingFeatures = normalizeFeatures(landingJson, 'landing');
+-
+-      const cableDataSource = await Cesium.GeoJsonDataSource.load(
+-        { type: 'FeatureCollection', features: cableFeatures },
+-        {
+-          clampToGround: true,
+-          stroke: cableColor.withAlpha(0.95),
+-          fill: cableColor.withAlpha(0.18),
+-          strokeWidth: 2,
+-          markerColor: cableColor,
+-          markerSize: 6,
+-        }
+-      );
+-      if (!owns()) return;
+-      const landingDataSource = await Cesium.GeoJsonDataSource.load(
+-        { type: 'FeatureCollection', features: landingFeatures },
+-        {
+-          clampToGround: true,
+-          stroke: landingColor.withAlpha(0.9),
+-          fill: landingColor.withAlpha(0.35),
+-          strokeWidth: 2,
+-          markerColor: landingColor,
+-          markerSize: 6,
+-        }
+-      );
+-      if (!owns()) return;
+-
+-      cableDataSource.name = 'TeleGeography Submarine Cables';
+-      landingDataSource.name = 'TeleGeography Landing Points';
+-      const referenceDataSource = new Cesium.CustomDataSource('TeleGeography Cable References');
+-      const addedSources = [cableDataSource, landingDataSource, referenceDataSource];
+-
+-      // dataSources.add() is itself an await point: Cesium mutates the
+-      // collection on a DEFERRED tick, so a disable/destroy racing this
+-      // window finds nothing to remove and the adds still materialize
+-      // afterwards. Await every add to settlement (allSettled so a partial
+-      // failure cannot leave an unawaited add materializing later), then
+-      // re-check ownership. Pinned teardown mechanism: disable/destroy never
+-      // wait for in-flight adds — the stale generation's own post-await
+-      // check here guarantees cleanup by removing exactly the sources THIS
+-      // generation added.
+-      const addResults = await Promise.allSettled([
+-        viewer.dataSources.add(cableDataSource),
+-        viewer.dataSources.add(landingDataSource),
+-        viewer.dataSources.add(referenceDataSource),
+-      ]);
+-      const rejectedAdd = addResults.find((result) => result.status === 'rejected');
+-      if (!owns() || rejectedAdd) {
+-        // Compensate: every add has settled by now, so removal is effective
+-        // (a remove inside the deferred window would have been a no-op).
+-        // Remove EVERY generation-local source regardless of settle status:
+-        // Cesium's add() pushes into the collection BEFORE raising
+-        // dataSourceAdded, so a REJECTED add may still have landed its
+-        // mutation. remove() of a never-added source is a harmless no-op.
+-        for (const source of addedSources) {
+-          try { viewer.dataSources.remove(source, true); } catch { /* collection gone */ }
+-        }
+-        if (owns() && rejectedAdd) throw rejectedAdd.reason;
+-        return;
+-      }
+-
+-      // Await-free commit: the viewer accepted all three sources and this
+-      // load still owns the lifecycle.
+-      _cableDataSource = cableDataSource;
+-      _landingDataSource = landingDataSource;
+-      _referenceDataSource = referenceDataSource;
+-
+-      const cableEntities = _cableDataSource.entities.values;
+-      const landingEntities = _landingDataSource.entities.values;
+-      _pickByEntity = new WeakMap();
+-      _referenceRecords = [];
+-      _surfaceRecords = [];
+-
+-      cableEntities.forEach((entity, index) => {
+-        const feature = cableFeatures[index];
+-        const reference = featureReference(feature);
+-        if (!reference) return;
+-
+-        styleCableEntity(entity, feature);
+-        registerPickEntity(entity, {
+-          kind: 'cable',
+-          reference,
+-          label: featureLabel(feature),
+-        });
+-        _surfaceRecords.push({
+-          entity,
+-          base: Cesium.Cartesian3.fromDegrees(reference.lon, reference.lat, 0),
+-        });
+-        addReferenceStem({
+-          reference,
+-          label: featureLabel(feature),
+-          kind: 'cable',
+-          color: cableColor,
+-          feature,
+-        });
+-      });
+-
+-      landingEntities.forEach((entity, index) => {
+-        const feature = landingFeatures[index];
+-        const reference = featureReference(feature);
+-        if (!reference) return;
+-
+-        styleLandingEntity(entity, feature);
+-        registerPickEntity(entity, {
+-          kind: 'landing-point',
+-          reference,
+-          label: featureLabel(feature),
+-        });
+-        _surfaceRecords.push({
+-          entity,
+-          base: Cesium.Cartesian3.fromDegrees(reference.lon, reference.lat, 0),
+-        });
+-        addReferenceStem({
+-          reference,
+-          label: featureLabel(feature),
+-          kind: 'landing-point',
+-          color: landingColor,
+-          feature,
+-        });
+-      });
+-
+-      _count = cableFeatures.length + landingFeatures.length;
+-      _loaded = true;
+-      _lastUpdate = Date.now();
+-      _loadingLabel = '';
+-      updateVisibility();
+-      _referenceSweepGate.markDirty();
+-      viewer.scene.requestRender?.();
+-    } catch (error) {
+-      // A stale or aborted load reports nothing: its failure belongs to a
+-      // lifecycle the user already left.
+-      if (owns() && error?.name !== 'AbortError') {
+-        _error = error?.message || 'TeleGeography load failed';
+-        console.warn('[Data:telegeography-submarine-cables]', _error, error);
+-      }
+-    } finally {
+-      // Only the OWNING load may clear the shared lifecycle. A stale load
+-      // clearing `_loading`/`_abort` would hand a later enable/update a
+-      // duplicate load while the real one is still in flight.
+-      if (generation === _loadGeneration) {
+-        _loading = false;
+-        if (_abort === abort) _abort = null;
+-      }
+-    }
+-  }
+-
+-  function updateVisibility() {
+-    if (_cableDataSource) _cableDataSource.show = _enabled;
+-    if (_landingDataSource) _landingDataSource.show = _enabled;
+-    if (_referenceDataSource) _referenceDataSource.show = _enabled;
+-  }
+-
+-  function registerPickEntity(entity, info) {
+-    entity.__gevTeleGeography = info;
+-    _pickByEntity.set(entity, info);
+-  }
+-
+-  function styleCableEntity(entity, feature) {
+-    if (!entity?.polyline) return;
+-    const color = feature?.properties?.color
+-      ? Cesium.Color.fromCssColorString(String(feature.properties.color))
+-      : cableColor;
+-    entity.polyline.material = color.withAlpha(0.92);
+-    entity.polyline.width = 2.5;
+-    entity.polyline.clampToGround = true;
+-    entity.polyline.classificationType = _classificationType;
+-    entity.show = true;
+-  }
+-
+-  /**
+-   * Apply the single translucent blend pass to the landing-billboard and
+-   * reference-point collections. Landing entities carry only billboards and
+-   * reference entities only points, so completion is one applied collection
+-   * per source; a failed shape probe disables the optimization permanently
+-   * for this session and says so loudly in dev builds.
+-   * Both sources are probed BEFORE either is committed, so the helper's
+-   * "defaults untouched on shape drift" fallback holds across the pair too —
+-   * a reference-source failure can never leave the landing source already
+-   * forced to TRANSLUCENT.
+-   */
+-  function applyMarkerBlendOnce() {
+-    const landing = probeTranslucentMarkerBlend(_landingDataSource);
+-    const reference = probeTranslucentMarkerBlend(_referenceDataSource);
+-    if (landing.invariantFailed || reference.invariantFailed) {
+-      _markerBlendDone = true;
+-      if (!_markerBlendInvariantWarned && import.meta.env?.DEV === true) {
+-        _markerBlendInvariantWarned = true;
+-        console.error(
+-          '[Data:telegeography-submarine-cables] EntityCluster marker-collection '
+-          + 'shape changed — single-pass translucent blend skipped; markers fall '
+-          + 'back to Cesium\'s default two-pass blend.',
+-        );
+-      }
+-      return;
+-    }
+-    const landingBlend = commitTranslucentMarkerBlend(landing);
+-    const referenceBlend = commitTranslucentMarkerBlend(reference);
+-    if (landingBlend.applied > 0 && referenceBlend.applied > 0) _markerBlendDone = true;
+-  }
+-
+-  /**
+-   * Re-classify every cable ground line for the active surface. One batched
+-   * ground-primitive rebuild per stack switch — never per frame.
+-   * @param {Cesium.ClassificationType} next
+-   */
+-  function applyCableClassification(next) {
+-    if (next === undefined || next === _classificationType) return;
+-    _classificationType = next;
+-    if (!_cableDataSource) return;
+-    const entities = _cableDataSource.entities.values;
+-    for (let i = 0; i < entities.length; i++) {
+-      const polyline = entities[i].polyline;
+-      if (polyline) polyline.classificationType = next;
+-    }
+-    _viewer?.scene?.requestRender?.();
+-  }
+-
+-  function styleLandingEntity(entity, feature) {
+-    if (!entity?.point) return;
+-    entity.point.color = landingColor.withAlpha(0.92);
+-    entity.point.pixelSize = feature?.properties?.is_tbd ? 6 : 7;
+-    entity.point.outlineColor = cableOutline;
+-    entity.point.outlineWidth = 1;
+-    entity.point.disableDepthTestDistance = 0;
+-    entity.show = true;
+-  }
+-
+-  function addReferenceStem({ reference, label, kind, color, feature }) {
+-    if (!_referenceDataSource || !reference) return;
+-
+-    const base = Cesium.Cartesian3.fromDegrees(reference.lon, reference.lat, 0);
+-    const tip = Cesium.Cartesian3.fromDegrees(reference.lon, reference.lat, 2500);
+-    const info = {
+-      kind,
+-      reference,
+-      label,
+-      featureId: feature?.id || feature?.properties?.id || null,
+-    };
+-    const pointColor = color.withAlpha(kind === 'cable' ? 0.84 : 0.94);
+-    const stemColor = color.withAlpha(kind === 'cable' ? 0.58 : 0.68);
+-    // Constant properties on the sweep cadence, never per-frame callbacks:
+-    // the sweep redefines them through the alternating buffers below.
+-    const stemPositionBuffers = [[base, tip], [base, tip]];
+-
+-    const entity = _referenceDataSource.entities.add({
+-      id: `${kind}-reference-${_referenceRecords.length}-${info.featureId || 'feature'}`,
+-      position: tip,
+-      polyline: {
+-        positions: stemPositionBuffers[0],
+-        width: kind === 'cable' ? 2 : 2.4,
+-        material: new Cesium.ColorMaterialProperty(stemColor),
+-      },
+-      point: {
+-        pixelSize: kind === 'cable' ? 7 : 8,
+-        color: pointColor,
+-        outlineColor: Cesium.Color.BLACK.withAlpha(0.65),
+-        outlineWidth: 1,
+-        disableDepthTestDistance: 0,
+-      },
+-    });
+-
+-    entity.__gevTeleGeography = info;
+-    _pickByEntity.set(entity, info);
+-    const record = {
+-      id: entity.id,
+-      entity,
+-      base,
+-      tip,
+-      nextTip: Cesium.Cartesian3.clone(tip),
+-      stemPositionBuffers,
+-      stemPositionBufferIndex: 0,
+-      reference,
+-      kind,
+-      label: clampLabel(label),
+-      visible: false,
+-      distanceM: Infinity,
+-      entry: null,
+-    };
+-    record.entry = createCableOverlayEntry(record);
+-    _referenceRecords.push(record);
+-  }
+-
+-  function updateReferenceVisibility() {
+-    if (!_enabled || !_viewer?.camera) return;
+-    const cameraPos = _viewer.camera.positionWC;
+-    if (!cameraPos) return;
+-
+-    const canvasHeight = _viewer.scene?.canvas?.clientHeight || 1080;
+-    const fov = _viewer.camera.frustum?.fov || (Math.PI / 3);
+-    const occluder = new Cesium.EllipsoidalOccluder(Cesium.Ellipsoid.WGS84, cameraPos);
+-    for (const record of _referenceRecords) {
+-      const visible = occluder.isPointVisible(record.base);
+-      record.visible = visible;
+-      record.distanceM = Cesium.Cartesian3.distance(cameraPos, record.base);
+-      if (record.entity.show !== visible) {
+-        record.entity.show = visible;
+-      }
+-      // Hidden stems keep their last geometry; this same sweep refreshes them
+-      // in the pass where they turn visible again.
+-      if (visible) updateCableReferenceStem(record, cameraPos, canvasHeight, fov);
+-    }
+-    for (const record of _surfaceRecords) {
+-      const visible = occluder.isPointVisible(record.base);
+-      if (record.entity.show !== visible) {
+-        record.entity.show = visible;
+-      }
+-    }
+-    const winners = selectCableReferenceLabelWinners(_referenceRecords);
+-    let changed = winners.length !== _lastPublishedCount;
+-    for (let i = 0; i < winners.length; i++) {
+-      const record = winners[i];
+-      const priority = cableReferencePriority(record.distanceM);
+-      record.entry.priority = priority;
+-      _publishScratch[i] = record.entry;
+-      if (!changed
+-        && (_lastPublishedIds[i] !== record.entry.id
+-          || _lastPublishedPriorities[i] !== priority)) {
+-        changed = true;
+-      }
+-    }
+-    _publishScratch.length = winners.length;
+-    _referenceLabelCount = winners.length;
+-    // The marker collections are created lazily by the visualizers, so the
+-    // single-pass blend is applied on the sweep cadence until both landed.
+-    if (!_markerBlendDone) applyMarkerBlendOnce();
+-    if (!changed) return;
+-    _overlayPublisher.publish(_publishScratch);
+-    _lastPublishedCount = winners.length;
+-    for (let i = 0; i < winners.length; i++) {
+-      _lastPublishedIds[i] = _publishScratch[i].id;
+-      _lastPublishedPriorities[i] = _publishScratch[i].priority;
+-    }
+-    _lastPublishedIds.length = winners.length;
+-    _lastPublishedPriorities.length = winners.length;
+-  }
+-
+-  function beginInteraction(viewer) {
+-    if (_clickHandler) return;
+-    _clickHandler = screenSpaceEventHandlerFactory(viewer.scene.canvas);
+-    _clickHandler.setInputAction((click) => {
+-      if (!_enabled) return;
+-      const picked = viewer.scene.pick(click.position);
+-      const record = resolvePickRecord(picked);
+-      if (!record?.reference) return;
+-      flyToReference(viewer, record.reference);
+-    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+-  }
+-
+-  function resolvePickRecord(picked) {
+-    if (!picked) return null;
+-    const primitive = picked.primitive;
+-    if (primitive) {
+-      const primitiveInfo = _pickByEntity.get(primitive);
+-      if (primitiveInfo) return primitiveInfo;
+-      if (primitive.__gevTeleGeography) return primitive.__gevTeleGeography;
+-      if (primitive.id && typeof primitive.id === 'object' && primitive.id.reference) {
+-        return primitive.id;
+-      }
+-    }
+-
+-    const entity = picked.id;
+-    if (entity) {
+-      const entityInfo = _pickByEntity.get(entity);
+-      if (entityInfo) return entityInfo;
+-      if (entity.__gevTeleGeography) return entity.__gevTeleGeography;
+-      if (entity.id && typeof entity.id === 'object' && entity.id.reference) {
+-        return entity.id;
+-      }
+-    }
+-
+-    return null;
+-  }
+-
+-  function flyToReference(viewer, reference) {
+-    if (!viewer || !reference) return;
+-    const destination = Cesium.Cartesian3.fromDegrees(reference.lon, reference.lat, 6500);
+-    viewer.camera.cancelFlight();
+-    viewer.camera.flyTo({
+-      destination,
+-      orientation: {
+-        heading: viewer.camera.heading || 0,
+-        pitch: Cesium.Math.toRadians(-52),
+-        roll: 0,
+-      },
+-      duration: 1.35,
+-      easingFunction: Cesium.EasingFunction.CUBIC_IN_OUT,
+-    });
+-  }
+-
+-  function featureReference(feature) {
+-    const geometry = feature?.geometry;
+-    if (!geometry) return null;
+-
+-    const props = feature?.properties || {};
+-    const propertyCoords = coordsFromProperty(props.coordinates);
+-    if (propertyCoords) {
+-      return {
+-        lon: propertyCoords[0],
+-        lat: propertyCoords[1],
+-      };
+-    }
+-
+-    if (geometry.type === 'Point') {
+-      const coords = coordsFromPoint(geometry.coordinates);
+-      if (!coords) return null;
+-      return { lon: coords[0], lat: coords[1] };
+-    }
+-
+-    const coords = [];
+-    collectLonLat(geometry.coordinates, coords);
+-    if (!coords.length) return null;
+-
+-    let lonSum = 0;
+-    let latSum = 0;
+-    for (const [lon, lat] of coords) {
+-      lonSum += lon;
+-      latSum += lat;
+-    }
+-    return {
+-      lon: lonSum / coords.length,
+-      lat: latSum / coords.length,
+-    };
+-  }
+-
+-  function coordsFromProperty(value) {
+-    if (!Array.isArray(value) || value.length < 2) return null;
+-    const lon = Number(value[0]);
+-    const lat = Number(value[1]);
+-    if (!Number.isFinite(lon) || !Number.isFinite(lat)) return null;
+-    return [lon, lat];
+-  }
+-
+-  function coordsFromPoint(value) {
+-    if (!Array.isArray(value) || value.length < 2) return null;
+-    const lon = Number(value[0]);
+-    const lat = Number(value[1]);
+-    if (!Number.isFinite(lon) || !Number.isFinite(lat)) return null;
+-    return [lon, lat];
+-  }
+-
+-  function collectLonLat(value, out) {
+-    if (!Array.isArray(value)) return;
+-    if (typeof value[0] === 'number' && typeof value[1] === 'number') {
+-      const lon = Number(value[0]);
+-      const lat = Number(value[1]);
+-      if (Number.isFinite(lon) && Number.isFinite(lat)) {
+-        out.push([lon, lat]);
+-      }
+-      return;
+-    }
+-    for (const child of value) collectLonLat(child, out);
+-  }
+-
+-  function featureLabel(feature) {
+-    const props = feature?.properties || {};
+-    return String(props.name || props.id || feature?.id || '').trim();
+-  }
+-
+-  function normalizeFeatures(json, kind) {
+-    const features = Array.isArray(json?.features) ? json.features : [];
+-    return features.map((feature, index) => {
+-      const id = feature?.properties?.id || feature?.id || `${kind}-${index}`;
+-      return {
+-        ...feature,
+-        id: String(id),
+-      };
+-    });
+-  }
+-
+-  async function fetchJson(url, signal) {
+-    const response = await fetch(url, { signal, cache: 'force-cache' });
+-    if (!response.ok) {
+-      throw new Error(`HTTP ${response.status} for ${url}`);
+-    }
+-    return response.json();
+-  }
+-
+-  return {
+-    id: 'telegeography-submarine-cables',
+-    name: 'Submarine Cables',
+-    icon: '≋',
+-    source: 'TeleGeography',
+-    updateInterval: 0,
+-    statsRefreshInterval: 500,
+-
+-    init(viewer) {
+-      _viewer = viewer;
+-      _classificationType = cableClassificationTypeForScene(viewer?.scene);
+-      if (!_mapStackListener && mapStackEventTarget?.addEventListener) {
+-        _mapStackListener = (event) => {
+-          applyCableClassification(event?.detail?.activeId
+-            ? cableClassificationTypeForStack(event.detail.activeId)
+-            : cableClassificationTypeForScene(_viewer?.scene));
+-        };
+-        mapStackEventTarget.addEventListener('gev:map-stack-changed', _mapStackListener);
+-      }
+-      beginInteraction(viewer);
+-      if (!_preRenderRemover) {
+-        _preRenderRemover = viewer.scene.preRender.addEventListener(() => {
+-          // The camera is handed to the gate so tracked/orbit cameras — which
+-          // never emit moveEnd — reach the motion fallback. No render is
+-          // requested for a fallback sweep: it only fires while the camera is
+-          // already moving, so frames are flowing by construction.
+-          if (!_enabled || !_loaded
+-            || !_referenceSweepGate.shouldRun(viewer.camera)) return;
+-          updateReferenceVisibility();
+-        });
+-      }
+-      if (!_moveEndRemover) {
+-        _moveEndRemover = viewer.camera.moveEnd.addEventListener(() => {
+-          if (!_enabled) return;
+-          _referenceSweepGate.markDirty();
+-          viewer.scene.requestRender?.();
+-        });
+-      }
+-    },
+-
+-    enable(viewer) {
+-      _enabled = true;
+-      updateVisibility();
+-      _overlayPublisher.show();
+-      // A hide() cleared the host source, so an identical cohort must still
+-      // republish on the next sweep.
+-      resetPublishSignature();
+-      _referenceSweepGate.markDirty();
+-      // The gate is dirty-only; ask for the frame its sweep needs in case the
+-      // camera is parked and nothing else is rendering.
+-      (viewer || _viewer)?.scene?.requestRender?.();
+-      void load(viewer || _viewer);
+-    },
+-
+-    disable() {
+-      _enabled = false;
+-      updateVisibility();
+-      _overlayPublisher.hide();
+-      resetPublishSignature();
+-      if (_loading && _abort) {
+-        _abort.abort();
+-        _loading = false;
+-        _loadingLabel = '';
+-      }
+-    },
+-
+-    update(viewer) {
+-      return load(viewer || _viewer);
+-    },
+-
+-    destroy(viewer) {
+-      if (_abort) _abort.abort();
+-      if (_cableDataSource && viewer) viewer.dataSources.remove(_cableDataSource, true);
+-      if (_landingDataSource && viewer) viewer.dataSources.remove(_landingDataSource, true);
+-      if (_referenceDataSource && viewer) viewer.dataSources.remove(_referenceDataSource, true);
+-      // hide() clears every published host entry and goes invisible while
+-      // keeping the publisher reusable — the legacy layer supported re-init
+-      // after destroy, and hidden publishers already drop late publishes.
+-      // Pinned by the direct-destroy host test: removing this line leaves a
+-      // visible overlay source with orphan labels.
+-      _overlayPublisher.hide();
+-      if (_clickHandler) {
+-        _clickHandler.destroy();
+-        _clickHandler = null;
+-      }
+-      if (_preRenderRemover) {
+-        _preRenderRemover();
+-        _preRenderRemover = null;
+-      }
+-      if (_moveEndRemover) {
+-        _moveEndRemover();
+-        _moveEndRemover = null;
+-      }
+-      if (_mapStackListener && mapStackEventTarget?.removeEventListener) {
+-        mapStackEventTarget.removeEventListener('gev:map-stack-changed', _mapStackListener);
+-        _mapStackListener = null;
+-      }
+-      _viewer = null;
+-      _enabled = false;
+-      _loading = false;
+-      _loaded = false;
+-      _count = 0;
+-      _error = null;
+-      _lastUpdate = null;
+-      _loadingLabel = '';
+-      _cableDataSource = null;
+-      _landingDataSource = null;
+-      _referenceDataSource = null;
+-      _referenceRecords = [];
+-      _surfaceRecords = [];
+-      _pickByEntity = new WeakMap();
+-      _referenceLabelCount = 0;
+-      _publishScratch.length = 0;
+-      _markerBlendDone = false;
+-      _markerBlendInvariantWarned = false;
+-      resetPublishSignature();
+-      _referenceSweepGate.reset();
+-    },
+-
+-    getStats() {
+-      return {
+-        count: _count,
+-        lastUpdate: _lastUpdate,
+-        loading: _loading,
+-        loadingLabel: _loadingLabel,
+-        error: _error,
+-        referenceLabelCount: _referenceLabelCount,
+-      };
+-    },
+-  };
+-}
+-
+-function clampLabel(value, maxLength = 34) {
+-  const text = String(value || '').replace(/\s+/g, ' ').trim();
+-  if (!text) return '';
+-  if (text.length <= maxLength) return text;
+-  return `${text.slice(0, Math.max(1, maxLength - 3))}...`;
+-}
+diff --git a/src/data/telegeographySubmarineCables.test.mjs b/src/data/telegeographySubmarineCables.test.mjs
+deleted file mode 100644
+index 1155056..0000000
+--- a/src/data/telegeographySubmarineCables.test.mjs
++++ /dev/null
+@@ -1,1256 +0,0 @@
+-import test from 'node:test';
+-import assert from 'node:assert/strict';
+-import { readFileSync } from 'node:fs';
+-import * as Cesium from 'cesium';
+-import { MAP_STACKS } from '../mapStackController.js';
+-import {
+-  CABLE_LABEL_DEPTH_DECISION,
+-  CABLE_OVERLAY_COLLISION_CAPACITY,
+-  CABLE_OVERLAY_SOURCE_ID,
+-  CABLE_REFERENCE_LABEL_WINNER_CAP,
+-  CABLE_STEM_TIP_EPSILON_M,
+-  CABLE_SWEEP_MOTION_EPSILON_M,
+-  CABLE_SWEEP_MOTION_PROBE_INTERVAL_MS,
+-  applyTranslucentMarkerBlend,
+-  cableClassificationTypeForScene,
+-  cableClassificationTypeForStack,
+-  cableReferencePriority,
+-  createCableOverlayEntry,
+-  createCableOverlayPublisher,
+-  createCableReferenceSweepGate,
+-  createTeleGeographySubmarineCableLayer,
+-  selectCableReferenceLabelWinners,
+-  updateCableReferenceStem,
+-} from './telegeographySubmarineCables.js';
+-
+-test('cable reference winners remain nearest-first and hard-capped', () => {
+-  const records = Array.from({ length: 300 }, (_, index) => ({
+-    entity: { id: `reference-${index}` },
+-    label: `Reference ${index}`,
+-    visible: true,
+-    distanceM: 1000 + index,
+-  }));
+-
+-  let winners = selectCableReferenceLabelWinners(records);
+-  assert.equal(winners.length, CABLE_REFERENCE_LABEL_WINNER_CAP);
+-  assert.equal(winners[0], records[0]);
+-  assert.equal(winners.at(-1), records[CABLE_REFERENCE_LABEL_WINNER_CAP - 1]);
+-
+-  for (let index = 0; index < 80; index++) records[index].visible = false;
+-  winners = selectCableReferenceLabelWinners(records);
+-  assert.equal(winners.length, CABLE_REFERENCE_LABEL_WINNER_CAP);
+-  assert.equal(winners[0], records[80], 'hidden references release their slots to the next nearest');
+-
+-  records[90].distanceM = 10_000_000; // beyond the 9,000 km reference range
+-  winners = selectCableReferenceLabelWinners(records);
+-  assert.ok(!winners.includes(records[90]), 'out-of-range references never reach the host');
+-});
+-
+-test('cable overlay entries satisfy the shared presentation contract', () => {
+-  const tip = Cesium.Cartesian3.fromDegrees(-40, 35, 2500);
+-  const record = {
+-    id: 'cable-reference-0-atlantic-1',
+-    kind: 'cable',
+-    label: 'Atlantic Crossing-1',
+-    tip,
+-    distanceM: 400_000,
+-  };
+-  const entry = createCableOverlayEntry(record);
+-
+-  assert.equal(entry.id, 'cable-reference-0-atlantic-1');
+-  assert.equal(entry.position, tip, 'entry stays attached to the mutable stem-tip Cartesian');
+-  assert.equal(entry.variant, 'label');
+-  assert.equal(entry.title, 'Atlantic Crossing-1');
+-  assert.equal(entry.accent, '#39d5ff');
+-  assert.equal(entry.collisionGroup, 'ambient-label');
+-  assert.equal(entry.paintLane, 'ambient-label');
+-  assert.equal(entry.interactive, false, 'point/stem/line picking remains Cesium-native');
+-  assert.equal(entry.maxDistance, 9_000_000);
+-  assert.equal(entry.distanceFadeStartRatio, 0.7);
+-  assert.deepEqual(entry.distanceScale, {
+-    near: 250_000,
+-    nearValue: 1,
+-    far: 9_000_000,
+-    farValue: 0.62,
+-  }, 'former native scaleByDistance curve is preserved');
+-  assert.equal(entry.edgeFade, 'keyhole');
+-  assert.equal(entry.horizonCull, true);
+-  assert.equal(entry.terrainOcclusion, false);
+-  assert.equal(entry.verticalOnly, true);
+-  assert.equal(entry.placement, 'above');
+-
+-  const landing = createCableOverlayEntry({
+-    id: 'landing-point-reference-1-lisbon',
+-    kind: 'landing-point',
+-    label: 'Lisbon, Portugal',
+-    tip,
+-    distanceM: 100_000,
+-  });
+-  assert.equal(landing.accent, '#8fffd2', 'landing points keep their mint accent');
+-  assert.equal(landing.interactive, false);
+-});
+-
+-test('cable reference priority is nearest-first and sweep-stable', () => {
+-  assert.ok(cableReferencePriority(1_000) > cableReferencePriority(1_000_000));
+-  assert.ok(cableReferencePriority(1_000_000) > cableReferencePriority(8_000_000));
+-  assert.equal(
+-    cableReferencePriority(500_000),
+-    cableReferencePriority(500_000 + 10_000),
+-    '50 km quantization keeps slow camera drift from reshuffling ranks',
+-  );
+-  assert.equal(
+-    cableReferencePriority(undefined),
+-    cableReferencePriority(9_000_000),
+-    'missing distances rank like the range edge instead of jumping the queue',
+-  );
+-});
+-
+-test('cable overlay publisher owns the production show/publish/hide lifecycle', () => {
+-  const calls = [];
+-  const publisher = createCableOverlayPublisher({
+-    host: {
+-      setVisible: (...args) => calls.push(['visible', ...args]),
+-      setEntries: (...args) => calls.push(['entries', ...args]),
+-      clearSource: (...args) => calls.push(['clear', ...args]),
+-    },
+-  });
+-
+-  publisher.publish([{ id: 'ignored-before-show' }]);
+-  publisher.show();
+-  publisher.show();
+-  publisher.publish([{ id: 'cable-1' }]);
+-  publisher.hide();
+-  publisher.publish([{ id: 'dropped-while-hidden' }]);
+-  publisher.hide();
+-
+-  assert.deepEqual(calls[0], ['visible', CABLE_OVERLAY_SOURCE_ID, true]);
+-  assert.deepEqual(calls[1].slice(0, 3), ['entries', CABLE_OVERLAY_SOURCE_ID, [{ id: 'cable-1' }]]);
+-  assert.deepEqual(calls[1][3], {
+-    cohortLimit: CABLE_REFERENCE_LABEL_WINNER_CAP,
+-    collisionCapacity: CABLE_OVERLAY_COLLISION_CAPACITY,
+-    moving: false,
+-  });
+-  assert.deepEqual(calls[2], ['clear', CABLE_OVERLAY_SOURCE_ID]);
+-  assert.deepEqual(calls[3], ['visible', CABLE_OVERLAY_SOURCE_ID, false]);
+-  assert.equal(calls.length, 4, 'hidden publishers drop late publishes; repeat hide is a no-op');
+-
+-  // The production teardown (layer.destroy) is hide(): the publisher stays
+-  // reusable for the layer's supported re-init-after-destroy contract. There
+-  // is intentionally no permanent-destroy method to test.
+-  assert.equal(publisher.destroy, undefined);
+-  publisher.show();
+-  publisher.publish([{ id: 'cable-2' }]);
+-  assert.deepEqual(calls[4], ['visible', CABLE_OVERLAY_SOURCE_ID, true]);
+-  assert.deepEqual(calls[5].slice(0, 3), ['entries', CABLE_OVERLAY_SOURCE_ID, [{ id: 'cable-2' }]]);
+-});
+-
+-test('cable ground lines classify against exactly the active surface on every stack', () => {
+-  // Photorealistic tiles render with the globe hidden — 3D-tile pass only.
+-  assert.equal(
+-    cableClassificationTypeForStack('photoreal'),
+-    Cesium.ClassificationType.CESIUM_3D_TILE,
+-  );
+-  // Every globe stack renders imagery on the shown globe — terrain pass only.
+-  for (const stackId of ['bing-aerial', 'bing-labels', 'esri-imagery', 'osm']) {
+-    assert.equal(
+-      cableClassificationTypeForStack(stackId),
+-      Cesium.ClassificationType.TERRAIN,
+-      `${stackId} must classify against terrain so cables stay visible there`,
+-    );
+-  }
+-  // Unknown stack → BOTH: visible on every surface, the shipped fallback.
+-  // A TRUTHY unknown id must reach it too — "not photoreal" is not the same
+-  // claim as "renders on the globe", and asserting TERRAIN for an id this
+-  // module has never heard of would hide the cables on a future 3D-tile
+-  // stack instead of degrading to the documented safe behavior.
+-  assert.equal(cableClassificationTypeForStack('some-future-stack'), Cesium.ClassificationType.BOTH);
+-  assert.equal(cableClassificationTypeForStack('photoreal-v2'), Cesium.ClassificationType.BOTH);
+-  assert.equal(cableClassificationTypeForStack(''), Cesium.ClassificationType.BOTH);
+-  assert.equal(cableClassificationTypeForStack(undefined), Cesium.ClassificationType.BOTH);
+-  assert.equal(cableClassificationTypeForStack(null), Cesium.ClassificationType.BOTH);
+-
+-  // Every id that actually ships must be a KNOWN id: a stack added to
+-  // MAP_STACKS without a mapping here silently loses its halved command set,
+-  // so the omission fails loudly instead of degrading quietly.
+-  for (const stack of MAP_STACKS) {
+-    assert.notEqual(
+-      cableClassificationTypeForStack(stack.id),
+-      Cesium.ClassificationType.BOTH,
+-      `MAP_STACKS id '${stack.id}' has no cable classification mapping`,
+-    );
+-  }
+-
+-  // Boot fires no stack event; the initial value derives from live scene
+-  // state exactly like the height-datum listeners: photoreal ⇔ globe hidden.
+-  assert.equal(
+-    cableClassificationTypeForScene({ globe: { show: false } }),
+-    Cesium.ClassificationType.CESIUM_3D_TILE,
+-  );
+-  assert.equal(
+-    cableClassificationTypeForScene({ globe: { show: true } }),
+-    Cesium.ClassificationType.TERRAIN,
+-  );
+-  assert.equal(cableClassificationTypeForScene(null), Cesium.ClassificationType.BOTH);
+-});
+-
+-test('a map-stack change re-classifies every cable line once, and destroy detaches the listener', async () => {
+-  const listeners = new Map();
+-  const eventTarget = {
+-    addEventListener: (name, fn) => listeners.set(name, fn),
+-    removeEventListener: (name, fn) => {
+-      if (listeners.get(name) === fn) listeners.delete(name);
+-    },
+-  };
+-  const env = await createRealCableLayerHarness({ mapStackEventTarget: eventTarget });
+-  const cableSource = env.dataSources.find((ds) => /Submarine Cables/.test(ds.name || ''));
+-  const classificationOf = (entity) => entity.polyline.classificationType.getValue();
+-
+-  // The harness scene has no globe → BOTH at init (safe unknown fallback).
+-  const cableEntity = cableSource.entities.values[0];
+-  assert.equal(classificationOf(cableEntity), Cesium.ClassificationType.BOTH);
+-  const listener = listeners.get('gev:map-stack-changed');
+-  assert.equal(typeof listener, 'function', 'init must subscribe to the stack event');
+-
+-  listener({ detail: { activeId: 'photoreal', status: 'ready' } });
+-  assert.equal(classificationOf(cableEntity), Cesium.ClassificationType.CESIUM_3D_TILE);
+-
+-  listener({ detail: { activeId: 'osm', status: 'ready' } });
+-  assert.equal(classificationOf(cableEntity), Cesium.ClassificationType.TERRAIN);
+-
+-  env.layer.destroy(env.viewer);
+-  assert.equal(listeners.has('gev:map-stack-changed'), false, 'destroy must detach the stack listener');
+-});
+-
+-test('marker collections blend in a single translucent pass behind a loud shape invariant', async () => {
+-  // Helper contract on a REAL Cesium cluster shape.
+-  const ds = new Cesium.CustomDataSource('blend-probe');
+-  let result = applyTranslucentMarkerBlend(ds);
+-  assert.deepEqual(result, { applied: 0, pending: 2, invariantFailed: false },
+-    'pre-visualizer clusters are pending, never a shape failure');
+-
+-  ds.clustering._billboardCollection = new Cesium.BillboardCollection();
+-  ds.clustering._pointCollection = new Cesium.PointPrimitiveCollection();
+-  result = applyTranslucentMarkerBlend(ds);
+-  assert.deepEqual(result, { applied: 2, pending: 0, invariantFailed: false });
+-  assert.equal(ds.clustering._billboardCollection.blendOption, Cesium.BlendOption.TRANSLUCENT);
+-  assert.equal(ds.clustering._pointCollection.blendOption, Cesium.BlendOption.TRANSLUCENT);
+-
+-  // Shape drift fails LOUDLY-detectably instead of applying blindly: a
+-  // renamed field or a foreign object type must never be touched.
+-  assert.equal(applyTranslucentMarkerBlend({ clustering: {} }).invariantFailed, true,
+-    'missing private fields mean Cesium changed shape');
+-  const wrongType = new Cesium.CustomDataSource('wrong-type');
+-  wrongType.clustering._billboardCollection = { blendOption: 0 };
+-  const wrongResult = applyTranslucentMarkerBlend(wrongType);
+-  assert.equal(wrongResult.invariantFailed, true);
+-  assert.equal(wrongType.clustering._billboardCollection.blendOption, 0, 'foreign objects are left untouched');
+-  assert.equal(applyTranslucentMarkerBlend(null).invariantFailed, true);
+-
+-  // ATOMICITY: a shape failure on the SECOND collection must not leave the
+-  // FIRST one already forced. Validation of every field/type completes before
+-  // the first assignment, so a failed probe applies nothing at all — that is
+-  // what "leaves Cesium's default blend untouched" has to mean.
+-  const partial = new Cesium.CustomDataSource('partial-shape');
+-  partial.clustering._billboardCollection = new Cesium.BillboardCollection();
+-  partial.clustering._pointCollection = { blendOption: 0 }; // renamed/reshaped
+-  const partialResult = applyTranslucentMarkerBlend(partial);
+-  assert.equal(partialResult.invariantFailed, true);
+-  assert.equal(partialResult.applied, 0, 'a failed probe reports zero applications');
+-  assert.equal(
+-    partial.clustering._billboardCollection.blendOption,
+-    Cesium.BlendOption.OPAQUE_AND_TRANSLUCENT,
+-    'the valid first collection keeps Cesium\'s default blend when the second fails',
+-  );
+-  assert.equal(partial.clustering._pointCollection.blendOption, 0, 'the malformed collection is never touched');
+-
+-  // Real-layer wiring: once the visualizers have created the collections,
+-  // the next sweep applies the single-pass blend to both marker sources.
+-  const env = await createRealCableLayerHarness();
+-  env.raiseSweep();
+-  const landingSource = env.dataSources.find((source) => /Landing Points/.test(source.name || ''));
+-  const referenceSource = env.dataSources.find((source) => /References/.test(source.name || ''));
+-  landingSource.clustering._billboardCollection = new Cesium.BillboardCollection();
+-  landingSource.clustering._pointCollection = new Cesium.PointPrimitiveCollection();
+-  referenceSource.clustering._billboardCollection = new Cesium.BillboardCollection();
+-  referenceSource.clustering._pointCollection = new Cesium.PointPrimitiveCollection();
+-  for (const fn of env.listeners.moveEnd) fn();
+-  env.raiseSweep();
+-  assert.equal(
+-    landingSource.clustering._billboardCollection.blendOption,
+-    Cesium.BlendOption.TRANSLUCENT,
+-    'landing billboards blend in one pass after the sweep',
+-  );
+-  assert.equal(
+-    referenceSource.clustering._pointCollection.blendOption,
+-    Cesium.BlendOption.TRANSLUCENT,
+-    'reference points blend in one pass after the sweep',
+-  );
+-  env.layer.destroy(env.viewer);
+-
+-  // The same atomicity holds ACROSS the two marker sources: the layer probes
+-  // both before committing either, so a reshaped reference source can never
+-  // leave the landing source already forced to TRANSLUCENT.
+-  const failEnv = await createRealCableLayerHarness();
+-  const failLanding = failEnv.dataSources.find((source) => /Landing Points/.test(source.name || ''));
+-  const failReference = failEnv.dataSources.find((source) => /References/.test(source.name || ''));
+-  failLanding.clustering._billboardCollection = new Cesium.BillboardCollection();
+-  failLanding.clustering._pointCollection = new Cesium.PointPrimitiveCollection();
+-  delete failReference.clustering._pointCollection; // Cesium reshaped
+-  failEnv.raiseSweep();
+-  assert.equal(
+-    failLanding.clustering._billboardCollection.blendOption,
+-    Cesium.BlendOption.OPAQUE_AND_TRANSLUCENT,
+-    'a reference-source shape failure leaves the landing source on the default blend',
+-  );
+-  failEnv.layer.destroy(failEnv.viewer);
+-});
+-
+-test('cable reference sweep gate is dirty-only — no timer path', () => {
+-  const gate = createCableReferenceSweepGate();
+-  assert.equal(gate.shouldRun(), true, 'initial dirtiness covers enable/load');
+-  // However many frames render, an un-dirtied gate never runs the sweep —
+-  // the former 500 ms timer path is gone.
+-  for (let frame = 0; frame < 200; frame++) {
+-    assert.equal(gate.shouldRun(), false);
+-  }
+-  gate.markDirty();
+-  assert.equal(gate.shouldRun(), true, 'moveEnd dirtiness runs exactly once');
+-  assert.equal(gate.shouldRun(), false);
+-  gate.reset();
+-  assert.equal(gate.shouldRun(), true, 'reset restores the initial dirtiness');
+-});
+-
+-test('the sweep gate falls back to motion probes for cameras that never emit moveEnd', () => {
+-  let clock = 0;
+-  const frameMs = 1000 / 60;
+-  const origin = Cesium.Cartesian3.fromDegrees(-40, 35, 4_500_000);
+-  const camera = { positionWC: Cesium.Cartesian3.clone(origin) };
+-  const gate = createCableReferenceSweepGate({ now: () => clock });
+-  const runFrames = (count, step = () => {}) => {
+-    let sweeps = 0;
+-    for (let frame = 0; frame < count; frame++) {
+-      clock += frameMs;
+-      step(frame);
+-      if (gate.shouldRun(camera)) sweeps++;
+-    }
+-    return sweeps;
+-  };
+-
+-  assert.equal(gate.shouldRun(camera), true, 'initial dirtiness still covers enable/load');
+-
+-  // PARKED: 100 s of frames on a camera that never moves must cost ZERO
+-  // sweeps — the fallback is motion-aware, not a reinstated timer.
+-  assert.equal(runFrames(6000), 0, 'a parked camera costs zero sweeps however long frames flow');
+-
+-  // Sub-epsilon jitter is not motion either: the probe compares against the
+-  // last SWEPT position, so numeric noise can never accumulate into a sweep.
+-  const jitter = runFrames(6000, (frame) => {
+-    camera.positionWC = Cesium.Cartesian3.add(
+-      origin,
+-      new Cesium.Cartesian3(0, 0, (frame % 2) * (CABLE_SWEEP_MOTION_EPSILON_M / 10)),
+-      new Cesium.Cartesian3(),
+-    );
+-  });
+-  assert.equal(jitter, 0, 'sub-epsilon camera jitter never earns a sweep');
+-
+-  // TRACKING: a follow camera advances every frame and never emits moveEnd.
+-  // The sweep must land inside one probe window instead of starving forever.
+-  const timedGate = createCableReferenceSweepGate({ now: () => clock });
+-  const timedCamera = { positionWC: Cesium.Cartesian3.clone(origin) };
+-  assert.equal(timedGate.shouldRun(timedCamera), true, 'the gate starts dirty');
+-  const trackingStart = clock;
+-  let sweepAt = null;
+-  for (let frame = 0; frame < 600 && sweepAt === null; frame++) {
+-    clock += frameMs;
+-    timedCamera.positionWC = Cesium.Cartesian3.add(
+-      origin,
+-      new Cesium.Cartesian3(0, 0, 12 * (frame + 1)), // ~0.7 km/s: a tracked jet
+-      new Cesium.Cartesian3(),
+-    );
+-    if (timedGate.shouldRun(timedCamera)) sweepAt = clock;
+-  }
+-  assert.notEqual(sweepAt, null, 'a continuously moving camera must not starve the sweep');
+-  assert.ok(
+-    sweepAt - trackingStart <= CABLE_SWEEP_MOTION_PROBE_INTERVAL_MS + frameMs,
+-    `the fallback sweep must land inside one probe window (landed at ${sweepAt - trackingStart} ms)`,
+-  );
+-  assert.ok(
+-    sweepAt - trackingStart >= CABLE_SWEEP_MOTION_PROBE_INTERVAL_MS,
+-    'and never sooner — the probe stays bounded to one sample per window',
+-  );
+-
+-  // moveEnd still wins immediately: an event-dirtied gate does not wait for
+-  // the probe window it is sitting inside.
+-  timedGate.markDirty();
+-  assert.equal(timedGate.shouldRun(timedCamera), true, 'moveEnd dirtiness bypasses the probe window');
+-  assert.equal(timedGate.shouldRun(timedCamera), false, 'and still runs exactly once');
+-
+-  // A gate called without a camera keeps the pure dirty-only contract.
+-  const cameraless = createCableReferenceSweepGate({ now: () => clock });
+-  assert.equal(cameraless.shouldRun(), true);
+-  clock += CABLE_SWEEP_MOTION_PROBE_INTERVAL_MS * 10;
+-  assert.equal(cameraless.shouldRun(), false, 'no camera state means no motion fallback');
+-});
+-
+-function makeStemRecord(lon = -40, lat = 35) {
+-  const base = Cesium.Cartesian3.fromDegrees(lon, lat, 0);
+-  const tip = Cesium.Cartesian3.fromDegrees(lon, lat, 2500);
+-  const stemPositionBuffers = [[base, tip], [base, tip]];
+-  const setCalls = { position: 0, polyline: 0, polylineArrays: [] };
+-  return {
+-    record: {
+-      entity: {
+-        position: { setValue: () => { setCalls.position++; } },
+-        polyline: {
+-          positions: {
+-            setValue: (value) => {
+-              setCalls.polyline++;
+-              setCalls.polylineArrays.push(value);
+-            },
+-          },
+-        },
+-      },
+-      base,
+-      tip,
+-      nextTip: Cesium.Cartesian3.clone(tip),
+-      stemPositionBuffers,
+-      stemPositionBufferIndex: 0,
+-      reference: { lon, lat },
+-    },
+-    setCalls,
+-    stemPositionBuffers,
+-  };
+-}
+-
+-test('staticized stems redefine constants only on real tip changes, alternating buffers', () => {
+-  const { record, setCalls, stemPositionBuffers } = makeStemRecord();
+-  const canvasHeight = 900;
+-  const fov = Math.PI / 3;
+-  const camera = Cesium.Cartesian3.fromDegrees(-40, 35, 500_000);
+-
+-  assert.equal(updateCableReferenceStem(record, camera, canvasHeight, fov), true);
+-  assert.equal(setCalls.position, 1);
+-  assert.equal(setCalls.polyline, 1);
+-  assert.equal(setCalls.polylineArrays[0], stemPositionBuffers[1], 'first real update selects the alternate buffer');
+-
+-  // Sub-epsilon camera noise must not redefine anything.
+-  const jitter = Cesium.Cartesian3.add(
+-    camera,
+-    new Cesium.Cartesian3(CABLE_STEM_TIP_EPSILON_M / 10, 0, 0),
+-    new Cesium.Cartesian3(),
+-  );
+-  assert.equal(updateCableReferenceStem(record, jitter, canvasHeight, fov), false);
+-  assert.equal(setCalls.position, 1);
+-  assert.equal(setCalls.polyline, 1);
+-
+-  // A real camera move flips back to the first buffer: steady state allocates
+-  // no arrays beyond the two preallocated ones.
+-  const moved = Cesium.Cartesian3.add(
+-    camera,
+-    new Cesium.Cartesian3(0, 0, 400_000),
+-    new Cesium.Cartesian3(),
+-  );
+-  assert.equal(updateCableReferenceStem(record, moved, canvasHeight, fov), true);
+-  assert.equal(setCalls.polylineArrays[1], stemPositionBuffers[0]);
+-  assert.equal(new Set(setCalls.polylineArrays).size, 2);
+-
+-  // Stem height honors the shipped 700 m..85 km clamp.
+-  const tipCarto = Cesium.Cartographic.fromCartesian(record.tip);
+-  assert.ok(tipCarto.height >= 700 && tipCarto.height <= 85_000);
+-});
+-
+-test('the depth decision is the dated Option-2 host migration, superseding Option 1', () => {
+-  assert.deepEqual(CABLE_LABEL_DEPTH_DECISION, {
+-    option: 2,
+-    decidedAt: '2026-08-18',
+-    supersedes: '2026-08-02',
+-    depthTested: false,
+-  });
+-});
+-
+-test('cables create no native labels and no per-frame geometry callbacks', () => {
+-  const source = readFileSync(new URL('./telegeographySubmarineCables.js', import.meta.url), 'utf8');
+-  assert.doesNotMatch(source, /new Cesium\.LabelGraphics/, 'reverting to native labels must fail this pin');
+-  assert.doesNotMatch(source, /new Cesium\.CallbackProperty/, 'reverting to per-frame stem callbacks must fail this pin');
+-  assert.match(source, /setOverlayEntries/, 'labels must flow through the shared world-overlay host');
+-  assert.match(source, /record\.entity\.position\.setValue\(record\.tip\)/);
+-  assert.match(source, /const stemPositionBuffers = \[\[base, tip\], \[base, tip\]\]/);
+-  assert.match(source, /record\.entity\.polyline\.positions\.setValue\(stemPositions\)/);
+-});
+-
+-const CABLE_FIXTURE = {
+-  type: 'FeatureCollection',
+-  features: [
+-    {
+-      type: 'Feature',
+-      id: 'ac1',
+-      properties: { id: 'ac1', name: 'Atlantic Crossing-1' },
+-      geometry: { type: 'LineString', coordinates: [[-40, 35], [-30, 40]] },
+-    },
+-  ],
+-};
+-// Node has no `document`, so Point features (whose GeoJSON default marker
+-// needs a canvas PinBuilder) cannot load here. Landing references only need
+-// `properties.coordinates`, so a line geometry exercises the same path.
+-const LANDING_FIXTURE = {
+-  type: 'FeatureCollection',
+-  features: [
+-    {
+-      type: 'Feature',
+-      id: 'lisbon',
+-      properties: { id: 'lisbon', name: 'Lisbon, Portugal', coordinates: [-9.1, 38.7] },
+-      geometry: { type: 'LineString', coordinates: [[-9.1, 38.7], [-9.05, 38.72]] },
+-    },
+-  ],
+-};
+-
+-function fixtureForUrl(url) {
+-  return String(url).includes('landing-point') ? LANDING_FIXTURE : CABLE_FIXTURE;
+-}
+-
+-function makeStubViewer(listeners, dataSources, addCalls = { count: 0 }, addControl = null) {
+-  return {
+-    dataSources: {
+-      // Mirror Cesium's real DataSourceCollection.add(): the returned promise
+-      // resolves — and the collection mutates — on a DEFERRED tick, never in
+-      // the caller's synchronous frame. A remove() issued before the deferred
+-      // add settles therefore removes NOTHING and the add still materializes
+-      // afterwards (empirically verified against Cesium). Tests may hold the
+-      // settle window open via addControl to abort inside it, and may mark an
+-      // add rejected-AFTER-push: Cesium pushes into the collection BEFORE
+-      // raising dataSourceAdded, so a throwing listener rejects the promise
+-      // after the mutation already landed.
+-      add: (source) => {
+-        const callIndex = addCalls.count;
+-        addCalls.count += 1;
+-        return new Promise((resolve, reject) => {
+-          const settle = () => {
+-            dataSources.push(source);
+-            if (addControl?.rejectAfterPush?.has(callIndex)) {
+-              reject(new Error('dataSourceAdded listener threw after the push landed'));
+-              return;
+-            }
+-            resolve(source);
+-          };
+-          if (addControl?.held) addControl.pending.push(settle);
+-          else Promise.resolve().then(settle);
+-        });
+-      },
+-      remove: (source) => {
+-        const index = dataSources.indexOf(source);
+-        if (index >= 0) dataSources.splice(index, 1);
+-        return index >= 0;
+-      },
+-    },
+-    camera: {
+-      positionWC: Cesium.Cartesian3.fromDegrees(-40, 35, 4_500_000),
+-      frustum: { fov: Math.PI / 3 },
+-      moveEnd: {
+-        addEventListener: (fn) => {
+-          listeners.moveEnd.add(fn);
+-          return () => listeners.moveEnd.delete(fn);
+-        },
+-      },
+-      heading: 0,
+-      cancelFlight() {},
+-      flyTo() {},
+-    },
+-    scene: {
+-      canvas: { clientHeight: 900 },
+-      requestRender() {},
+-      pick() { return null; },
+-      preRender: {
+-        addEventListener: (fn) => {
+-          listeners.preRender.add(fn);
+-          return () => listeners.preRender.delete(fn);
+-        },
+-      },
+-    },
+-  };
+-}
+-
+-/**
+- * Harness whose fetches stay PENDING until the test releases them, honoring
+- * the abort signal like real fetch (reject with AbortError on abort). Load
+- * lifecycle races are sequenced deterministically through it.
+- */
+-function createDeferredCableLayerHarness() {
+-  const hostCalls = [];
+-  const listeners = { preRender: new Set(), moveEnd: new Set() };
+-  const dataSources = [];
+-  const addCalls = { count: 0 };
+-  const addControl = { held: false, pending: [], rejectAfterPush: new Set() };
+-  const pendingFetches = [];
+-  const abortError = () => Object.assign(new Error('The operation was aborted'), { name: 'AbortError' });
+-  const originalFetch = globalThis.fetch;
+-  globalThis.fetch = (url, options = {}) => new Promise((resolve, reject) => {
+-    const entry = {
+-      url: String(url),
+-      settled: false,
+-      release() {
+-        if (entry.settled) return;
+-        entry.settled = true;
+-        resolve({ ok: true, json: async () => fixtureForUrl(url) });
+-      },
+-    };
+-    const signal = options?.signal;
+-    if (signal) {
+-      if (signal.aborted) {
+-        entry.settled = true;
+-        reject(abortError());
+-        return;
+-      }
+-      signal.addEventListener('abort', () => {
+-        if (entry.settled) return;
+-        entry.settled = true;
+-        reject(abortError());
+-      }, { once: true });
+-    }
+-    pendingFetches.push(entry);
+-  });
+-
+-  const layer = createTeleGeographySubmarineCableLayer({
+-    overlayHost: {
+-      setVisible: (...args) => hostCalls.push(['visible', ...args]),
+-      setEntries: (...args) => hostCalls.push(['entries', ...args]),
+-      clearSource: (...args) => hostCalls.push(['clear', ...args]),
+-    },
+-    screenSpaceEventHandlerFactory: () => ({ setInputAction() {}, destroy() {} }),
+-  });
+-  const viewer = makeStubViewer(listeners, dataSources, addCalls, addControl);
+-  layer.init(viewer);
+-
+-  return {
+-    layer,
+-    viewer,
+-    hostCalls,
+-    dataSources,
+-    addCalls,
+-    listeners,
+-    pendingFetches,
+-    raiseSweep() {
+-      for (const fn of listeners.preRender) fn();
+-    },
+-    releaseAll() {
+-      for (const entry of [...pendingFetches]) entry.release();
+-      pendingFetches.length = 0;
+-    },
+-    /** Park every subsequent dataSources.add in its deferred settle window. */
+-    holdAdds() {
+-      addControl.held = true;
+-    },
+-    /** Make the Nth add (0-based) push into the collection, THEN reject. */
+-    failAddAfterPush(callIndex) {
+-      addControl.rejectAfterPush.add(callIndex);
+-    },
+-    /** Let the held adds mutate the collection (the deferred settle lands). */
+-    releaseHeldAdds() {
+-      addControl.held = false;
+-      const pending = addControl.pending.splice(0);
+-      for (const settle of pending) settle();
+-    },
+-    async settle() {
+-      // Drain the microtask/timer interleave the load path spans.
+-      for (let i = 0; i < 8; i++) await new Promise((resolve) => setTimeout(resolve, 0));
+-    },
+-    cleanup() {
+-      globalThis.fetch = originalFetch;
+-    },
+-  };
+-}
+-
+-/**
+- * Gate Cesium's GeoJsonDataSource.load: each call runs the REAL load, then
+- * parks its resolution behind a test-owned gate. Opening gate N and aborting
+- * in the same synchronous frame lands the abort exactly at the caller's
+- * post-await ownership check for that boundary.
+- */
+-function installGeoJsonLoadGate() {
+-  const original = Cesium.GeoJsonDataSource.load;
+-  const calls = [];
+-  const gates = [];
+-  Cesium.GeoJsonDataSource.load = function gatedLoad(...args) {
+-    calls.push(args);
+-    let open;
+-    const opened = new Promise((resolve) => { open = resolve; });
+-    gates.push({ open });
+-    return original.apply(Cesium.GeoJsonDataSource, args)
+-      .then((result) => opened.then(() => result));
+-  };
+-  return {
+-    calls,
+-    open(index) {
+-      gates[index]?.open();
+-    },
+-    /**
+-     * Open every gate, including ones created by continuations the opening
+-     * itself unblocks (a load calls the landing build only after the cable
+-     * gate opens), until no new gates appear.
+-     */
+-    async drainOpen(settle) {
+-      let opened = 0;
+-      while (opened < gates.length) {
+-        for (; opened < gates.length; opened++) gates[opened].open();
+-        await settle();
+-      }
+-    },
+-    restore() {
+-      Cesium.GeoJsonDataSource.load = original;
+-    },
+-  };
+-}
+-
+-test('an abort landing at the post-fetch boundary stops the stale load before GeoJson work', async () => {
+-  const env = createDeferredCableLayerHarness();
+-  const geojson = installGeoJsonLoadGate();
+-  try {
+-    env.layer.enable(env.viewer);
+-    // Release A's fetches and abort in the SAME frame: A's continuation runs
+-    // with ownership already lost, and the post-fetch owns() check is the guard.
+-    env.releaseAll();
+-    env.layer.disable();
+-    env.layer.enable(env.viewer);
+-    await env.settle();
+-    assert.equal(geojson.calls.length, 0, 'stale load A must not reach GeoJsonDataSource.load');
+-
+-    env.releaseAll();
+-    await env.settle();
+-    await geojson.drainOpen(() => env.settle());
+-    assert.equal(geojson.calls.length, 2, 'load B alone performs the two GeoJson loads');
+-    assert.equal(env.addCalls.count, 3);
+-    assert.equal(env.dataSources.length, 3);
+-    assert.equal(env.layer.getStats().count, 2);
+-  } finally {
+-    geojson.restore();
+-    env.layer.destroy(env.viewer);
+-    env.cleanup();
+-  }
+-});
+-
+-test('an abort landing at the post-cable-GeoJson boundary stops the stale load before the landing build', async () => {
+-  const env = createDeferredCableLayerHarness();
+-  const geojson = installGeoJsonLoadGate();
+-  try {
+-    env.layer.enable(env.viewer);
+-    env.releaseAll();
+-    await env.settle();
+-    assert.equal(env.pendingFetches.length, 0);
+-    assert.equal(geojson.calls.length, 1, 'load A is parked on the gated cable GeoJson build');
+-
+-    // Open the cable gate and abort in the same frame: A resumes at the
+-    // post-cable owns() check with ownership lost.
+-    geojson.open(0);
+-    env.layer.disable();
+-    env.layer.enable(env.viewer);
+-    await env.settle();
+-    assert.equal(geojson.calls.length, 1, 'stale load A must not start the landing GeoJson build');
+-
+-    env.releaseAll();
+-    await env.settle();
+-    await geojson.drainOpen(() => env.settle());
+-    assert.equal(geojson.calls.length, 3, 'load B adds its own two GeoJson builds');
+-    assert.equal(env.addCalls.count, 3);
+-    assert.equal(env.dataSources.length, 3);
+-    assert.equal(env.layer.getStats().count, 2);
+-  } finally {
+-    geojson.restore();
+-    env.layer.destroy(env.viewer);
+-    env.cleanup();
+-  }
+-});
+-
+-test('an abort landing at the pre-add boundary stops the stale load before any dataSources.add', async () => {
+-  const env = createDeferredCableLayerHarness();
+-  const geojson = installGeoJsonLoadGate();
+-  try {
+-    env.layer.enable(env.viewer);
+-    env.releaseAll();
+-    await env.settle();
+-    geojson.open(0);
+-    await env.settle();
+-    assert.equal(geojson.calls.length, 2, 'load A is parked on the gated landing GeoJson build');
+-
+-    // Open the landing gate and abort in the same frame: A resumes at the
+-    // pre-add owns() check with ownership lost.
+-    geojson.open(1);
+-    env.layer.disable();
+-    env.layer.enable(env.viewer);
+-    await env.settle();
+-    assert.equal(env.addCalls.count, 0, 'stale load A must never call dataSources.add');
+-
+-    env.releaseAll();
+-    await env.settle();
+-    await geojson.drainOpen(() => env.settle());
+-    assert.equal(env.addCalls.count, 3, 'load B alone adds the trio');
+-    assert.equal(env.dataSources.length, 3);
+-    assert.equal(env.layer.getStats().count, 2);
+-  } finally {
+-    geojson.restore();
+-    env.layer.destroy(env.viewer);
+-    env.cleanup();
+-  }
+-});
+-
+-test('a destroy inside the deferred add window leaves zero post-destroy data sources', async () => {
+-  const env = createDeferredCableLayerHarness();
+-  try {
+-    env.layer.enable(env.viewer);
+-    env.releaseAll();
+-    env.holdAdds();
+-    // Let the load run until all three adds have been CALLED but none has
+-    // settled — Cesium mutates the collection on a deferred tick, so this
+-    // window is real, and a remove() issued inside it removes nothing.
+-    const deadline = Date.now() + 2_000;
+-    while (env.addCalls.count < 3 && Date.now() < deadline) {
+-      await new Promise((resolve) => setTimeout(resolve, 0));
+-    }
+-    assert.equal(env.addCalls.count, 3, 'all three adds are in their deferred window');
+-    assert.equal(env.dataSources.length, 0, 'nothing has settled into the collection yet');
+-
+-    // Destroy lands in the window: it can remove nothing, so the stale
+-    // load's own post-add ownership check must compensate once the deferred
+-    // adds settle.
+-    env.layer.destroy(env.viewer);
+-    env.releaseHeldAdds();
+-    await env.settle();
+-    assert.equal(
+-      env.dataSources.length,
+-      0,
+-      'the deferred adds settled post-destroy and must be rolled back by their own load',
+-    );
+-
+-    // The layer still honors its re-init contract afterwards.
+-    env.layer.enable(env.viewer);
+-    env.releaseAll();
+-    await env.settle();
+-    assert.equal(env.dataSources.length, 3, 're-enable after the raced destroy loads cleanly');
+-    assert.equal(env.layer.getStats().count, 2);
+-  } finally {
+-    env.layer.destroy(env.viewer);
+-    env.cleanup();
+-  }
+-});
+-
+-test('a destroy in the deferred window with a rejected-after-push add still leaves zero sources', async () => {
+-  const env = createDeferredCableLayerHarness();
+-  try {
+-    env.layer.enable(env.viewer);
+-    env.releaseAll();
+-    env.holdAdds();
+-    // Cesium pushes the source into the collection BEFORE raising
+-    // dataSourceAdded, so a throwing listener rejects the add promise AFTER
+-    // its mutation landed. Make add #1 exactly that: pushed, then rejected;
+-    // #2/#3 fulfill normally.
+-    env.failAddAfterPush(0);
+-    const deadline = Date.now() + 2_000;
+-    while (env.addCalls.count < 3 && Date.now() < deadline) {
+-      await new Promise((resolve) => setTimeout(resolve, 0));
+-    }
+-    assert.equal(env.addCalls.count, 3, 'all three adds are in their deferred window');
+-    assert.equal(env.dataSources.length, 0, 'nothing has settled into the collection yet');
+-
+-    // Destroy lands in the window; the adds then settle as
+-    // [rejected-after-push, fulfilled, fulfilled]. Compensation that removes
+-    // only FULFILLED adds would strand the rejected-but-pushed source.
+-    env.layer.destroy(env.viewer);
+-    env.releaseHeldAdds();
+-    await env.settle();
+-    assert.equal(
+-      env.dataSources.length,
+-      0,
+-      'a rejected add still landed its push, so compensation must remove it too',
+-    );
+-  } finally {
+-    env.layer.destroy(env.viewer);
+-    env.cleanup();
+-  }
+-});
+-
+-test('a direct destroy of a published layer clears and hides its host source', async () => {
+-  const env = createDeferredCableLayerHarness();
+-  try {
+-    env.layer.enable(env.viewer);
+-    env.releaseAll();
+-    await env.settle();
+-    assert.equal(env.dataSources.length, 3, 'layer is fully loaded');
+-    // Drive the sweep through the layer's real preRender listener so the
+-    // host actually holds published cable entries.
+-    env.raiseSweep();
+-    assert.ok(
+-      env.hostCalls.some(([type]) => type === 'entries'),
+-      'sweep must publish before the direct destroy',
+-    );
+-    env.hostCalls.length = 0;
+-
+-    // Destroy DIRECTLY — no disable() first. The publisher teardown must
+-    // still clear the published source and hide it; skipping it would leave
+-    // a visible overlay source with orphan labels.
+-    env.layer.destroy(env.viewer);
+-    assert.ok(
+-      env.hostCalls.some(([type, id]) => type === 'clear' && id === CABLE_OVERLAY_SOURCE_ID),
+-      'direct destroy must clear the published host source',
+-    );
+-    assert.deepEqual(
+-      env.hostCalls.at(-1),
+-      ['visible', CABLE_OVERLAY_SOURCE_ID, false],
+-      'direct destroy must hide the host source after clearing it',
+-    );
+-  } finally {
+-    env.cleanup();
+-  }
+-});
+-
+-test('a stale aborted load never clobbers the next load\'s lifecycle (A/B/C toggle race)', async () => {
+-  const env = createDeferredCableLayerHarness();
+-  try {
+-    // A: enable starts a load whose fetches stay pending.
+-    env.layer.enable(env.viewer);
+-    assert.equal(env.pendingFetches.length, 2, 'load A has two fetches in flight');
+-
+-    // Abort A and immediately start B before A\'s rejection lands.
+-    env.layer.disable();
+-    env.layer.enable(env.viewer);
+-    await env.settle(); // A\'s stale catch/finally runs here, after B began.
+-
+-    // C: with A\'s stale completion having cleared nothing it does not own,
+-    // the layer still reports a load in flight, so update() must not start a
+-    // third load.
+-    void env.layer.update(env.viewer);
+-    await env.settle();
+-    const inFlight = env.pendingFetches.filter((entry) => !entry.settled).length;
+-    assert.equal(inFlight, 2, 'only load B\'s two fetches remain in flight — no duplicate load C');
+-
+-    // Releasing everything must produce exactly one set of scene adds.
+-    env.releaseAll();
+-    await env.settle();
+-    assert.equal(env.addCalls.count, 3, 'exactly one cable/landing/reference data-source trio is added');
+-    assert.equal(env.dataSources.length, 3);
+-    const stats = env.layer.getStats();
+-    assert.equal(stats.error, null);
+-    assert.equal(stats.count, 2, 'one cable + one landing point loaded once');
+-  } finally {
+-    env.layer.destroy(env.viewer);
+-    env.cleanup();
+-  }
+-});
+-
+-test('destroy mid-load stays clean and a re-enabled layer reloads exactly once', async () => {
+-  const env = createDeferredCableLayerHarness();
+-  try {
+-    // Destroy while load A\'s fetches are still in flight.
+-    env.layer.enable(env.viewer);
+-    assert.equal(env.pendingFetches.length, 2);
+-    env.layer.destroy(env.viewer);
+-
+-    // Legacy contract: the layer supports re-init after destroy. Enable D
+-    // before A\'s aborted rejection lands.
+-    env.layer.enable(env.viewer);
+-    await env.settle(); // A\'s stale finally runs here.
+-
+-    // A\'s stale completion must not have cleared D\'s in-flight lifecycle:
+-    // update() must not start a duplicate load E.
+-    void env.layer.update(env.viewer);
+-    await env.settle();
+-    const inFlight = env.pendingFetches.filter((entry) => !entry.settled).length;
+-    assert.equal(inFlight, 2, 'only load D\'s two fetches remain in flight');
+-
+-    env.releaseAll();
+-    await env.settle();
+-    assert.equal(env.addCalls.count, 3, 'the destroyed load added nothing; the re-enable added once');
+-    assert.equal(env.dataSources.length, 3);
+-    assert.equal(env.layer.getStats().count, 2);
+-  } finally {
+-    env.layer.destroy(env.viewer);
+-    env.cleanup();
+-  }
+-});
+-
+-async function createRealCableLayerHarness({ mapStackEventTarget = null } = {}) {
+-  const hostCalls = [];
+-  // The sweep gate's motion-fallback clock is FROZEN here and advanced only by
+-  // the tests that exercise it, so every other harness test observes the pure
+-  // event-dirty behavior with no wall-clock coupling.
+-  let clockMs = 0;
+-  const layer = createTeleGeographySubmarineCableLayer({
+-    overlayHost: {
+-      setVisible: (...args) => hostCalls.push(['visible', ...args]),
+-      setEntries: (...args) => hostCalls.push(['entries', ...args]),
+-      clearSource: (...args) => hostCalls.push(['clear', ...args]),
+-    },
+-    screenSpaceEventHandlerFactory: () => ({ setInputAction() {}, destroy() {} }),
+-    mapStackEventTarget,
+-    sweepClock: () => clockMs,
+-  });
+-
+-  const listeners = { preRender: new Set(), moveEnd: new Set() };
+-  const dataSources = [];
+-  const viewer = {
+-    dataSources: {
+-      add: (source) => { dataSources.push(source); return Promise.resolve(source); },
+-      remove: (source) => {
+-        const index = dataSources.indexOf(source);
+-        if (index >= 0) dataSources.splice(index, 1);
+-        return true;
+-      },
+-    },
+-    camera: {
+-      positionWC: Cesium.Cartesian3.fromDegrees(-40, 35, 4_500_000),
+-      frustum: { fov: Math.PI / 3 },
+-      moveEnd: {
+-        addEventListener: (fn) => {
+-          listeners.moveEnd.add(fn);
+-          return () => listeners.moveEnd.delete(fn);
+-        },
+-      },
+-      heading: 0,
+-      cancelFlight() {},
+-      flyTo() {},
+-    },
+-    scene: {
+-      canvas: { clientHeight: 900 },
+-      requestRender() {},
+-      pick() { return null; },
+-      preRender: {
+-        addEventListener: (fn) => {
+-          listeners.preRender.add(fn);
+-          return () => listeners.preRender.delete(fn);
+-        },
+-      },
+-    },
+-  };
+-
+-  const originalFetch = globalThis.fetch;
+-  // Node has no `document`, so Point features (whose GeoJSON default marker
+-  // needs a canvas PinBuilder) cannot load here. Landing references only need
+-  // `properties.coordinates`, so a line geometry exercises the same path.
+-  globalThis.fetch = async (url) => ({
+-    ok: true,
+-    json: async () => (String(url).includes('landing-point')
+-      ? {
+-        type: 'FeatureCollection',
+-        features: [
+-          {
+-            type: 'Feature',
+-            id: 'lisbon',
+-            properties: { id: 'lisbon', name: 'Lisbon, Portugal', coordinates: [-9.1, 38.7] },
+-            geometry: { type: 'LineString', coordinates: [[-9.1, 38.7], [-9.05, 38.72]] },
+-          },
+-        ],
+-      }
+-      : {
+-        type: 'FeatureCollection',
+-        features: [
+-          {
+-            type: 'Feature',
+-            id: 'ac1',
+-            properties: { id: 'ac1', name: 'Atlantic Crossing-1' },
+-            geometry: { type: 'LineString', coordinates: [[-40, 35], [-30, 40]] },
+-          },
+-        ],
+-      }),
+-  });
+-  try {
+-    layer.init(viewer);
+-    layer.enable(viewer);
+-    // enable() fires load() without awaiting it (legacy contract); poll the
+-    // layer's own stats until the load settles.
+-    const deadline = Date.now() + 2_000;
+-    while (Date.now() < deadline) {
+-      const stats = layer.getStats();
+-      if (stats.count > 0 || stats.error) break;
+-      await new Promise((resolve) => setTimeout(resolve, 10));
+-    }
+-    assert.equal(layer.getStats().error, null, 'harness load must succeed');
+-  } finally {
+-    globalThis.fetch = originalFetch;
+-  }
+-  const raiseSweep = () => {
+-    for (const fn of listeners.preRender) fn();
+-  };
+-  const advanceClock = (ms) => { clockMs += ms; };
+-  return { layer, viewer, hostCalls, dataSources, raiseSweep, listeners, advanceClock };
+-}
+-
+-test('a real enabled cable layer publishes host entries and has zero native labels', async () => {
+-  const env = await createRealCableLayerHarness();
+-  env.raiseSweep();
+-
+-  const publishes = env.hostCalls.filter(([type]) => type === 'entries');
+-  assert.ok(publishes.length > 0, 'sweep must publish to the shared host');
+-  const [, sourceId, entries, options] = publishes.at(-1);
+-  assert.equal(sourceId, CABLE_OVERLAY_SOURCE_ID);
+-  assert.equal(entries.length, 2, 'one cable + one landing point reference');
+-  assert.ok(entries.every((entry) => entry.variant === 'label'));
+-  assert.deepEqual(options, {
+-    cohortLimit: CABLE_REFERENCE_LABEL_WINNER_CAP,
+-    collisionCapacity: CABLE_OVERLAY_COLLISION_CAPACITY,
+-    moving: false,
+-  });
+-
+-  const referenceSource = env.dataSources.find((ds) => /References/.test(ds.name || ''));
+-  assert.ok(referenceSource, 'reference data source must exist');
+-  const referenceEntities = referenceSource.entities.values;
+-  assert.ok(referenceEntities.length > 0);
+-  assert.ok(
+-    referenceEntities.every((entity) => entity.label === undefined),
+-    'no reference entity may carry a native LabelGraphics',
+-  );
+-  assert.ok(
+-    referenceEntities.every((entity) => entity.position?.isConstant === true
+-      && entity.polyline?.positions?.isConstant === true),
+-    'stem properties must be constants, never per-frame callbacks',
+-  );
+-
+-  const stats = env.layer.getStats();
+-  assert.equal(stats.referenceLabelCount, 2);
+-
+-  env.layer.disable();
+-  assert.ok(
+-    env.hostCalls.some(([type, id]) => type === 'clear' && id === CABLE_OVERLAY_SOURCE_ID),
+-    'disable must clear the host source',
+-  );
+-  assert.deepEqual(
+-    env.hostCalls.at(-1),
+-    ['visible', CABLE_OVERLAY_SOURCE_ID, false],
+-    'disable must hide the host source after clearing it',
+-  );
+-
+-  env.layer.destroy(env.viewer);
+-  assert.equal(env.dataSources.length, 0, 'destroy must remove every data source');
+-});
+-
+-test('stems never rebuild mid-drag; exactly one rebuild lands on moveEnd', async () => {
+-  const env = await createRealCableLayerHarness();
+-  env.raiseSweep(); // initial sizing at the parked camera
+-
+-  const referenceSource = env.dataSources.find((ds) => /References/.test(ds.name || ''));
+-  const entity = referenceSource.entities.values[0];
+-  let stemRebuilds = 0;
+-  const originalSet = entity.polyline.positions.setValue.bind(entity.polyline.positions);
+-  entity.polyline.positions.setValue = (...args) => {
+-    stemRebuilds++;
+-    return originalSet(...args);
+-  };
+-
+-  // Mid-drag: the camera moves every tick and frames keep rendering, but no
+-  // moveEnd fires. However long this goes on, the stem constants must never
+-  // be redefined — each redefinition rebuilt the whole batched stem
+-  // primitive, and its unready replacement frames were the felt hitch.
+-  const camera = env.viewer.camera.positionWC;
+-  for (let tick = 0; tick < 30; tick++) {
+-    env.viewer.camera.positionWC = Cesium.Cartesian3.add(
+-      camera,
+-      new Cesium.Cartesian3(0, 0, 100_000 * (tick + 1)),
+-      new Cesium.Cartesian3(),
+-    );
+-    env.raiseSweep(); // preRender fires every frame during a drag
+-    await new Promise((resolve) => setTimeout(resolve, 25));
+-  }
+-  assert.equal(stemRebuilds, 0, 'render ticks without moveEnd must never redefine a stem');
+-
+-  // The gesture ends close over the cable's reference point (inside the
+-  // 700 m..85 km stem clamp band, so the re-size is a real tip change):
+-  // one moveEnd, one sweep, exactly one redefinition.
+-  env.viewer.camera.positionWC = Cesium.Cartesian3.fromDegrees(-35, 37.5, 400_000);
+-  for (const fn of env.listeners.moveEnd) fn();
+-  env.raiseSweep();
+-  assert.equal(stemRebuilds, 1, 'moveEnd re-sizes the stem exactly once');
+-  env.raiseSweep();
+-  assert.equal(stemRebuilds, 1, 'the next frame does not re-run the sweep');
+-
+-  env.layer.destroy(env.viewer);
+-});
+-
+-test('a tracked camera that never emits moveEnd is swept by the motion fallback', async () => {
+-  const env = await createRealCableLayerHarness();
+-  // Tracking hands over a mid-altitude follow camera. 400 km keeps the stem
+-  // inside the 700 m..85 km clamp band, so a sweep is observable as a real
+-  // tip re-size (at the harness's 4,500 km parking altitude every stem sits
+-  // pinned at the 85 km clamp and no sweep could be distinguished).
+-  env.viewer.camera.positionWC = Cesium.Cartesian3.fromDegrees(-35, 37.5, 400_000);
+-  env.raiseSweep(); // initial sizing at the tracking handoff
+-
+-  const referenceSource = env.dataSources.find((ds) => /References/.test(ds.name || ''));
+-  const entity = referenceSource.entities.values[0];
+-  let stemRebuilds = 0;
+-  const originalSet = entity.polyline.positions.setValue.bind(entity.polyline.positions);
+-  entity.polyline.positions.setValue = (...args) => {
+-    stemRebuilds++;
+-    return originalSet(...args);
+-  };
+-
+-  // Entity tracking / orbit: the follow camera advances every frame and
+-  // moveEnd NEVER fires. Frames are simulated at 60 Hz on the harness clock.
+-  const origin = env.viewer.camera.positionWC;
+-  const frameMs = 1000 / 60;
+-  const trackFrames = (from, to) => {
+-    for (let frame = from; frame < to; frame++) {
+-      env.advanceClock(frameMs);
+-      env.viewer.camera.positionWC = Cesium.Cartesian3.add(
+-        origin,
+-        new Cesium.Cartesian3(0, 0, 200 * (frame + 1)),
+-        new Cesium.Cartesian3(),
+-      );
+-      env.raiseSweep();
+-    }
+-  };
+-
+-  // Inside the first probe window the sweep stays event-dirty-only, so the
+-  // batched stem primitive is not rebuilt mid-motion (the shipped tradeoff).
+-  trackFrames(0, 60);
+-  assert.equal(stemRebuilds, 0, 'inside the probe window a tracked camera still costs no rebuilds');
+-
+-  // Past the window the fallback fires — exactly once, not per frame.
+-  trackFrames(60, 130);
+-  assert.equal(stemRebuilds, 1, 'the tracked camera earns exactly one fallback sweep per window');
+-
+-  // Tracking stops but frames keep rendering. The motion accumulated since
+-  // the last fallback sweep settles in exactly ONE further sweep...
+-  const parkFrames = (count) => {
+-    for (let frame = 0; frame < count; frame++) {
+-      env.advanceClock(frameMs);
+-      env.raiseSweep();
+-    }
+-  };
+-  parkFrames(240); // 4 s parked: two full probe windows
+-  assert.equal(stemRebuilds, 2, 'a stopped camera settles its residual motion in one further sweep');
+-
+-  // ...and the parked camera then costs zero sweeps for as long as it sits.
+-  parkFrames(3600); // 60 s parked
+-  assert.equal(stemRebuilds, 2, 'a settled parked camera never spends another sweep');
+-
+-  env.layer.destroy(env.viewer);
+-});
+-
+-test('an unchanged cohort never republishes, so a parked camera stays governor-idle', async () => {
+-  const env = await createRealCableLayerHarness();
+-  const publishCount = () => env.hostCalls.filter(([type]) => type === 'entries').length;
+-
+-  env.raiseSweep();
+-  assert.equal(publishCount(), 1, 'first sweep publishes the cohort');
+-
+-  // moveEnd with an unchanged camera re-arms the sweep; the identical winner
+-  // set must NOT reach the host again (each publish costs a requested render).
+-  for (const fn of env.listeners.moveEnd) fn();
+-  env.raiseSweep();
+-  for (const fn of env.listeners.moveEnd) fn();
+-  env.raiseSweep();
+-  assert.equal(publishCount(), 1, 'identical cohorts are skipped');
+-
+-  // A real camera move changes distances beyond the 50 km priority quantum,
+-  // so the next sweep publishes again.
+-  env.viewer.camera.positionWC = Cesium.Cartesian3.fromDegrees(-40, 35, 6_500_000);
+-  for (const fn of env.listeners.moveEnd) fn();
+-  env.raiseSweep();
+-  assert.equal(publishCount(), 2, 'a changed cohort publishes');
+-
+-  // disable → enable must force a republish even when the cohort is identical
+-  // (the hide cleared the host source).
+-  env.layer.disable();
+-  env.layer.enable(env.viewer);
+-  await new Promise((resolve) => setTimeout(resolve, 10));
+-  env.raiseSweep();
+-  assert.equal(publishCount(), 3, 're-enable republishes after the hide cleared the source');
+-
+-  env.layer.destroy(env.viewer);
+-});
+diff --git a/src/data/tr3bRegistry.test.mjs b/src/data/tr3bRegistry.test.mjs
+index f7f00b0..7cefad5 100644
+--- a/src/data/tr3bRegistry.test.mjs
++++ b/src/data/tr3bRegistry.test.mjs
+@@ -188,7 +188,7 @@ test('a conversion survives a poll refresh, in both the billboard and the tracke
+   const realFetch = globalThis.fetch;
+   const nowSec = Math.floor(Date.now() / 1000);
+   globalThis.fetch = async (url) => {
+-    if (!String(url).startsWith('/api/opensky')) {
++    if (!String(url).startsWith('/api/aircraft')) {
+       return { ok: true, status: 200, json: async () => ({ ac: [] }) };
+     }
+     return {
+@@ -308,7 +308,7 @@ test('conversions are session-scoped and no lifecycle path clears them', async (
+     meta: { callsign: 'OLD1', altitude: 9_000, klass: 'airliner', rawLat: 30.2, rawLon: -97.7 },
+   });
+   const realFetch = globalThis.fetch;
+-  globalThis.fetch = async (url) => (String(url).startsWith('/api/opensky')
++  globalThis.fetch = async (url) => (String(url).startsWith('/api/aircraft')
+     ? { ok: true, status: 200, headers: { get: () => null }, json: async () => ({ time: 0, states: [] }) }
+     : { ok: true, status: 200, json: async () => ({ ac: [] }) });
+   try {
+diff --git a/src/firstRunExperience.test.mjs b/src/firstRunExperience.test.mjs
+index 393f57b..6d4b474 100644
+--- a/src/firstRunExperience.test.mjs
++++ b/src/firstRunExperience.test.mjs
+@@ -679,7 +679,7 @@ test('the voice TOOL SCHEMA is byte-identical to main — the mission mapping is
+   const mapping = src.slice(src.indexOf('NAMED VIEWS are shorthand'));
+   const paragraph = mapping.slice(0, mapping.indexOf("',\n"));
+   for (const layerId of [
+-    'local-datacenters', 'local-dams', 'telegeography-submarine-cables', 'local-firms', 'earthquakes',
++    'local-datacenters', 'local-dams', 'local-firms', 'earthquakes',
+   ]) {
+     assert.ok(paragraph.includes(layerId), `mapping must name the existing ${layerId} enum value`);
+   }
+diff --git a/src/overlays/overlayLabelBudgets.js b/src/overlays/overlayLabelBudgets.js
+new file mode 100644
+index 0000000..bfe6348
+--- /dev/null
++++ b/src/overlays/overlayLabelBudgets.js
+@@ -0,0 +1,16 @@
++/**
++ * Shared world-overlay label budgets.
++ *
++ * These were previously exported by the removed NonCommercial layer.
++ * The dataset it shipped with was CC BY-NC-SA 3.0 (NonCommercial) and is not
++ * usable in a commercial product, so it was excised from this fork. The overlay
++ * allocation worker still needs these budgets for its reference-cohort
++ * performance calibration, so they now live here, decoupled from any dataset.
++ */
++
++/** Shared world-overlay source id used by the reference cohort. */
++export const REFERENCE_COHORT_OVERLAY_SOURCE_ID = 'reference-cohort';
++/** Bounded nearest-visible cohort the layer offers the shared host. */
++export const REFERENCE_COHORT_LABEL_WINNER_CAP = 160;
++/** Shared ambient-label paint budget, matching the infrastructure sources. */
++export const REFERENCE_COHORT_COLLISION_CAPACITY = 96;
+diff --git a/src/overlays/worldOverlayAllocation.test.mjs b/src/overlays/worldOverlayAllocation.test.mjs
+index bbaa4f1..cd19749 100644
+--- a/src/overlays/worldOverlayAllocation.test.mjs
++++ b/src/overlays/worldOverlayAllocation.test.mjs
+@@ -10,7 +10,7 @@ import { AMBIENT_CARD_COLLISION_CAPACITY } from './worldOverlay.js';
+ import { EARTHQUAKE_OVERLAY_COHORT_LIMIT } from '../data/earthquakes.js';
+ import { ROCKET_MISSION_AMBIENT_OVERLAY_COHORT_LIMIT } from '../data/rocketLaunches.js';
+ import { RADIO_OVERLAY_COHORT_LIMIT } from '../data/radio.js';
+-import { CABLE_REFERENCE_LABEL_WINNER_CAP } from '../data/telegeographySubmarineCables.js';
++import { REFERENCE_COHORT_LABEL_WINNER_CAP as CABLE_REFERENCE_LABEL_WINNER_CAP } from './overlayLabelBudgets.js';
+ import { isCalibratedAllocationRuntime } from '../../scripts/run-unit-tests.mjs';
+ 
+ /**
+@@ -42,7 +42,7 @@ import { isCalibratedAllocationRuntime } from '../../scripts/run-unit-tests.mjs'
+  *   rocket missions      |      48 |         48 |      24 |           5195 |       108.2 |       6,000
+  *   Phase 5 pre-missions |     591 |        591 |     353 |         127815 |       216.3 |     132,000
+  *   Phase 5 final        |     639 |        639 |     353 |         133769 |       209.3 |     142,000
+- *   submarine cables     |     160 |        160 |      96 |          17015 |       106.3 |      19,000
++ *   reference cohort     |     160 |        160 |      96 |          17015 |       106.3 |      19,000
+  *   all-live (w/ cables) |     864 |        864 |     398 |         164711 |       190.6 |     182,000
+  *   Phase 6 detection    |    5000 |       5000 |    5000 |  524191/600729 | 104.8/120.1 |     700,000
+  *
+@@ -89,7 +89,7 @@ import { isCalibratedAllocationRuntime } from '../../scripts/run-unit-tests.mjs'
+  * cohort plus one protected selected-station label; Radio supplies painted
+  * winners in the saturated ambient-label domain while the selected lane
+  * remains protected. Since the 2026-08-18 recalibration the row also carries
+- * the 160-winner submarine-cable cohort (864 candidates total, cables winning
++ * the 160-winner reference cohort (864 candidates total, cables winning
+  * painted ambient-label slots); its 182,000 frame budget and the existing 225
+  * B/candidate image-inclusive ceiling retain more than 10% headroom over the
+  * measured Node 24 median/max (164,711 / 167,313 B/frame).
+@@ -186,7 +186,7 @@ const WORKLOADS = [
+     saturated: true,
+   },
+   {
+-    name: 'with final Phase 5 host sources live (pre-cable-migration surface)',
++    name: 'with final Phase 5 host sources live (pre-cohort-migration surface)',
+     profile: 'phase5-military',
+     entries: LOCAL_OVERLAY_COHORT_LIMIT * 2 + FIRMS_AMBIENT_COHORT_LIMIT
+       + vesselOverlayCohortLimit(1600, 900) + 1 + CCTV_AMBIENT_CARD_MAX + 1
+@@ -218,7 +218,7 @@ const WORKLOADS = [
+     ambientCardCapacity: AMBIENT_CARD_COLLISION_CAPACITY,
+   },
+   {
+-    // Recalibrated 2026-08-18 when the migrated submarine-cable cohort joined
++    // Recalibrated 2026-08-18 when the migrated reference cohort joined
+     // the aggregate (the row is "every shared-host source", so cable labels
+     // must coexist with Radio/earthquake/mission quotas here, not only in
+     // their isolated row; the probe shows cables winning painted slots in the
+@@ -252,8 +252,8 @@ const WORKLOADS = [
+     // coverage. Measured median 17,015 B/frame (106.3 B/candidate)
+     // on Node 24.19; 19,000 carries ~11.7% headroom and the shared 154
+     // ceiling applies unchanged.
+-    name: 'with the bounded submarine-cable reference cohort',
+-    profile: 'submarine-cables',
++    name: 'with the bounded reference cohort',
++    profile: 'reference-cohort',
+     entries: CABLE_REFERENCE_LABEL_WINNER_CAP,
+     candidates: CABLE_REFERENCE_LABEL_WINNER_CAP,
+     maxBytesPerFrame: 19_000,
+diff --git a/src/overlays/worldOverlayAllocation.worker.mjs b/src/overlays/worldOverlayAllocation.worker.mjs
+index 6dee219..2ec8deb 100644
+--- a/src/overlays/worldOverlayAllocation.worker.mjs
++++ b/src/overlays/worldOverlayAllocation.worker.mjs
+@@ -66,11 +66,11 @@ import {
+   RADIO_OVERLAY_SOURCE_OPTIONS,
+ } from '../data/radio.js';
+ import {
+-  CABLE_OVERLAY_COLLISION_CAPACITY,
+-  CABLE_OVERLAY_SOURCE_ID,
+-  CABLE_REFERENCE_LABEL_WINNER_CAP,
++  REFERENCE_COHORT_COLLISION_CAPACITY as CABLE_OVERLAY_COLLISION_CAPACITY,
++  REFERENCE_COHORT_OVERLAY_SOURCE_ID as CABLE_OVERLAY_SOURCE_ID,
++  REFERENCE_COHORT_LABEL_WINNER_CAP as CABLE_REFERENCE_LABEL_WINNER_CAP,
+   createCableOverlayEntry,
+-} from '../data/telegeographySubmarineCables.js';
++} from './overlayLabelBudgets.js';
+ import {
+   destroyDetection,
+   getDetectionDiagnostics,
+@@ -827,13 +827,13 @@ function buildAllLiveRadioWorkload(count) {
+     + CCTV_AMBIENT_CARD_MAX + 1 + EARTHQUAKE_OVERLAY_COHORT_LIMIT + 3
+     + ROCKET_MISSION_AMBIENT_OVERLAY_COHORT_LIMIT;
+   // 2026-08-18: "every shared-host source" includes the migrated
+-  // submarine-cable cohort, so the aggregate exercises cable labels
++  // reference cohort, so the aggregate exercises cable labels
+   // interacting with Radio/earthquake/mission quotas and allocation.
+   const expectedCount = phase5Count + RADIO_OVERLAY_COHORT_LIMIT + 1
+     + CABLE_REFERENCE_LABEL_WINNER_CAP;
+   if (count !== expectedCount) throw new Error(`all-live-radio requires ${expectedCount} entries`);
+   const workload = buildPhase5RocketMissionWorkload(phase5Count);
+-  appendSubmarineCableWorkload(workload, CABLE_REFERENCE_LABEL_WINNER_CAP);
++  appendReferenceCohortWorkload(workload, CABLE_REFERENCE_LABEL_WINNER_CAP);
+   const entries = [];
+   for (let index = 0; index < RADIO_OVERLAY_COHORT_LIMIT; index += 1) {
+     const position = new Cesium.Cartesian3(-0.72 + (index % 8) * 0.18, -0.64 + Math.floor(index / 8) * 0.16, 0);
+@@ -868,15 +868,15 @@ function buildAllLiveRadioWorkload(count) {
+ }
+ 
+ /**
+- * Append the submarine-cable reference cohort (2026-08-18 host migration):
++ * Append the reference cohort (2026-08-18 host migration):
+  * the full 160-winner ambient-label field a mid-ocean camera can produce,
+- * mixing cable and landing-point accents. Per-frame drift republishes
++ * mixing two accent kinds. Per-frame drift republishes
+  * nothing (the real source republishes at 2 Hz and skips identical
+  * cohorts); the probe measures the host's steady projection/solve/paint
+  * cost for the source shape. Shared by the isolated row and the all-live
+  * aggregate.
+  */
+-function appendSubmarineCableWorkload(workload, count) {
++function appendReferenceCohortWorkload(workload, count) {
+   const entries = [];
+   for (let index = 0; index < count; index++) {
+     const column = index % 16;
+@@ -919,9 +919,9 @@ function appendSubmarineCableWorkload(workload, count) {
+ 
+ function buildSubmarineCablesWorkload(count) {
+   if (count !== CABLE_REFERENCE_LABEL_WINNER_CAP) {
+-    throw new Error(`submarine-cables requires ${CABLE_REFERENCE_LABEL_WINNER_CAP} entries`);
++    throw new Error(`reference-cohort requires ${CABLE_REFERENCE_LABEL_WINNER_CAP} entries`);
+   }
+-  return appendSubmarineCableWorkload(
++  return appendReferenceCohortWorkload(
+     { entries: [], positions: [], drifts: [], registrations: [] },
+     count,
+   );
+@@ -1026,7 +1026,7 @@ function main() {
+                             ? buildPhase5RocketMissionWorkload(ENTRY_COUNT)
+                             : PROFILE === 'all-live-radio'
+                               ? buildAllLiveRadioWorkload(ENTRY_COUNT)
+-                              : PROFILE === 'submarine-cables'
++                              : PROFILE === 'reference-cohort'
+                                 ? buildSubmarineCablesWorkload(ENTRY_COUNT)
+         : buildWorkload(ENTRY_COUNT);
+   const { entries, positions, drifts } = workload;
+diff --git a/src/qaL9MatrixVerdicts.test.mjs b/src/qaL9MatrixVerdicts.test.mjs
+index 867e344..beb3d9c 100644
+--- a/src/qaL9MatrixVerdicts.test.mjs
++++ b/src/qaL9MatrixVerdicts.test.mjs
+@@ -209,7 +209,7 @@ test('every layer the matrix can enable has an attribution expectation', () => {
+   // C11 enables military-installations, which the old check filtered out.
+   for (const id of ['flights', 'satellites', 'earthquakes', 'cctv', 'traffic',
+     'ais-live-vessels', 'military-installations', 'local-datacenters', 'local-dams',
+-    'local-firms', 'telegeography-submarine-cables']) {
++    'local-firms']) {
+     const expectation = requiredCreditFor(id);
+     assert.ok(expectation?.regex, `${id} needs a credit expectation`);
+   }
+diff --git a/src/scenes/director.test.mjs b/src/scenes/director.test.mjs
+index 3c1232b..e9c6b76 100644
+--- a/src/scenes/director.test.mjs
++++ b/src/scenes/director.test.mjs
+@@ -23,7 +23,7 @@ const REGISTERED = [
+   'flights', 'military', 'earthquakes', 'satellites', 'rocket-launches', 'traffic',
+   'cctv', 'radio', 'bikeshare', 'ais-live-vessels', 'military-installations',
+   'military-awareness', 'local-datacenters', 'local-dams',
+-  'telegeography-submarine-cables', 'local-firms',
++  'local-firms',
+ ];
+ 
+ /** Layers Space Missions permits while it isolates the globe (contextModePolicy). */
+diff --git a/src/scenes/scenePolicy.test.mjs b/src/scenes/scenePolicy.test.mjs
+index 172ca0b..9c34d65 100644
+--- a/src/scenes/scenePolicy.test.mjs
++++ b/src/scenes/scenePolicy.test.mjs
+@@ -43,7 +43,7 @@ const REGISTERED = new Set([
+   'flights', 'military', 'earthquakes', 'satellites', 'rocket-launches', 'traffic',
+   'cctv', 'radio', 'bikeshare', 'ais-live-vessels', 'military-installations',
+   'military-awareness', 'local-datacenters', 'local-dams',
+-  'telegeography-submarine-cables', 'local-firms',
++  'local-firms',
+ ]);
+ 
+ test('a shot only reconciles the layers it declares', () => {
+diff --git a/src/voice/gevActions.js b/src/voice/gevActions.js
+index a56c840..cb9ac0c 100644
+--- a/src/voice/gevActions.js
++++ b/src/voice/gevActions.js
+@@ -170,9 +170,6 @@ const LAYER_ALIASES = new Map([
+   ['data centers', 'local-datacenters'],
+   ['data centres', 'local-datacenters'],
+   ['dams', 'local-dams'],
+-  ['submarine cables', 'telegeography-submarine-cables'],
+-  ['cables', 'telegeography-submarine-cables'],
+-  ['telegeography', 'telegeography-submarine-cables'],
+   ['firms', 'local-firms'],
+   ['fires', 'local-firms'],
+   ['active fires', 'local-firms'],
+@@ -3271,7 +3268,6 @@ function cleanText(value) {
+ function layerTitle(layerId) {
+   if (layerId === 'local-datacenters') return 'Datacenter';
+   if (layerId === 'local-dams') return 'Dam';
+-  if (layerId === 'telegeography-submarine-cables') return 'Submarine Cable';
+   if (layerId === 'local-firms') return 'Active Fire';
+   return layerId || 'Entity';
+ }
+diff --git a/vite.config.js b/vite.config.js
+index 0ad4f2c..cd5b4ca 100644
+--- a/vite.config.js
++++ b/vite.config.js
+@@ -53,6 +53,12 @@ import {
+   normalizeRegionalWeather,
+ } from './src/data/regionalBrief.js';
+ import { normalizeAdsbLolPointResponse } from './src/data/adsbLolFallback.js';
++import {
++  AIRCRAFT_ENDPOINT,
++  ADSB_LOL_ENDPOINT,
++  resolveAircraftSourceMode,
++  resolveOwnReceiverUrl,
++} from './src/data/aircraftSource.js';
+ import { createAisStreamAdapter, isRecognizedAisEnvelope } from './src/data/aisStreamAdapter.js';
+ import { parseSilenceTimeoutEnv } from './src/data/aisWatchdog.js';
+ import { keylessHudSummaryResponse } from './src/hudSummaryResponse.js';
+@@ -2981,6 +2987,167 @@ async function serveAdsbLolPointFallback(req, res, requestedMode, reason) {
+   return true;
+ }
+ 
++/**
++ * Source-agnostic aircraft proxy.
++ *
++ * Upstream served aircraft from OpenSky, whose terms restrict commercial use.
++ * This middleware resolves the configured source (self-hosted receiver, the
++ * community adsb.lol aggregator, or OpenSky for development only) and returns
++ * the OpenSky state-vector shape the existing Flights renderer already
++ * consumes, so the renderer stays untouched.
++ *
++ * dump1090/readsb and adsb.lol share a record schema and differ only in the
++ * envelope key (`aircraft` vs `ac`); both normalise through the same path.
++ */
++function aircraftSourceProxy() {
++  /** Per-source cache: mode -> { body, status, at, count, source } */
++  const cache = new Map();
++  const TTL_MS = 5000;
++
++  const ownInFlight = new Map();
++
++  async function fetchOwnReceiver(url) {
++    const controller = new AbortController();
++    const timeoutId = setTimeout(() => controller.abort(), 8000);
++    try {
++      const upstream = await fetch(url, {
++        headers: { Accept: 'application/json' },
++        signal: controller.signal,
++      });
++      if (!upstream.ok) return null;
++      const payload = await readResponseJsonCapped(
++        upstream,
++        ADSBLOL_POINT_MAX_RESPONSE_BYTES,
++      );
++      // dump1090/readsb use `aircraft`; adsb.lol uses `ac`. Normalise the envelope.
++      const normalised = {
++        now: payload?.now ?? Math.floor(Date.now() / 1000),
++        ac: Array.isArray(payload?.aircraft) ? payload.aircraft : (payload?.ac || []),
++      };
++      return normalizeAdsbLolPointResponse(normalised);
++    } finally {
++      clearTimeout(timeoutId);
++    }
++  }
++
++  async function fetchAdsbLol(req, root) {
++    const incoming = new URL(req?.url || '', 'http://localhost');
++    let lat = Number(incoming.searchParams.get('lat'));
++    let lon = Number(incoming.searchParams.get('lon'));
++    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
++      const box = String(incoming.searchParams.get('lamin') || '');
++      const boxLon = String(incoming.searchParams.get('lomin') || '');
++      const lamax = Number(incoming.searchParams.get('lamax'));
++      const lomax = Number(incoming.searchParams.get('lomax'));
++      if (Number.isFinite(lamax) && Number.isFinite(lomax) && box && boxLon) {
++        lat = (Number(box) + lamax) / 2;
++        lon = (Number(boxLon) + lomax) / 2;
++      }
++    }
++    if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
++    const roundedLat = Math.round(lat * 4) / 4;
++    const roundedLon = Math.round(lon * 4) / 4;
++    const controller = new AbortController();
++    const timeoutId = setTimeout(() => controller.abort(), 10000);
++    try {
++      const upstream = await fetch(
++        `${ADSB_LOL_ENDPOINT}/lat/${roundedLat}/lon/${roundedLon}/dist/${ADSBLOL_POINT_RADIUS_NM}`,
++        {
++          headers: { Accept: 'application/json', 'User-Agent': 'nura-cop-globe/1.0' },
++          signal: controller.signal,
++        },
++      );
++      if (!upstream.ok) return null;
++      const payload = await readResponseJsonCapped(
++        upstream,
++        ADSBLOL_POINT_MAX_RESPONSE_BYTES,
++      );
++      return normalizeAdsbLolPointResponse(payload);
++    } finally {
++      clearTimeout(timeoutId);
++    }
++  }
++
++  return {
++    name: 'aircraft-source-proxy',
++    configureServer(server) {
++      server.middlewares.use(AIRCRAFT_ENDPOINT, async (req, res) => {
++        const mode = resolveAircraftSourceMode(process.env);
++        try {
++          // OpenSky is not cleared commercially: refuse rather than silently
++          // serve it. The client can still hit /api/opensky directly in dev.
++          if (mode === 'opensky') {
++            res.writeHead(409, { 'Content-Type': 'application/json' });
++            res.end(JSON.stringify({
++              error: 'opensky_not_commercially_cleared',
++              hint: 'Set NURA_ADSB_MODE=own or adsb_lol.',
++            }));
++            return;
++          }
++
++          const now = Date.now();
++          const hit = cache.get(mode);
++          if (hit && now - hit.at < TTL_MS) {
++            res.writeHead(200, {
++              'Content-Type': 'application/json',
++              'Cache-Control': 'no-store',
++              'X-Flight-Source': hit.source,
++              'X-Flight-Count': String(hit.count),
++              'X-Cache-Status': 'HIT',
++            });
++            res.end(hit.body);
++            return;
++          }
++
++          // coalesceProxyRequest returns { promise, shared } -- await the promise.
++          let snapshot;
++          if (mode === 'own') {
++            const coalesced = coalesceProxyRequest(
++              ownInFlight,
++              'own',
++              () => fetchOwnReceiver(resolveOwnReceiverUrl(process.env)),
++            );
++            snapshot = await coalesced.promise;
++          } else {
++            snapshot = await fetchAdsbLol(req);
++          }
++
++          if (!snapshot) {
++            if (hit) {
++              res.writeHead(200, {
++                'Content-Type': 'application/json',
++                'X-Flight-Source': hit.source,
++                'X-Cache-Status': 'STALE',
++              });
++              res.end(hit.body);
++              return;
++            }
++            res.writeHead(503, { 'Content-Type': 'application/json' });
++            res.end(JSON.stringify({ error: 'aircraft_source_unavailable', mode }));
++            return;
++          }
++
++          const body = JSON.stringify(snapshot);
++          const source = mode === 'own' ? 'own-receiver' : 'adsb.lol';
++          cache.set(mode, { body, at: now, count: snapshot.states.length, source });
++          res.writeHead(200, {
++            'Content-Type': 'application/json',
++            'Cache-Control': 'no-store',
++            'X-Flight-Source': source,
++            'X-Flight-Count': String(snapshot.states.length),
++            'X-Cache-Status': 'MISS',
++          });
++          res.end(body);
++        } catch (error) {
++          console.warn('[Aircraft Source]', error?.message || error);
++          res.writeHead(502, { 'Content-Type': 'application/json' });
++          res.end(JSON.stringify({ error: 'aircraft_source_error', mode }));
++        }
++      });
++    },
++  };
++}
++
+ function openSkySourceEpochMs(body) {
+   try {
+     const seconds = Number(JSON.parse(body)?.time);
+@@ -7741,6 +7908,7 @@ export default defineConfig(({ mode }) => {
+     plugins: [
+       cesium(),
+       openSkyProxy(),
++      aircraftSourceProxy(),
+       celestrakProxy(),
+       tomtomProxy(),
+       firmsProxy(),

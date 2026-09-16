@@ -1,0 +1,179 @@
+{
+ "page_id": "3d8a9b14-e498-8125-a630-f2fcc2bd2354",
+ "projects": [
+  [
+   "Executive Operating System & Delegation",
+   "3cda9b14-e498-812b-b0d7-da380317fc4a",
+   "Active"
+  ],
+  [
+   "Hermes FounderOS & Autonomous Agent Infrastructure",
+   "3cda9b14-e498-8150-a640-c7343080d3da",
+   "Active"
+  ],
+  [
+   "Imaging Service-Line Build: X-ray, Ultrasound, DEXA & Mammography",
+   "3cda9b14-e498-816f-9653-c1b989ac1926",
+   "Active"
+  ],
+  [
+   "Medisun Clinical Governance, Quality & Documentation",
+   "3cda9b14-e498-8112-9cf5-f755180cb5c0",
+   "Active"
+  ],
+  [
+   "Medisun Corporate Structure, Contracts & Commercial Strategy",
+   "3d1a9b14-e498-81bc-a4a8-d0cf9af27813",
+   "Active"
+  ],
+  [
+   "Medisun Health Group \u2014 Nura ERP",
+   "3cda9b14-e498-814b-b887-c84214dc4e70",
+   "Active"
+  ],
+  [
+   "Medisun Mobile Care Fleet & Brand Compliance",
+   "3cda9b14-e498-811c-9bef-c182402362fc",
+   "Active"
+  ],
+  [
+   "Medisun Population Health & Value-Based Care Operating System",
+   "3cda9b14-e498-81fa-b22e-c53cd9aa6a75",
+   "Active"
+  ],
+  [
+   "Mobile Integrated Health & Community Paramedicine Launch",
+   "3cda9b14-e498-81a4-956b-cd0f3fdb2e8b",
+   "Active"
+  ],
+  [
+   "North Miami Radiology Center Launch",
+   "3cda9b14-e498-8180-b2e0-ec09cba82d79",
+   "Active"
+  ],
+  [
+   "NURA ARES \u2014 DARPA ICU-in-a-Box Program",
+   "3d8a9b14-e498-81cc-bc8d-c70b6db8d464",
+   "Active"
+  ],
+  [
+   "NURA Clinical AI Platform / Provider Labs",
+   "3cda9b14-e498-815b-b66e-e271c9158e34",
+   "Active"
+  ],
+  [
+   "NURA Clinical Governance, Security & Compliance",
+   "3cda9b14-e498-8188-8036-f745238fd444",
+   "Active"
+  ],
+  [
+   "NURA Health Communications App",
+   "3cda9b14-e498-81f9-b5ae-cdbdc566b2ee",
+   "Active"
+  ],
+  [
+   "NURA Radiology Intelligence & Imaging Pipeline",
+   "3cda9b14-e498-814b-bcb5-cff912a98d83",
+   "Active"
+  ],
+  [
+   "NURA Second Brain & Knowledge Infrastructure",
+   "3cda9b14-e498-8196-86ae-e622fd9bc25b",
+   "Active"
+  ],
+  [
+   "NURATECH Corporate Development, IP & Capital Strategy",
+   "3cda9b14-e498-81e1-be11-ef59f2fd6f6a",
+   "Planning"
+  ],
+  [
+   "Rescue Health Foundation Community Health Programs",
+   "3cda9b14-e498-813f-b300-dc1b0f5cb6b6",
+   "Planning"
+  ]
+ ],
+ "canonical": {
+  "projects": [
+   "9547910e-8975-44b8-b511-2108abfa0d11",
+   "Executive Projects",
+   "18 projects"
+  ],
+  "tasks": [
+   "d3ff0c00-c629-43dc-b82c-06a28866fcb1",
+   "Master Tasks & Commitments",
+   "78 rows"
+  ],
+  "medisun": [
+   "8aca9b14-e498-8200-8d00-0149672c0a5f",
+   "Medisun Completed Work Register",
+   "27 rows"
+  ],
+  "orgs": [
+   "c20a9b14-e498-8333-b554-01413da172df",
+   "Organizations & Current Roles",
+   "9 rows"
+  ],
+  "prehosp": [
+   "cdca9b14-e498-821f-9a92-814495237c4f",
+   "Prehospital & Aeromedical Evidence Board",
+   "6 rows"
+  ],
+  "erp": [
+   "e80e33c7-d5a3-4f4b-a3e5-0c19133a605d",
+   "Nura ERP Build Backlog",
+   "45 rows"
+  ],
+  "mih": [
+   "298d6119-62cf-4233-8717-9a3c1c687080",
+   "MIH Evidence & Policy Registry",
+   "15 rows"
+  ],
+  "handoffs": [
+   "3cda9b14-e498-8178-8581-c358f57305a1",
+   "Hermes \u2194 ChatGPT \u2014 Agent Handoffs",
+   "27 rows"
+  ],
+  "people": [
+   "d3da9b14-e498-82df-b0d8-014512d331ec",
+   "People",
+   "6 rows"
+  ],
+  "todo": [
+   "384a9b14-e498-8041-a6cf-fc6849b4fc40",
+   "To Do List DB",
+   "13 rows"
+  ],
+  "flutter": [
+   "22260907-f18c-4768-95de-052942bdb055",
+   "Flutter Delivery Board \u2014 Active",
+   "10 rows"
+  ]
+ },
+ "superseded": [
+  [
+   "e90a9b14-e498-83f9-ae0b-810a94157b95",
+   "Executive Projects (copy)",
+   "17 rows \u2014 16 shared + 1 renamed duplicate"
+  ],
+  [
+   "752a9b14-e498-8309-b369-817c7145b742",
+   "Master Tasks & Commitments (copy)",
+   "57 rows \u2014 strict subset of the 78"
+  ],
+  [
+   "44a69385-45ef-47ab-a787-aa6274472081",
+   "Medisun Completed Work Register (copy)",
+   "27 rows \u2014 identical"
+  ],
+  [
+   "116b71cd-76a4-4eef-a1d0-81068e3c6cf4",
+   "Organizations & Current Roles (copy)",
+   "9 rows \u2014 identical"
+  ],
+  [
+   "c28d624e-b827-4065-b1fd-200cdf7dd561",
+   "Prehospital & Aeromedical Evidence Board (copy)",
+   "6 rows \u2014 identical"
+  ]
+ ]
+}

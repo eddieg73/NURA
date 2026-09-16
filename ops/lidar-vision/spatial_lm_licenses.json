@@ -1,0 +1,62 @@
+[
+ {
+  "repo": "OpenBMB/MiniCPM-V",
+  "label": "MiniCPM-V",
+  "license": "APACHE-2.0",
+  "stars": 26359
+ },
+ {
+  "repo": "QwenLM/Qwen2.5-VL",
+  "label": "Qwen2.5-VL",
+  "license": "APACHE-2.0",
+  "stars": 19935
+ },
+ {
+  "repo": "QwenLM/Qwen3-VL",
+  "label": "Qwen3-VL",
+  "license": "APACHE-2.0",
+  "stars": 19935
+ },
+ {
+  "repo": "facebookresearch/dinov2",
+  "label": "DINOv2",
+  "license": "APACHE-2.0",
+  "stars": 13322
+ },
+ {
+  "repo": "OpenGVLab/InternVL",
+  "label": "InternVL",
+  "license": "MIT",
+  "stars": 10155
+ },
+ {
+  "repo": "deepseek-ai/DeepSeek-VL2",
+  "label": "DeepSeek-VL2",
+  "license": "MIT",
+  "stars": 5373
+ },
+ {
+  "repo": "Pointcept/Pointcept",
+  "label": "Pointcept",
+  "license": "MIT",
+  "stars": 3215
+ },
+ {
+  "repo": "embodied-generalist/embodied-generalist",
+  "label": "LEO (already cleared, MIT)",
+  "license": "MIT",
+  "stars": 489
+ },
+ {
+  "repo": "LaVi-Lab/Video-3D-LLM",
+  "label": "Video-3D-LLM",
+  "license": "APACHE-2.0",
+  "stars": 223
+ },
+ {
+  "repo": "manycore-research/SpatialLM",
+  "label": "spatial LLM (the Meta one)",
+  "license": "LLAMA-COMMUNITY",
+  "stars": 4733
+ }
+]

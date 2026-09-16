@@ -1,0 +1,90 @@
+{
+ "manycore-research/SpatialLM": {
+  "stars": 4733,
+  "license": "NOASSERTION",
+  "pushed": "2026-06-26",
+  "desc": "[NeurIPS 2025] SpatialLM: Training Large Language Models for Structured Indoor Modeling",
+  "url": "https://github.com/manycore-research/SpatialLM",
+  "lang": "Python"
+ },
+ "ByteDance-Seed/Depth-Anything-3": {
+  "stars": 6329,
+  "license": "Apache-2.0",
+  "pushed": "2026-07-27",
+  "desc": "Depth Anything 3",
+  "url": "https://github.com/ByteDance-Seed/Depth-Anything-3",
+  "lang": "Python"
+ },
+ "facebookresearch/vggt": {
+  "stars": 14377,
+  "license": "NOASSERTION",
+  "pushed": "2026-05-19",
+  "desc": "[CVPR 2025 Best Paper Award] VGGT: Visual Geometry Grounded Transformer",
+  "url": "https://github.com/facebookresearch/vggt",
+  "lang": "Python"
+ },
+ "naver/mast3r": {
+  "stars": 3101,
+  "license": "NOASSERTION",
+  "pushed": "2025-06-30",
+  "desc": "Grounding Image Matching in 3D with MASt3R",
+  "url": "https://github.com/naver/mast3r",
+  "lang": "Python"
+ },
+ "OpenRobotLab/PointLLM": {
+  "stars": 1054,
+  "license": "NONE",
+  "pushed": "2026-05-15",
+  "desc": "[ECCV 2024 Best Paper Candidate & TPAMI 2025] PointLLM: Empowering Large Language Models to Understand Point Clouds",
+  "url": "https://github.com/InternRobotics/PointLLM",
+  "lang": "Python"
+ },
+ "embodied-generalist/embodied-generalist": {
+  "stars": 489,
+  "license": "MIT",
+  "pushed": "2025-04-20",
+  "desc": "[ICML 2024] LEO: An Embodied Generalist Agent in 3D World",
+  "url": "https://github.com/embodied-generalist/embodied-generalist",
+  "lang": "Python"
+ },
+ "Pointcept/Pointcept": {
+  "stars": 3215,
+  "license": "MIT",
+  "pushed": "2026-09-11",
+  "desc": "Pointcept: Perceive the world with sparse points, a codebase for point cloud perception research. Latest works: Utonia (",
+  "url": "https://github.com/Pointcept/Pointcept",
+  "lang": "Python"
+ },
+ "isl-org/Open3D": {
+  "stars": 13955,
+  "license": "NOASSERTION",
+  "pushed": "2026-09-12",
+  "desc": "Open3D: A Modern Library for 3D Data Processing",
+  "url": "https://github.com/isl-org/Open3D",
+  "lang": "C++"
+ },
+ "autowarefoundation/autoware": {
+  "stars": 12057,
+  "license": "Apache-2.0",
+  "pushed": "2026-09-09",
+  "desc": "Autoware - the world's leading open-source software project for autonomous driving",
+  "url": "https://github.com/autowarefoundation/autoware",
+  "lang": "Dockerfile"
+ },
+ "AnyLoc/AnyLoc": {
+  "stars": 640,
+  "license": "BSD-3-Clause",
+  "pushed": "2024-03-13",
+  "desc": "AnyLoc: Universal Visual Place Recognition (RA-L 2023)",
+  "url": "https://github.com/AnyLoc/AnyLoc",
+  "lang": "Python"
+ },
+ "OpenGVLab/InternVL": {
+  "stars": 10155,
+  "license": "MIT",
+  "pushed": "2025-09-22",
+  "desc": "[CVPR 2024 Oral] InternVL Family: A Pioneering Open-Source Alternative to GPT-4o.  \u63a5\u8fd1GPT-4o\u8868\u73b0\u7684\u5f00\u6e90\u591a\u6a21\u6001\u5bf9\u8bdd\u6a21\u578b",
+  "url": "https://github.com/OpenGVLab/InternVL",
+  "lang": "Python"
+ }
+}

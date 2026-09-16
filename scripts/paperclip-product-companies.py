@@ -40,7 +40,7 @@ issues = [
                         "4) COMPLIANCE: product claims + meal-plan health claims pass "
                         "healthtech-marketing-claims-review; no medical claims on supplements/peptides "
                         "beyond evidence.\n"
-                        "DELIVER: division + catalog plan + meal-studio MVP on this issue."},
+                        "DELIVER: division + catalog plan + meal-studio MVP on this issue."),
         "assigneeAgentId": ATLAS,
     },
     {
@@ -60,7 +60,7 @@ issues = [
                         "4) CADENCE: 1 peptide deep-dive/week + 3 reels/week; archive to vault "
                         "(NURA-OS/Peptide-Library.md).\n"
                         "DELIVER: editorial calendar + first peptide deep-dive (evidence-linked) on this "
-                        "issue."},
+                        "issue."),
         "assigneeAgentId": IRIS,
     },
 ]

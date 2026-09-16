@@ -4,7 +4,7 @@ Checks :3100/api/health every 2 min; auto-recovers via the sanctioned manager;
 appends to the uptime ledger. Silent when healthy (no_agent cron pattern)."""
 import datetime, os, subprocess, sys, time
 
-HEALTH_URL = "http://127.0.0.1:3101/api/health"  # corrected 2026-08-02: canonical fork runs :3101; :3100 = stale upstream (health-only)  # corrected 2026-08-02: /api/health 404s; /health is live
+HEALTH_URL = "http://127.0.0.1:3100/health"  # corrected 2026-09-11: :3100 is the LIVE local service (verified /health=200, /api/health=200); :3101 has NO listener (curl=000). Aligns with paperclip_server_manager.py in this dir. Prior ":3101 canonical" comment was false — it would have produced permanent false-DOWN + recovery loops (orphan-cascade generator class).
 LEDGER = "/opt/data/profiles/nura/data/uptime/paperclip.log"
 os.makedirs(os.path.dirname(LEDGER), exist_ok=True)
 MANAGER = "/opt/data/scripts/paperclip_server_manager.py"

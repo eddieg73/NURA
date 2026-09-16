@@ -1,0 +1,335 @@
+===HOST===
+srv817449
+195.35.32.113 10.10.0.3 172.18.0.1 172.20.0.1 172.19.0.1 172.17.0.1 172.21.0.1 2a02:4780:10:bfc8::1 
+6.8.0-139-generic
+up 2 days, 20 hours, 6 minutes
+===OS===
+Ubuntu 24.04.3 LTS
+===DISK===
+/dev/sda1        48G   18G   31G  37% /
+===DOCKER_CONTAINERS===
+hrtlab-wp|wordpress:php8.3-apache|Up 2 days|127.0.0.1:8100->80/tcp
+hrtlab-db|mariadb:11.4|Up 2 days|3306/tcp
+medisun-db|mysql:8.0|Up 2 days (healthy)|3306/tcp, 33060/tcp
+perfex-cron|perfex-management:3.4.1|Up 2 days|80/tcp
+perfex-app|perfex-management:3.4.1|Up 2 days|127.0.0.1:8099->80/tcp
+perfex-db|mysql:8.0|Up 2 days (healthy)|3306/tcp, 33060/tcp
+code-n8n-1|docker.n8n.io/n8nio/n8n:latest|Up 2 days|5678/tcp
+n8n-n8n-6tp2rd-n8n-1|docker.n8n.io/n8nio/n8n:latest|Up 2 days|5678/tcp
+===DOCKER_COMPOSE_PROJECTS===
+code
+hrtlab-wp
+medisun
+n8n-n8n-6tp2rd
+perfex-management
+===DOCKER_VOLUMES===
+code_n8n_data-n8n-n8n-6tp2rd
+dokploy-docker-config
+dokploy-postgres-database
+hrtlab-wp_hrtlab-db
+hrtlab-wp_hrtlab-wp
+medisun_medisun-db
+n8n-n8n-6tp2rd_n8n_data-n8n-n8n-6tp2rd
+perfex-management_perfex-db
+redis-data-volume
+===DOCKER_NETWORKS===
+bridge|bridge
+host|host
+hrtlab-wp_default|bridge
+medisun_medisun|bridge
+n8n-n8n-6tp2rd|bridge
+none|null
+perfex-management_perfex|bridge
+===DOCKER_IMAGES===
+mariadb:11.4|327MB
+wordpress:php8.3-apache|786MB
+perfex-management:3.4.1|233MB
+mysql:8.0|799MB
+docker.n8n.io/n8nio/n8n:latest|1.17GB
+===COMPOSE_FILES===
+/opt/perfex-management/docker-compose.yml
+/opt/medisun/docker-compose.yml
+/opt/hrtlab-wp/docker-compose.yml
+===SYSTEMD_RUNNING===
+apache2.service
+containerd.service
+cron.service
+dbus.service
+docker.service
+getty@tty1.service
+ModemManager.service
+monarx-agent.service
+mysql.service
+php8.2-fpm.service
+polkit.service
+qemu-guest-agent.service
+rsyslog.service
+serial-getty@ttyS0.service
+ssh.service
+systemd-journald.service
+systemd-logind.service
+systemd-networkd.service
+systemd-resolved.service
+systemd-timesyncd.service
+systemd-udevd.service
+tailscaled.service
+tinyproxy.service
+udisks2.service
+unattended-upgrades.service
+user@0.service
+===SYSTEMD_ENABLED===
+apache2.service
+apparmor.service
+apport.service
+blk-availability.service
+cloud-config.service
+cloud-final.service
+cloud-init-local.service
+cloud-init.service
+console-setup.service
+containerd.service
+cron.service
+dmesg.service
+docker.service
+e2scrub_reap.service
+finalrd.service
+getty@.service
+grub-common.service
+grub-initrd-fallback.service
+keyboard-setup.service
+lvm2-monitor.service
+ModemManager.service
+monarx-agent.service
+mysql.service
+netfilter-persistent.service
+networkd-dispatcher.service
+open-iscsi.service
+open-vm-tools.service
+php8.2-fpm.service
+pollinate.service
+rsyslog.service
+secureboot-db.service
+setvtrgb.service
+snapd.apparmor.service
+snapd.autoimport.service
+snapd.core-fixup.service
+snapd.recovery-chooser-trigger.service
+snapd.seeded.service
+snapd.service
+snapd.system-shutdown.service
+ssl-cert.service
+sysstat.service
+systemd-networkd-wait-online.service
+systemd-networkd.service
+systemd-pstore.service
+systemd-resolved.service
+systemd-timesyncd.service
+tailscaled.service
+tinyproxy.service
+ua-reboot-cmds.service
+ubuntu-advantage.service
+udisks2.service
+unattended-upgrades.service
+vgauth.service
+===LISTENING_PORTS===
+127.0.0.1:65529 users:(("monarx-agent",pid=1163629,fd=11))
+127.0.0.1:8099 users:(("docker-proxy",pid=2491,fd=7))
+127.0.0.1:8100 users:(("docker-proxy",pid=35473,fd=7))
+0.0.0.0:8888 users:(("tinyproxy",pid=716,fd=3))
+127.0.0.53%lo:53 users:(("systemd-resolve",pid=507,fd=15))
+127.0.0.1:3306 users:(("mysqld",pid=861,fd=36))
+0.0.0.0:22 users:(("sshd",pid=3544,fd=3),("systemd",pid=1,fd=132))
+127.0.0.54:53 users:(("systemd-resolve",pid=507,fd=17))
+127.0.0.1:33060 users:(("mysqld",pid=861,fd=31))
+*:443 users:(("apache2",pid=1197384,fd=6),("apache2",pid=1197381,fd=6),("apache2",pid=1197379,fd=6),("apache2",pid=1197184,fd=6),("apache2",pid=1196710,fd=6),("apache2",pid=1195602,fd=6),("apache2",pid=1195601,fd=6),("apache2",pid=1195600,fd=6),("apache2",pid=1195599,fd=6),("apache2",pid=1195598,fd=6),("apache2",pid=1164258,fd=6))
+[::]:22 users:(("sshd",pid=3544,fd=4),("systemd",pid=1,fd=134))
+*:80 users:(("apache2",pid=1197384,fd=4),("apache2",pid=1197381,fd=4),("apache2",pid=1197379,fd=4),("apache2",pid=1197184,fd=4),("apache2",pid=1196710,fd=4),("apache2",pid=1195602,fd=4),("apache2",pid=1195601,fd=4),("apache2",pid=1195600,fd=4),("apache2",pid=1195599,fd=4),("apache2",pid=1195598,fd=4),("apache2",pid=1164258,fd=4))
+===NGINX_SITES===
+===NGINX_SERVER_NAMES===
+===NGINX_PROXY_PASS===
+===APACHE_VHOSTS===
+VirtualHost configuration:
+*:443                  is a NameVirtualHost
+         default server app.brawlerzbox.com (/etc/apache2/sites-enabled/app.brawlerzbox.com-le-ssl.conf:2)
+         port 443 namevhost app.brawlerzbox.com (/etc/apache2/sites-enabled/app.brawlerzbox.com-le-ssl.conf:2)
+         port 443 namevhost crm.launchpadai.tech (/etc/apache2/sites-enabled/crm.launchpadai.tech-le-ssl.conf:2)
+                 alias pay.nuratech.ai
+         port 443 namevhost erp.epicaesthetix.com (/etc/apache2/sites-enabled/erp-le-ssl.conf:2)
+         port 443 namevhost erp.hrthouse.com (/etc/apache2/sites-enabled/erp.hrthouse.com-le-ssl.conf:2)
+         port 443 namevhost erp.medisunmedical.com (/etc/apache2/sites-enabled/erp.medisunmedical.com-le-ssl.conf:2)
+         port 443 namevhost hrtlab.us (/etc/apache2/sites-enabled/hrtlab.us-le-ssl.conf:2)
+                 alias www.hrtlab.us
+         port 443 namevhost management.nuratech.ai (/etc/apache2/sites-enabled/management.nuratech.ai-le-ssl.conf:2)
+         port 443 namevhost media.nuratech.ai (/etc/apache2/sites-enabled/media.nuratech.ai-le-ssl.conf:2)
+         port 443 namevhost medisun.nuratech.ai (/etc/apache2/sites-enabled/medisun.nuratech.ai-le-ssl.conf:2)
+         port 443 namevhost rfa.nuratech.ai (/etc/apache2/sites-enabled/rfa.nuratech.ai-le-ssl.conf:2)
+         port 443 namevhost rfaapp.nuratech.ai (/etc/apache2/sites-enabled/rfaapp.nuratech.ai-le-ssl.conf:2)
+*:80                   is a NameVirtualHost
+         default server app.brawlerzbox.com (/etc/apache2/sites-enabled/app.brawlerzbox.com.conf:1)
+         port 80 namevhost app.brawlerzbox.com (/etc/apache2/sites-enabled/app.brawlerzbox.com.conf:1)
+         port 80 namevhost pay.nuratech.ai (/etc/apache2/sites-enabled/crm.launchpadai.tech.conf:1)
+         port 80 namevhost erp.epicaesthetix.com (/etc/apache2/sites-enabled/erp.conf:1)
+         port 80 namevhost erp.hrthouse.com (/etc/apache2/sites-enabled/erp.hrthouse.com.conf:1)
+         port 80 namevhost erp.medisunmedical.com (/etc/apache2/sites-enabled/erp.medisunmedical.com.conf:1)
+         port 80 namevhost hrtlab.us (/etc/apache2/sites-enabled/hrtlab.us.conf:1)
+                 alias www.hrtlab.us
+         port 80 namevhost management.nuratech.ai (/etc/apache2/sites-enabled/management.nuratech.ai.conf:1)
+         port 80 namevhost media.nuratech.ai (/etc/apache2/sites-enabled/media.nuratech.ai.conf:1)
+         port 80 namevhost medisun.nuratech.ai (/etc/apache2/sites-enabled/medisun.nuratech.ai.conf:4)
+         port 80 namevhost rfa.nuratech.ai (/etc/apache2/sites-enabled/rfa.nuratech.ai.conf:1)
+         port 80 namevhost rfaapp.nuratech.ai (/etc/apache2/sites-enabled/rfaapp.nuratech.ai.conf:1)
+ServerRoot: "/etc/apache2"
+Main DocumentRoot: "/var/www/html"
+Main ErrorLog: "/var/log/apache2/error.log"
+Mutex proxy: using_defaults
+Mutex ssl-cache: using_defaults
+Mutex default: dir="/var/run/apache2/" mechanism=default 
+Mutex mpm-accept: using_defaults
+Mutex watchdog-callback: using_defaults
+Mutex rewrite-map: using_defaults
+Mutex ssl-stapling-refresh: using_defaults
+app.brawlerzbox.com-le-ssl.conf
+app.brawlerzbox.com.conf
+crm.launchpadai.tech-le-ssl.conf
+crm.launchpadai.tech.conf
+erp-le-ssl.conf
+erp.conf
+erp.hrthouse.com-le-ssl.conf
+erp.hrthouse.com.conf
+erp.medisunmedical.com-le-ssl.conf
+erp.medisunmedical.com.conf
+hrtlab.us-le-ssl.conf
+hrtlab.us.conf
+management.nuratech.ai-le-ssl.conf
+management.nuratech.ai.conf
+media.nuratech.ai-le-ssl.conf
+media.nuratech.ai.conf
+medisun.nuratech.ai-le-ssl.conf
+medisun.nuratech.ai.conf
+rfa.nuratech.ai-le-ssl.conf
+rfa.nuratech.ai.conf
+rfaapp.nuratech.ai-le-ssl.conf
+rfaapp.nuratech.ai.conf
+===TLS_CERTS===
+pay.nuratech.ai|Dec 11 01:39:32 2026 GMT|DNS:pay.nuratech.ai
+crm.launchpadai.tech|Jun 10 09:01:37 2026 GMT|DNS:crm.launchpadai.tech
+rfaapp.nuratech.ai|Dec  2 23:55:36 2026 GMT|DNS:rfaapp.nuratech.ai
+medisun.nuratech.ai|Nov 23 23:18:11 2026 GMT|DNS:medisun.nuratech.ai
+media.nuratech.ai|Nov 22 23:45:25 2026 GMT|DNS:media.nuratech.ai
+management.nuratech.ai|Nov 22 17:48:13 2026 GMT|DNS:management.nuratech.ai
+erp.hrthouse.com|Nov 10 05:29:36 2026 GMT|DNS:erp.hrthouse.com
+erp.medisunmedical.com|Nov 10 05:29:47 2026 GMT|DNS:erp.medisunmedical.com
+hrtlab.us|Dec 13 15:32:34 2026 GMT|DNS:hrtlab.us,DNS:www.hrtlab.us
+rfa.nuratech.ai|Dec  2 23:55:26 2026 GMT|DNS:rfa.nuratech.ai
+app.brawlerzbox.com|Dec  5 06:26:23 2026 GMT|DNS:app.brawlerzbox.com
+erp.epicaesthetix.com|Aug 24 10:46:11 2026 GMT|DNS:erp.epicaesthetix.com
+===CRON_ROOT===
+* * * * * wget -q -O- https://crm.launchpadai.tech/cron/index
+* * * * * wget -q -O- https://erp.epicaesthetix.com/cron/index
+* * * * * wget -q -O- https://app.brawlerzbox.com/cron/index
+* * * * * wget -q -O- https://erp.hrthouse.com/crm/cron/index > /dev/null 2>&1
+* * * * * wget -q -O- https://erp.medisunmedical.com/cron/index >/dev/null 2>&1
+* * * * * wget -q -O- https://media.nuratech.ai/cron/index >/dev/null 2>&1
+0 2 * * * /usr/local/bin/pay_backup_daily.sh >> /root/pay_backup/backup.log 2>&1
+===CRON_D===
+certbot
+docker-builder-prune
+docker-image-prune
+e2scrub_all
+monarx-update
+php
+sysstat
+---
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+0 */12 * * * root test -x /usr/bin/certbot -a \! -d /run/systemd/system && perl -e 'sleep int(rand(43200))' && certbot -q renew --no-random-sleep-on-renew
+9 4 * * 3 root docker builder prune -f > /dev/null 2>&1
+9 0 * * * root docker image prune -af --filter "until=24h" > /dev/null 2>&1
+30 3 * * 0 root test -e /run/systemd/system || SERVICE_MODE=1 /usr/lib/x86_64-linux-gnu/e2fsprogs/e2scrub_all_cron
+10 3 * * * root test -e /run/systemd/system || SERVICE_MODE=1 /sbin/e2scrub_all -A -r
+21 15 * * 2 root apt-get update -qq && apt-get install -y -qq monarx-agent monarx-protect monarx-protect-autodetect > /dev/null 2>&1
+09,39 *     * * *     root   [ -x /usr/lib/php/sessionclean ] && if [ ! -d /run/systemd/system ]; then /usr/lib/php/sessionclean; fi
+PATH=/usr/lib/sysstat:/usr/sbin:/usr/sbin:/usr/bin:/sbin:/bin
+5-55/10 * * * * root command -v debian-sa1 > /dev/null && debian-sa1 1 1
+59 23 * * * root command -v debian-sa1 > /dev/null && debian-sa1 60 2
+===USER_CRONS===
+[root] * * * * * wget -q -O- https://crm.launchpadai.tech/cron/index
+* * * * * wget -q -O- https://erp.epicaesthetix.com/cron/index
+* * * * * wget -q -O- https://app.brawlerzbox.com/cron/index
+* * * * * wget -q -O- https://erp.hrthouse.com/crm/cron/index > /dev/null 2>&1
+* * * * * wget -q -O- https://erp.medisunmedical.com/cron/index >/dev/null 2>&1
+* * * * * wget -q -O- https://media.nuratech.ai/cron/index >/dev/null 2>&1
+0 2 * * * /usr/local/bin/pay_backup_daily.sh >> /root/pay_backup/backup.log 2>&1
+===DATABASES===
+mysql  Ver 8.0.46-0ubuntu0.24.04.4 for Linux on x86_64 ((Ubuntu))
+hrtlab-db|mariadb:11.4
+medisun-db|mysql:8.0
+perfex-db|mysql:8.0
+/var/cache/snapd/commands.db
+/var/cache/man/index.db
+/var/lib/command-not-found/commands.db
+/var/lib/PackageKit/transactions.db
+/var/lib/fwupd/pending.db
+===WEB_ROOTS_APPS===
+/var/www/media.nuratech.ai/index.php
+/var/www/media.nuratech.ai/media/index.html
+/var/www/media.nuratech.ai/assets/index.html
+/var/www/media.nuratech.ai/application/index.html
+/var/www/media.nuratech.ai/documentation/index.html
+/var/www/media.nuratech.ai/uploads/index.html
+/var/www/media.nuratech.ai/temp/index.html
+/var/www/media.nuratech.ai/modules/index.html
+/var/www/media.nuratech.ai/system/index.html
+/var/www/erp.hrthouse.com/index.php
+/var/www/erp.hrthouse.com/media/index.html
+/var/www/erp.hrthouse.com/assets/index.html
+/var/www/erp.hrthouse.com/application/index.html
+/var/www/erp.hrthouse.com/documentation/index.html
+/var/www/erp.hrthouse.com/uploads/index.html
+/var/www/erp.hrthouse.com/temp/index.html
+/var/www/erp.hrthouse.com/modules/index.html
+/var/www/erp.hrthouse.com/system/index.html
+/var/www/crm/index.php
+/var/www/crm/media/index.html
+/var/www/crm/assets/index.html
+/var/www/crm/modules.bak.1787800145/index.html
+/var/www/crm/application/index.html
+/var/www/crm/documentation/index.html
+/var/www/crm/modules.bak.1787799954/index.html
+/var/www/crm/uploads/index.html
+/var/www/crm/temp/index.html
+/var/www/crm/modules/index.html
+/var/www/crm/system/index.html
+/var/www/erp.medisunmedical.com/index.php
+===APP_DIRS===
+/opt/containerd
+/opt/hrtlab-wp
+/opt/medisun
+/opt/perfex-management
+===PM2===
+none
+===LANG_RUNTIMES===
+php: PHP 8.1.34 (cli) (built: Feb 13 2026 15:57:20) (NTS)
+python3: Python 3.12.3
+node: absent
+npm: absent
+java: absent
+go: absent
+ruby: absent
+===FIREWALL_LOCAL===
+-P INPUT ACCEPT
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-N DOCKER
+-N DOCKER-BRIDGE
+-N DOCKER-CT
+-N DOCKER-FORWARD
+-N DOCKER-ISOLATION-STAGE-1
+-N DOCKER-ISOLATION-STAGE-2
+-N DOCKER-USER
+-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 443 -j ACCEPT
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -j ACCEPT
+-A FORWARD -j DOCKER-USER
+===END===

@@ -5,7 +5,15 @@ import os
 import subprocess
 import sys
 
-KEY = os.path.expanduser("~/.ssh/id_nura_clean")
+KEY = next(
+    (c for c in (
+        os.environ.get("FLEET_SSH_KEY", ""),
+        os.path.expanduser("~/.ssh/id_nura_clean"),
+        "/opt/data/profiles/nura/home/.ssh/id_nura_clean",
+        "/root/.ssh/id_nura_clean",
+    ) if c and os.path.exists(c)),
+    os.path.expanduser("~/.ssh/id_nura_clean"),
+)
 NODES = {
     "CLINIC": ("72.61.71.211", "1441409"),
     "LAB": ("72.60.163.140", "1030183"),
@@ -38,6 +46,10 @@ def scan(node, ip, vid):
 
 
 def main():
+    if not os.path.exists(KEY):
+        print(json.dumps({"error": "no readable SSH key — instrument failure, NOT a node outage",
+                          "key": KEY}))
+        sys.exit(2)
     results = [scan(n, ip, vid) for n, (ip, vid) in NODES.items()]
     print(json.dumps(results, indent=1))
 

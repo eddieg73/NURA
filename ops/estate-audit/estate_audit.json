@@ -1,0 +1,24 @@
+{
+ "skills": {
+  "total": 885,
+  "no_fm": 0,
+  "no_desc": 0,
+  "tiny": 0,
+  "dupes": 85
+ },
+ "scripts": {
+  "total": 1300,
+  "syntax_errors": 1
+ },
+ "plugins": {
+  "declared": 75,
+  "enabled": 61,
+  "malformed": 0
+ },
+ "crons": {
+  "total": 97,
+  "error": 2,
+  "monitored": 0
+ },
+ "uncovered": []
+}

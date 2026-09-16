@@ -1,0 +1,334 @@
+{
+ "ika-rwth-aachen/ros2-depth-anything-v3-trt": {
+  "stars": 556,
+  "license": "Apache-2.0",
+  "lang": "C++",
+  "desc": "ROS2 TensorRT Node for Monocular Metric Depth estimation and Point Cloud generation from camera images with Depth Anything V3",
+  "pushed": "2026-08-21",
+  "url": "https://github.com/ika-rwth-aachen/ros2-depth-anything-v3-trt",
+  "topics": [
+   "depth-anything-v3",
+   "monocular-depth",
+   "monocular-depth-estimation",
+   "ros2",
+   "tensorrt"
+  ]
+ },
+ "danderfer/Comp_Sci_Sem_2": {
+  "stars": 209,
+  "license": "NONE",
+  "lang": "Python",
+  "desc": "According to all known laws of aviation, there is no way that a bee should be able to fly. Its wings are too small to get its fat little body off the ground. Th",
+  "pushed": "2023-04-03",
+  "url": "https://github.com/danderfer/Comp_Sci_Sem_2",
+  "topics": []
+ },
+ "yangtiming/ImOV3D": {
+  "stars": 94,
+  "license": "MIT",
+  "lang": "Python",
+  "desc": "ImOV3D: Learning Open Vocabulary Point Clouds 3D Object Detection from Only 2D Images (NeurIPS2024)",
+  "pushed": "2026-02-20",
+  "url": "https://github.com/yangtiming/ImOV3D",
+  "topics": []
+ },
+ "Fsoft-AIC/Open-Vocabulary-Affordance-Detection-in-3D-Point-Clouds": {
+  "stars": 90,
+  "license": "MIT",
+  "lang": "Python",
+  "desc": "[IROS 2023] Open-Vocabulary Affordance Detection in 3d Point Clouds",
+  "pushed": "2024-09-04",
+  "url": "https://github.com/Fsoft-AIC/Open-Vocabulary-Affordance-Detection-in-3D-Point-Clouds",
+  "topics": [
+   "3d-point-clouds",
+   "affordance-learning",
+   "computer-vision-ai",
+   "iros2023",
+   "robotics"
+  ]
+ },
+ "Aryia-Behroziuan/References": {
+  "stars": 67,
+  "license": "NONE",
+  "lang": null,
+  "desc": " Poole, Mackworth & Goebel 1998, p. 1.  Russell & Norvig 2003, p. 55.  Definition of AI as the study of intelligent agents: Poole, Mackworth & Goebel (1998), wh",
+  "pushed": "2022-09-02",
+  "url": "https://github.com/Aryia-Behroziuan/References",
+  "topics": []
+ },
+ "YuZhong-Chen/LLM-Navigation": {
+  "stars": 28,
+  "license": "Apache-2.0",
+  "lang": "C++",
+  "desc": "\ud83d\ude97\ud83d\udde3\ufe0f\ud83d\udce1\ud83d\uddfe\ud83c\udfc1 A framework for navigation tasks that can build the 3D scene graph in real-time and utilize large language model (LLM) to guide the robot.",
+  "pushed": "2024-10-14",
+  "url": "https://github.com/YuZhong-Chen/LLM-Navigation",
+  "topics": [
+   "automation",
+   "computer-vision",
+   "edge-computing",
+   "llm",
+   "robotics",
+   "scene-graph",
+   "slam"
+  ]
+ },
+ "yanx27/CLEVR3D": {
+  "stars": 21,
+  "license": "NONE",
+  "lang": "Python",
+  "desc": "CLEVR3D Dataset: Comprehensive Visual Question Answering on Point Clouds through Compositional Scene Manipulation",
+  "pushed": "2024-02-02",
+  "url": "https://github.com/yanx27/CLEVR3D",
+  "topics": [
+   "point-cloud",
+   "scene-graph",
+   "scene-understanding",
+   "vqa-3d",
+   "vqa-dataset"
+  ]
+ },
+ "miladfa7/SpatialLM-Gradio": {
+  "stars": 13,
+  "license": "NOASSERTION",
+  "lang": "Python",
+  "desc": "\"Gradio\" Interface for SpatialLM Model | A 3D Large Language Model for Structured Scene Understanding, Processing Point Cloud Data from Monocular Videos, RGBD I",
+  "pushed": "2025-03-22",
+  "url": "https://github.com/miladfa7/SpatialLM-Gradio",
+  "topics": [
+   "3d-bounding-boxes",
+   "3d-object-detection",
+   "gradio",
+   "llm",
+   "point-clouds",
+   "scene-understanding",
+   "spatial-intelligence"
+  ]
+ },
+ "wikieden/tempomem": {
+  "stars": 3,
+  "license": "Apache-2.0",
+  "lang": "Python",
+  "desc": "Spatial memory layer for AI agents \u2014 RGB-D / point clouds to a persistent, queryable, LLM-native 3D scene graph. Mem0 for 3D space.",
+  "pushed": "2026-07-05",
+  "url": "https://github.com/wikieden/tempomem",
+  "topics": [
+   "3d",
+   "ai-agents",
+   "embodied-ai",
+   "llm",
+   "point-cloud",
+   "rgbd",
+   "robotics",
+   "scene-graph",
+   "spatial-memory",
+   "sqlite"
+  ]
+ },
+ "uniHsia/LLM-Navigation": {
+  "stars": 2,
+  "license": "NONE",
+  "lang": null,
+  "desc": "A framework for navigation tasks that can build the 3D scene graph in real time and utilize a large language model (LLM) to guide the robot.",
+  "pushed": "2026-04-29",
+  "url": "https://github.com/uniHsia/LLM-Navigation",
+  "topics": []
+ },
+ "rolandocortez/smart-depth-cra2m-tracker": {
+  "stars": 1,
+  "license": "NONE",
+  "lang": "Python",
+  "desc": "Real-time 3D tracking and depth estimation using a monocular RGB camera. Powered by YOLOv10, ByteTrack, and Depth Anything v2, this system enables accurate metr",
+  "pushed": "2025-06-18",
+  "url": "https://github.com/rolandocortez/smart-depth-cra2m-tracker",
+  "topics": []
+ },
+ "Tian-zeping/VLAP": {
+  "stars": 1,
+  "license": "NONE",
+  "lang": null,
+  "desc": " Hi, I'm Zeping \ud83d\udc4b  \ud83c\udf93 Graduate student interested in multimodal intelligence and embodied AI.   \ud83d\udd2c Research Interests  - Multimodal Large Language Models - Vision",
+  "pushed": "2026-09-02",
+  "url": "https://github.com/Tian-zeping/VLAP",
+  "topics": []
+ },
+ "Sanjiv01/multisensor-spatial-reasoning": {
+  "stars": 0,
+  "license": "NOASSERTION",
+  "lang": "Python",
+  "desc": "Benchmarking and fine-tuning vision-language models for spatial reasoning on multi-sensor autonomous-driving data (camera, LiDAR, RADAR, HD-map).",
+  "pushed": "2026-09-07",
+  "url": "https://github.com/Sanjiv01/multisensor-spatial-reasoning",
+  "topics": []
+ },
+ "YuZhong-Chen/LLM-Navigation-AMD": {
+  "stars": 0,
+  "license": "NONE",
+  "lang": "C++",
+  "desc": "\ud83d\ude97\ud83d\udde3\ufe0f\ud83d\udce1\ud83d\uddfe\ud83c\udfc1 A framework for navigation tasks that can build the 3D scene graph in real-time and utilize large language model (LLM) to guide the robot.",
+  "pushed": "2024-09-24",
+  "url": "https://github.com/YuZhong-Chen/LLM-Navigation-AMD",
+  "topics": []
+ },
+ "api-evangelist/moondream": {
+  "stars": 0,
+  "license": "NONE",
+  "lang": null,
+  "desc": "Moondream \u2014 independent third-party profile of a public API surface, by API Evangelist. Moondream is a fast, efficient open vision language model (VLM) from M87",
+  "pushed": "2026-09-04",
+  "url": "https://github.com/api-evangelist/moondream",
+  "topics": [
+   "apis-json",
+   "artificial-intelligence",
+   "company",
+   "computer-vision",
+   "developer-tools",
+   "image-captioning",
+   "machine-learning",
+   "object-detection",
+   "ocr",
+   "vision-language-model"
+  ]
+ },
+ "melocj2/rag-tool": {
+  "stars": 0,
+  "license": "MIT",
+  "lang": "Python",
+  "desc": "A small, fully-offline Retrieval-Augmented Generation CLI. Point it at a folder of .md/.txt files, then ask questions answered by your local gemma4:12b model, g",
+  "pushed": "2026-09-11",
+  "url": "https://github.com/melocj2/rag-tool",
+  "topics": []
+ },
+ "Shreyash-Sachit-Sahu/rag-pipeline": {
+  "stars": 0,
+  "license": "MIT",
+  "lang": "Python",
+  "desc": "A production-grade Retrieval-Augmented Generation system you can point at any website or document collection and immediately start asking questions against. You",
+  "pushed": "2026-04-24",
+  "url": "https://github.com/Shreyash-Sachit-Sahu/rag-pipeline",
+  "topics": []
+ },
+ "abhishekbidare03/interview-coach": {
+  "stars": 0,
+  "license": "NONE",
+  "lang": "Python",
+  "desc": "Interview Coach \u2014 a privacy-first, voice-driven technical interview simulator that runs entirely on your laptop (no cloud or API keys). It transcribes spoken an",
+  "pushed": "2026-08-20",
+  "url": "https://github.com/abhishekbidare03/interview-coach",
+  "topics": []
+ },
+ "rehan1419/RAG-based-AI-Teaching-Assistant": {
+  "stars": 0,
+  "license": "NONE",
+  "lang": "Python",
+  "desc": "RAG pipeline that answers questions over lecture/tutorial videos by pointing you to the exact video and timestamp \u2014 audio is transcribed, translated (hi\u2192en), em",
+  "pushed": "2026-07-18",
+  "url": "https://github.com/rehan1419/RAG-based-AI-Teaching-Assistant",
+  "topics": []
+ },
+ "Eureka0cc/see-talk-ai-system": {
+  "stars": 0,
+  "license": "NONE",
+  "lang": "Java",
+  "desc": "SeeTalk AI: Real-time multimodal AI that sees your world and hears you. Just point your camera and talk. It understands scenes, answers questions, and reads tex",
+  "pushed": "2026-06-14",
+  "url": "https://github.com/Eureka0cc/see-talk-ai-system",
+  "topics": []
+ },
+ "Artsen/Semantic-Landscape-Sampler": {
+  "stars": 0,
+  "license": "MIT",
+  "lang": "TypeScript",
+  "desc": "Semantic Landscape Sampler (SLS) lets you ask a question, generate N diverse answers from your chosen GPT model, and visualize the result as an interactive 3D p",
+  "pushed": "2025-10-22",
+  "url": "https://github.com/Artsen/Semantic-Landscape-Sampler",
+  "topics": []
+ },
+ "DEEPESH468/DepthFusion": {
+  "stars": 0,
+  "license": "Apache-2.0",
+  "lang": "Python",
+  "desc": "Real-time monocular metric depth estimation pipeline using Depth Anything 3, camera calibration, MoGe, and 3D geometry.",
+  "pushed": "2026-08-04",
+  "url": "https://github.com/DEEPESH468/DepthFusion",
+  "topics": []
+ },
+ "Chidanand26/depth-vision-assistant": {
+  "stars": 0,
+  "license": "MIT",
+  "lang": "Python",
+  "desc": "Real-time monocular metric depth estimation + YOLOv8 object detection with LLM scene analysis (Raspberry Pi + Depth-Anything-V2).",
+  "pushed": "2026-06-28",
+  "url": "https://github.com/Chidanand26/depth-vision-assistant",
+  "topics": [
+   "computer-vision",
+   "depth-estimation",
+   "edge-ai",
+   "llm",
+   "object-detection",
+   "pytorch",
+   "raspberry-pi",
+   "robotics",
+   "yolov8"
+  ]
+ },
+ "leobernardin/depth-anything-lora-finetuning": {
+  "stars": 0,
+  "license": "NONE",
+  "lang": "Jupyter Notebook",
+  "desc": "Master\u2019s project focused on fine-tuning Depth Anything V2 using LoRA for monocular depth estimation. Includes analysis of the pretrained model, dataset adaptati",
+  "pushed": "2025-12-11",
+  "url": "https://github.com/leobernardin/depth-anything-lora-finetuning",
+  "topics": []
+ },
+ "raahimnawaz/monocular-vo": {
+  "stars": 0,
+  "license": "MIT",
+  "lang": "Python",
+  "desc": "Monocular visual odometry with metric scale from Depth Anything v2: calibrated webcam capture, PnP, real-world trajectory.",
+  "pushed": "2026-08-17",
+  "url": "https://github.com/raahimnawaz/monocular-vo",
+  "topics": [
+   "computer-vision",
+   "depth-estimation",
+   "huggingface",
+   "monocular-depth",
+   "opencv",
+   "perception",
+   "pytorch",
+   "robotics",
+   "slam",
+   "visual-odometry"
+  ]
+ },
+ "Wasiq1123/depth-estimation-finetuning-yolo26-dav2": {
+  "stars": 0,
+  "license": "NONE",
+  "lang": "Jupyter Notebook",
+  "desc": "Staged fine-tuning of YOLO26-Depth and Depth Anything V2 for indoor monocular metric depth estimation \u2014 NYUv2 \u2192 ScanNet \u2192 real lab/office environments, for robo",
+  "pushed": "2026-09-05",
+  "url": "https://github.com/Wasiq1123/depth-estimation-finetuning-yolo26-dav2",
+  "topics": [
+   "computer-vision",
+   "depth-anything-v2",
+   "depth-estimation",
+   "domain-adaptation",
+   "fine-tuning",
+   "metric-depth-estimation",
+   "monocular-depth-estimation",
+   "nyuv2",
+   "pytorch",
+   "scannet",
+   "yolo26"
+  ]
+ },
+ "mazenzy/DINO_Depth_Test_V2": {
+  "stars": 0,
+  "license": "NONE",
+  "lang": "Python",
+  "desc": "Standalone Jetson Orin Nano bench test for metric monocular depth using Logitech C270 + Depth Anything V2 Metric. Captures RGB at known distances, runs FP16 GPU",
+  "pushed": "2026-01-02",
+  "url": "https://github.com/mazenzy/DINO_Depth_Test_V2",
+  "topics": []
+ }
+}
