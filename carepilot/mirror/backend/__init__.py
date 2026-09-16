@@ -1,1 +1,0 @@
-# CarePilot backend package.
